@@ -276,7 +276,7 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
     <div class="flinks">
       <a href="https://batterista.online" target="_blank">www.batterista.online</a>
       <span style="color:#252525">•</span>
-      <a href="mailto:info@batterista.online">info@batterista.online</a>
+      <a href="/cdn-cgi/l/email-protection#70191e161f30121104041502190304115e1f1e1c191e15"><span class="__cf_email__" data-cfemail="aec7c0c8c1eecccfdadacbdcc7dddacf80c1c0c2c7c0cb">[email&#160;protected]</span></a>
     </div>
     <div class="ver">Stem Mixer v1.0 · Powered by Demucs (Meta AI) via Hugging Face</div>
     <a href="https://www.buymeacoffee.com/batterista" target="_blank" class="coffee">
@@ -286,8 +286,7 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
 
 </div><!-- /app -->
 
-<script type="module">
-import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 
 // ─── ⚙️ CONFIGURA QUI IL TUO SPACE ID ────────────────────────────────────────
 // Dopo aver creato lo Space su Hugging Face, metti qui il tuo Space ID
@@ -406,49 +405,55 @@ async function go(file) {
 
 async function separateStems(file) {
   const ctx = getCtx();
+  const spaceUrl = `https://${spaceId.replace("/", "-")}.hf.space`;
 
-  // 1. Connetti allo Space
-  let app;
+  // 1. Upload file
+  pill("p-connect","done"); pill("p-upload","on");
+  setSt("Upload del brano…", "Invio a Hugging Face", true);
+
+  const formData = new FormData();
+  formData.append("files", file);
+
+  let uploadedPath;
   try {
-    app = await Client.connect(spaceId);
-    // Nessun token — lo Space è pubblico
+    const r = await fetch(`${spaceUrl}/upload`, { method:"POST", body: formData });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const json = await r.json();
+    uploadedPath = Array.isArray(json) ? json[0] : json;
   } catch(e) {
     throw new Error(
-      `Impossibile connettersi allo Space "${spaceId}".\n` +
-      `Controlla che lo Space esista e sia pubblico su huggingface.co/spaces/${spaceId}\n\n` +
+      `Impossibile raggiungere lo Space.\n` +
+      `• Verifica che sia online: huggingface.co/spaces/${spaceId}\n` +
+      `• Se è in sleep clicca "Restart" su HF e riprova tra 30 secondi\n\n` +
       `Dettaglio: ${e.message}`
     );
   }
 
-  pill("p-connect","done"); pill("p-upload","on");
-  setSt("Upload del brano…", "Invio al modello Demucs", true);
+  pill("p-upload","done"); pill("p-ai","on");
+  setSt("Separazione AI in corso…", "Demucs sta analizzando il brano (1-3 min)", true);
 
-  // 2. Invia il file e avvia la separazione
-  let result;
+  // 2. Predict
+  let predictData;
   try {
-    const blob = new Blob([await file.arrayBuffer()], { type: file.type || "audio/mpeg" });
-    result = await app.predict("/predict", [handle_file(blob)]);
+    const r = await fetch(`${spaceUrl}/run/predict`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fn_index: 0,
+        data: [{ name: uploadedPath, data: null, is_file: true }],
+        session_hash: Math.random().toString(36).slice(2)
+      })
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status} — ${await r.text().then(t=>t.slice(0,200))}`);
+    predictData = await r.json();
   } catch(e) {
-    // Prova con fn_index 0 se /predict non esiste
-    try {
-      const blob = new Blob([await file.arrayBuffer()], { type: file.type || "audio/mpeg" });
-      result = await app.predict(0, [handle_file(blob)]);
-    } catch(e2) {
-      throw new Error(
-        `Errore durante la separazione.\n` +
-        `• Verifica che lo Space sia online (visita huggingface.co/spaces/${spaceId})\n` +
-        `• Lo Space gratuito può andare in sleep — clicca "Restart" su HF e riprova\n` +
-        `• Prova con un file audio più corto\n\n` +
-        `Dettaglio: ${e2.message}`
-      );
-    }
+    throw new Error(`Errore durante la separazione AI.\n\nDettaglio: ${e.message}`);
   }
 
-  pill("p-upload","done"); pill("p-ai","done"); pill("p-dec","on");
+  pill("p-ai","done"); pill("p-dec","on");
   setSt("Decodifica audio…", "Preparazione dei canali", false, 80);
 
-  // 3. Decodifica i buffer
-  const outputs = result?.data;
+  const outputs = predictData?.data;
   if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Riprova.");
 
   const stemOrder = ["drums","bass","vocals","other"];
