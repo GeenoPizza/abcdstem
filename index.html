@@ -144,9 +144,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .solo-ban button:hover{opacity:1}
 
 /* ── Channel strip ── */
-.ch-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;align-items:stretch}
-.ch-scroll::-webkit-scrollbar{height:2px}
-.ch-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+.ch-scroll-outer{overflow-x:auto;margin:-12px;padding:12px;}
+.ch-scroll-outer::-webkit-scrollbar{height:2px}
+.ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+#scroll-hint{text-align:center;font-size:10px;color:var(--neutral-600);letter-spacing:.15em;margin-top:10px;user-select:none;transition:opacity .4s}
+#scroll-hint.hidden{opacity:0}
+.ch-scroll{display:flex;gap:12px;align-items:stretch;padding-bottom:4px;}
+
 
 .ch{flex-shrink:0;width:120px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
 
@@ -193,7 +197,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
   <div class="header">
     <div class="logo">
       <h1><span class="la">A</span><span class="lb">B</span><span class="lc">C</span><span class="ld">D</span><span class="method">method:<span class="stem">stem</span></span></h1>
-      <div class="logo-sub">AI Stem Separator · Powered by Demucs</div>
+      <div class="logo-sub">AI Stem Separator · batterista.online</div>
     </div>
     <div class="header-right">
       <a href="https://batterista.online" target="_blank">batterista.online</a>
@@ -224,7 +228,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
       <div class="upload-fmt">MP3 · WAV · FLAC · OGG · M4A</div>
     </div>
     <div class="upload-warn">
-      ⏱ <b>Attenzione ai tempi:</b> la separazione AI richiede mediamente <b>2–3 minuti</b>, ma per brani lunghi o complessi possono volerci <b>5 minuti o più</b>. Puoi lasciare la tab in background — riceverai una <b>notifica browser</b> quando è pronto (consenti le notifiche quando richiesto).
+      ⏱ <b>Attenzione ai tempi:</b> la separazione AI richiede mediamente <b>2–3 minuti</b>, ma per brani lunghi o complessi possono volerci <b>5 minuti o più</b>. Puoi lasciare la tab in background — riceverai una <b>notifica browser</b> quando è pronto.
     </div>
   </div>
 
@@ -242,7 +246,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
       <div class="steps">
         <div class="pill" id="p-connect">🔌 Connessione</div>
         <div class="pill" id="p-upload">📤 Upload</div>
-        <div class="pill" id="p-ai">⚙️ Separazione AI</div>
+        <div class="pill" id="p-ai">⚙️ Separazione</div>
         <div class="pill" id="p-dec">🔊 Decodifica</div>
       </div>
       <div id="s-file" style="font-size:11px;color:var(--neutral-600);margin-top:2px"></div>
@@ -293,7 +297,11 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
   <!-- Channels -->
   <div class="card" id="ch-card" style="display:none">
     <div class="card-header"><span class="card-label">Stem Channels</span></div>
-    <div class="ch-scroll" id="ch-wrap"></div>
+    <div class="ch-scroll-outer">
+      <div class="ch-scroll" id="ch-wrap"></div>
+      <!-- Scroll hint -->
+      <div id="scroll-hint">‹ scorri ›</div>
+    </div>
   </div>
 
   <footer>
@@ -303,7 +311,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
       <span style="color:var(--neutral-600)">•</span>
       <a href="/cdn-cgi/l/email-protection#98f1f6fef7d8faf9ececfdeaf1ebecf9b6f7f6f4f1f6fd"><span class="__cf_email__" data-cfemail="7a13141c153a181b0e0e1f0813090e1b5415141613141f">[email&#160;protected]</span></a>
     </div>
-    <div class="ver">ABCD Method: Stem v1.1 · Powered by Demucs (Meta AI) via Hugging Face</div>
+    <div class="ver">ABCD Method: Stem v1.1</div>
     <a href="https://www.buymeacoffee.com/batterista" target="_blank" class="coffee">
       Aiutami a mantenere questa app gratuita: ☕ Offrimi un caffè
     </a>
@@ -408,7 +416,7 @@ async function go(file){
   await requestNotifPermission();
   try{
     const bufs=await separateStems(file);
-    sendNotif("ABCD Method: Stem","✅ Separazione completata! "+trackName+" è pronto.");
+    sendNotif("ABCD Method: Stem","✅ Pronto! "+trackName+" è pronto.");
     buildMixer(bufs);
   }catch(err){
     show("status-card",false);show("err-card",true);
@@ -666,6 +674,7 @@ function buildChannels(){
   // Master channel
   const mDiv=document.createElement("div");
   mDiv.className="ch-master";mDiv.id="ch-master";
+  mDiv.style.boxShadow="0 0 20px rgba(255,255,255,0.07)";mDiv.style.borderColor="rgba(255,255,255,0.18)";
   const mu=masterMuted,tT=(1-masterVol/150)*100;
   mDiv.innerHTML=`
     ${makeLedDisplay("master",null)}
@@ -839,6 +848,9 @@ document.addEventListener("keydown", e => {
 });
 
 initUI();
+// Nascondi scroll hint dopo primo scroll
+const outer=document.querySelector('.ch-scroll-outer');
+if(outer){outer.addEventListener('scroll',()=>{const h=document.getElementById('scroll-hint');if(h)h.classList.add('hidden');},{once:true});}
 </script>
 </body>
 </html>
