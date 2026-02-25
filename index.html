@@ -1,3 +1,7 @@
+
+Stemmixer · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -430,7 +434,33 @@ async function separateStems(file) {
   }
 
   pill("p-upload","done"); pill("p-ai","on");
-  setSt("Separazione AI in corso…", "Demucs sta analizzando il brano (1-3 min)", true);
+  setSt("Separazione AI in corso…", "Demucs sta analizzando il brano…", true);
+
+  // Timer visivo durante la separazione
+  const aiStart = Date.now();
+  const phases = [
+    "Analisi della forma d'onda…",
+    "Separazione drums…",
+    "Separazione bass…",
+    "Separazione vocals…",
+    "Separazione other…",
+    "Finalizzazione stems…",
+  ];
+  let phaseIdx = 0;
+  const timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - aiStart) / 1000);
+    const m = Math.floor(elapsed / 60);
+    const s = elapsed % 60;
+    const timeStr = m > 0 ? `${m}m ${s}s` : `${s}s`;
+    const phase = phases[phaseIdx % phases.length];
+    phaseIdx++;
+    $("s-sub").textContent = `${phase} — ${timeStr} trascorsi`;
+    // Progress bar simulata: sale fino al 75% in ~90 secondi
+    const fakePct = Math.min(75, (elapsed / 90) * 75);
+    const p = $("prog");
+    p.classList.remove("slide");
+    p.style.width = fakePct + "%";
+  }, 4000);
 
   // 2. Predict
   let predictData;
@@ -444,9 +474,11 @@ async function separateStems(file) {
         session_hash: Math.random().toString(36).slice(2)
       })
     });
+    clearInterval(timerInterval);
     if (!r.ok) throw new Error(`HTTP ${r.status} — ${await r.text().then(t=>t.slice(0,200))}`);
     predictData = await r.json();
   } catch(e) {
+    clearInterval(timerInterval);
     throw new Error(`Errore durante la separazione AI.\n\nDettaglio: ${e.message}`);
   }
 
