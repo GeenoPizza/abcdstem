@@ -454,8 +454,7 @@ async function separateStems(file) {
   setSt("Decodifica audio…", "Preparazione dei canali", false, 80);
 
   const outputs = predictData?.data;
-console.log("RISPOSTA SPACE:", JSON.stringify(predictData).slice(0, 500));
-if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Riprova.");
+  if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Riprova.");
 
   const stemOrder = ["drums","bass","vocals","other"];
   const bufMap = {};
@@ -466,17 +465,16 @@ if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Ripro
     setSt(`Decodifica ${stemId}…`, "", false, 80 + i * 5);
 
     let url = null;
-    if      (typeof out === "string")           url = out;
-    else if (out?.url)                          url = out.url;
-    else if (out?.data?.startsWith("data:"))    { /* base64 inline */ }
+    if      (typeof out === "string")        url = out;
+    else if (out?.url)                       url = out.url;
+    else if (out?.name)                      url = `${spaceUrl}/file=${out.name}`;
 
     try {
       let ab;
       if (out?.data?.startsWith("data:")) {
-        // base64 data URI
-        const b64  = out.data.split(",")[1];
-        const bin  = atob(b64);
-        const u8   = new Uint8Array(bin.length);
+        const b64 = out.data.split(",")[1];
+        const bin = atob(b64);
+        const u8  = new Uint8Array(bin.length);
         for (let j=0; j<bin.length; j++) u8[j] = bin.charCodeAt(j);
         ab = u8.buffer;
       } else if (url) {
