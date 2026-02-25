@@ -32,22 +32,19 @@
   --phase-d:#5dda9d;
   --phase-d-text:#9de7c6;
 }
-body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh;padding:28px 16px 64px}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh;padding:32px 20px 72px;font-size:15px}
 .app{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 
 /* ── Header ── */
-.header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-abcd{display:flex;gap:3px}
-.logo-abcd span{width:22px;height:22px;border-radius:5px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace}
-.logo-abcd .la{background:rgba(95,141,255,0.15);color:var(--phase-a);border:1px solid rgba(95,141,255,0.25)}
-.logo-abcd .lb{background:rgba(241,181,79,0.15);color:var(--phase-b);border:1px solid rgba(241,181,79,0.25)}
-.logo-abcd .lc{background:rgba(255,134,92,0.15);color:var(--phase-c);border:1px solid rgba(255,134,92,0.25)}
-.logo-abcd .ld{background:rgba(93,218,157,0.15);color:var(--phase-d);border:1px solid rgba(93,218,157,0.25)}
-.logo-title{display:flex;flex-direction:column}
-.logo-title h1{font-size:1.3rem;font-weight:700;letter-spacing:-.02em;color:var(--text);line-height:1}
-.logo-title h1 em{font-style:normal;color:var(--accent)}
-.logo-title small{font-size:9px;text-transform:uppercase;letter-spacing:.35em;color:var(--neutral-500);margin-top:3px}
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.logo h1{font-size:2.2rem;font-weight:300;letter-spacing:-.01em;color:#d4d4d8;line-height:1}
+.logo h1 .la{font-weight:600;color:#88a7d0}
+.logo h1 .lb{font-weight:600;color:#c2b68a}
+.logo h1 .lc{font-weight:600;color:#d9a88a}
+.logo h1 .ld{font-weight:600;color:#8ab7aa}
+.logo h1 .method{padding-left:8px;font-weight:300;color:#a3a3a3}
+.logo h1 .stem{color:#8ab7aa;font-weight:600}
+.logo-sub{font-size:10px;color:var(--neutral-500);margin-top:6px}
 .header-right a{color:var(--neutral-500);text-decoration:none;font-size:11px;transition:color .2s}
 .header-right a:hover{color:var(--accent)}
 
@@ -139,21 +136,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .ch-scroll::-webkit-scrollbar{height:2px}
 .ch-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 
-.ch{flex-shrink:0;width:96px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
+.ch{flex-shrink:0;width:112px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
 
 /* LED Display */
 .ch-display{width:100%;background:#060809;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:3px}
 .ch-label-led{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1}
-.led-meters{display:flex;gap:3px;align-items:flex-end;height:36px;margin-top:2px}
-.led-col{display:flex;flex-direction:column-reverse;gap:1.5px}
-.led-seg{width:7px;height:3.5px;border-radius:1px}
+.led-meters{display:flex;gap:3px;align-items:flex-end;height:44px;margin-top:2px}
+.led-col{display:flex;flex-direction:column;gap:1.5px}
+.led-seg{width:8px;height:4px;border-radius:1px}
 .ch-db-led{font-family:'DM Mono',monospace;font-size:7px;color:#2a3035;margin-top:2px;letter-spacing:.05em}
 
 /* Fader */
-.fader-track{width:6px;height:140px;border-radius:99px;background:rgba(255,255,255,0.06);position:relative;cursor:pointer;touch-action:none;user-select:none}
+.fader-track{width:7px;height:160px;border-radius:99px;background:rgba(255,255,255,0.06);position:relative;cursor:pointer;touch-action:none;user-select:none}
 .fader-fill{position:absolute;bottom:0;left:0;right:0;border-radius:99px}
 .fader-unity{position:absolute;left:-4px;right:-4px;height:1px;background:rgba(255,255,255,0.18);pointer-events:none}
-.fader-thumb{position:absolute;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:5px;cursor:grab;border:1px solid}
+.fader-thumb{position:absolute;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:5px;cursor:grab;border:1px solid}
 .fader-thumb:active{cursor:grabbing}
 .ch-pct{font-size:10px;font-weight:700;font-family:'DM Mono',monospace}
 .sm-row{display:flex;gap:4px}
@@ -162,17 +159,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .btn-dl-stem:hover{border-color:rgba(93,218,157,0.3);color:var(--accent);background:rgba(93,218,157,0.06)}
 
 /* Master channel */
-.ch-master{flex-shrink:0;width:96px;border-radius:16px;border:1px solid rgba(93,218,157,0.18);background:rgba(93,218,157,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.ch-master{flex-shrink:0;width:112px;border-radius:16px;border:1px solid rgba(93,218,157,0.18);background:rgba(93,218,157,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
 
-/* ── Overview ── */
-.ov{display:flex;flex-direction:column;gap:7px}
-.ov-row{display:flex;align-items:center;gap:10px}
-.ov-name{font-size:11px;width:60px;flex-shrink:0;color:var(--neutral-400)}
-.ov-track{flex:1;height:4px;border-radius:99px;background:rgba(255,255,255,0.05);overflow:hidden}
-.ov-bar{height:100%;border-radius:99px;opacity:.75;transition:width .2s}
-.ov-val{font-family:'DM Mono',monospace;font-size:10px;color:var(--neutral-600);width:36px;text-align:right}
-.badges{display:flex;gap:3px}
-.badge{font-size:7px;font-weight:700;padding:2px 5px;border-radius:3px;letter-spacing:.05em}
+/* overview removed */
 
 /* ── Footer ── */
 footer{border-top:1px solid var(--border);padding-top:28px;text-align:center;margin-top:8px}
@@ -191,13 +180,8 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
   <!-- Header -->
   <div class="header">
     <div class="logo">
-      <div class="logo-abcd">
-        <span class="la">A</span><span class="lb">B</span><span class="lc">C</span><span class="ld">D</span>
-      </div>
-      <div class="logo-title">
-        <h1>Method: <em>Stem</em></h1>
-        <small>AI Stem Separator · Powered by Demucs</small>
-      </div>
+      <h1><span class="la">A</span><span class="lb">B</span><span class="lc">C</span><span class="ld">D</span><span class="method">method:<span class="stem">stem</span></span></h1>
+      <div class="logo-sub">AI Stem Separator · Powered by Demucs</div>
     </div>
     <div class="header-right">
       <a href="https://batterista.online" target="_blank">batterista.online</a>
@@ -281,7 +265,6 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
           <button class="btn-play-main" id="btn-play">▶</button>
           <button class="btn-ic" id="btn-stop" title="Stop">■</button>
           <button class="btn-txt" id="btn-reset">↺ Reset</button>
-          <button class="btn-dl" id="btn-dl-mix">⬇ Scarica Mix</button>
           <button class="btn-grn" id="btn-new">+ Nuovo brano</button>
         </div>
       </div>
@@ -294,18 +277,12 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
     <div class="ch-scroll" id="ch-wrap"></div>
   </div>
 
-  <!-- Overview -->
-  <div class="card" id="ov-card" style="display:none">
-    <div class="card-header"><span class="card-label">Mix Overview</span></div>
-    <div class="ov" id="ov-rows"></div>
-  </div>
-
   <footer>
     <p>Copyright © Batterista Online — Tutti i diritti riservati</p>
     <div class="flinks">
       <a href="https://batterista.online" target="_blank">www.batterista.online</a>
       <span style="color:var(--neutral-600)">•</span>
-      <a href="mailto:info@batterista.online">info@batterista.online</a>
+      <a href="/cdn-cgi/l/email-protection#98f1f6fef7d8faf9ececfdeaf1ebecf9b6f7f6f4f1f6fd"><span class="__cf_email__" data-cfemail="7a13141c153a181b0e0e1f0813090e1b5415141613141f">[email&#160;protected]</span></a>
     </div>
     <div class="ver">ABCD Method: Stem v1.1 · Powered by Demucs (Meta AI) via Hugging Face</div>
     <a href="https://www.buymeacoffee.com/batterista" target="_blank" class="coffee">
@@ -314,7 +291,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
   </footer>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
@@ -341,7 +318,7 @@ let stemNodes=[], startAt=0, pauseOff=0, animId=null, vuTimer=null;
 const fmt=s=>{if(!s||isNaN(s))return"0:00";return`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,"0")}`};
 const hasSolo=()=>stems.some(s=>s.solo);
 const effMuted=s=>s.muted||(hasSolo()&&!s.solo);
-const effGain=s=>(effMuted(s)||masterMuted)?0:(s.volume/100)*(masterVol/100);
+const effGain=s=>{if(effMuted(s)||masterMuted)return 0;const sv=Math.pow(s.volume/100,2);const mv=Math.pow(masterVol/100,2);return sv*mv;};
 const $=id=>document.getElementById(id);
 const show=(id,v=true)=>{const e=$(id);if(e)e.style.display=v?"block":"none"};
 
@@ -492,10 +469,10 @@ async function separateStems(file){
 function buildMixer(bufMap){
   stems.forEach(s=>{const buf=bufMap[s.id]||null;s.buffer=buf;s.waveform=buf?makeWave(buf):[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0;});
   totalDur=Math.max(...stems.filter(s=>s.buffer).map(s=>s.buffer.duration),0);
-  show("status-card",false);show("mixer-card",true);show("ch-card",true);show("ov-card",true);
+  show("status-card",false);show("mixer-card",true);show("ch-card",true);
   $("track-name").textContent="🎵 "+trackName;
   $("tdur").textContent="/ "+fmt(totalDur);
-  buildChannels();drawWave();updateOv();
+  buildChannels();drawWave();
 }
 
 function makeWave(buf){
@@ -603,8 +580,10 @@ function makeLedDisplay(id,cfg){
   const color=cfg?cfg.color:"#5dda9d";
   const label=cfg?cfg.label:"MASTER";
   let html=`<div class="ch-display">
-    <div class="ch-label-led" style="color:${color}">${label}</div>
     <div class="led-meters">`;
+  // row 0 = fondo (verde basso), row LED_ROWS-1 = cima (peak rosso)
+  // Con flex-direction:column, rendiamo: primo figlio = cima, ultimo = fondo
+  // Quindi iteriamo dal row alto al basso (visivamente cima→fondo)
   for(let ch=0;ch<2;ch++){
     html+=`<div class="led-col">`;
     for(let row=LED_ROWS-1;row>=0;row--){
@@ -613,7 +592,10 @@ function makeLedDisplay(id,cfg){
     }
     html+=`</div>`;
   }
-  html+=`</div><div class="ch-db-led" id="db-led-${id}">0dB</div></div>`;
+  html+=`</div>
+    <div class="ch-label-led" style="color:${color}">${label}</div>
+    <div class="ch-db-led" id="db-led-${id}">0dB</div>
+  </div>`;
   return html;
 }
 
@@ -662,13 +644,13 @@ function buildChannels(){
     </div>
     <div class="ch-pct" id="pct-master" style="color:${mu?"var(--neutral-600)":"#5dda9d"}">${Math.round(masterVol)}%</div>
     <button id="btn-mmut" style="width:54px;height:20px;border-radius:5px;border:1px solid ${mu?"#f97316":"var(--border)"};background:${mu?"rgba(249,115,22,0.18)":"var(--surface)"};color:${mu?"#f97316":"var(--neutral-500)"};cursor:pointer;font-size:8px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.05em;transition:all .2s">${mu?"MUTE":"MASTER"}</button>
+    <button class="btn-dl-stem" id="btn-dl-mix-ch" style="border-color:rgba(93,218,157,0.25);color:#5dda9d">⬇ Mix</button>
   `;
   wrap.appendChild(mDiv);
   setupFader("master",null,true);
   $("btn-mmut").onclick=()=>{masterMuted=!masterMuted;buildChannels();updateGains()};
 
   $("solo-ban").style.display=hasSolo()?"flex":"none";
-  updateOv();
 }
 
 function setupFader(id,cfg,isMaster=false){
@@ -692,7 +674,6 @@ function updateFaderUI(id,cfg){
   if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":cfg.color+"aa"},${mu?"#161a1c":cfg.color+"22"})`;fth.style.borderColor=mu?"#2a2e32":cfg.color;fth.style.boxShadow=mu?"none":`0 0 8px ${cfg.glow}`;}
   if(pct){pct.textContent=Math.round(s.volume)+"%";pct.style.color=mu?"var(--neutral-600)":cfg.color;}
   if(db)db.textContent=mu?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
-  updateOv();
 }
 
 function updateMasterFaderUI(){
@@ -721,17 +702,55 @@ function updateOv(){
 }
 
 // ── Download ──────────────────────────────────────────────────────────────────
-function downloadStem(id,label){
+async function exportAudio(buffer, filename){
+  // Prova MP3 via MediaRecorder (Chrome/Edge supportano audio/webm;codecs=opus, Safari supporta mp4)
+  // Se non disponibile, fallback WAV
+  const ctx=getCtx();
+  const offCtx=new OfflineAudioContext(buffer.numberOfChannels, buffer.length, buffer.sampleRate);
+  const src=offCtx.createBufferSource(); src.buffer=buffer;
+  src.connect(offCtx.destination); src.start(0);
+  const rendered=await offCtx.startRendering();
+
+  // Tenta export MP3/OGG via MediaRecorder
+  const streamCtx=new AudioContext();
+  const dest=streamCtx.createMediaStreamDestination();
+  const src2=streamCtx.createBufferSource(); src2.buffer=rendered;
+  src2.connect(dest); 
+
+  const mimeTypes=["audio/mp4","audio/webm;codecs=opus","audio/ogg;codecs=opus"];
+  const mime=mimeTypes.find(m=>MediaRecorder.isTypeSupported(m));
+
+  if(mime){
+    const chunks=[];
+    const rec=new MediaRecorder(dest.stream,{mimeType:mime,audioBitsPerSecond:192000});
+    rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
+    rec.onstop=()=>{
+      streamCtx.close();
+      const ext=mime.includes("mp4")?"m4a":mime.includes("ogg")?"ogg":"webm";
+      const blob=new Blob(chunks,{type:mime});
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+      a.download=filename.replace(".wav","."+ext);a.click();URL.revokeObjectURL(a.href);
+    };
+    src2.start(0);
+    rec.start();
+    setTimeout(()=>rec.stop(), rendered.duration*1000+200);
+  } else {
+    // Fallback WAV
+    streamCtx.close();
+    const wav=bufferToWav(rendered);
+    const blob=new Blob([wav],{type:"audio/wav"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);
+  }
+}
+
+async function downloadStem(id,label){
   const s=stems.find(x=>x.id===id);if(!s?.buffer)return;
-  const wav=bufferToWav(s.buffer);
-  const blob=new Blob([wav],{type:"audio/wav"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${trackName}_${label}.wav`;a.click();URL.revokeObjectURL(a.href);
+  await exportAudio(s.buffer,`${trackName}_${label}.wav`);
 }
 
 async function downloadMix(){
   const ctx=getCtx();
-  const active=stems.filter(s=>s.buffer);
-  if(!active.length)return;
+  const active=stems.filter(s=>s.buffer);if(!active.length)return;
   const len=Math.max(...active.map(s=>s.buffer.length));
   const offCtx=new OfflineAudioContext(2,len,ctx.sampleRate);
   const offMaster=offCtx.createGain();offMaster.connect(offCtx.destination);
@@ -741,9 +760,7 @@ async function downloadMix(){
     src.connect(gn);gn.connect(offMaster);src.start(0);
   });
   const rendered=await offCtx.startRendering();
-  const wav=bufferToWav(rendered);
-  const blob=new Blob([wav],{type:"audio/wav"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${trackName}_mix.wav`;a.click();URL.revokeObjectURL(a.href);
+  await exportAudio(rendered,`${trackName}_mix.wav`);
 }
 
 function bufferToWav(buffer){
@@ -770,9 +787,8 @@ $("btn-new").onclick=()=>{
   stopAll();pauseOff=0;curTime=0;
   stems.forEach(s=>{s.buffer=null;s.waveform=[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0});
   masterVol=100;masterMuted=false;totalDur=0;trackName="";
-  show("mixer-card",false);show("ch-card",false);show("ov-card",false);show("upload-card",true);$("file-input").value="";
+  show("mixer-card",false);show("ch-card",false);show("upload-card",true);$("file-input").value="";
 };
-$("btn-dl-mix").onclick=downloadMix;
 $("clear-solo").onclick=()=>{stems.forEach(s=>s.solo=false);buildChannels();updateGains()};
 $("btn-retry").onclick=()=>{show("err-card",false);show("upload-card",true);$("file-input").value=""};
 $("col-btn").onclick=()=>{
@@ -780,6 +796,15 @@ $("col-btn").onclick=()=>{
   $("mixer-body").classList.toggle("collapsed",transCollapsed);
   $("col-btn").textContent=transCollapsed?"▼":"▲";
 };
+
+// ── Spacebar play/pause ──────────────────────────────────────────────────────
+document.addEventListener("keydown", e => {
+  if(e.code === "Space" && !["INPUT","TEXTAREA"].includes(document.activeElement?.tagName||"")){
+    e.preventDefault();
+    if(!totalDur) return;
+    if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay();
+  }
+});
 
 initUI();
 </script>
