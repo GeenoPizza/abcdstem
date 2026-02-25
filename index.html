@@ -454,7 +454,8 @@ async function separateStems(file) {
   setSt("Decodifica audio…", "Preparazione dei canali", false, 80);
 
   const outputs = predictData?.data;
-  if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Riprova.");
+console.log("RISPOSTA SPACE:", JSON.stringify(predictData).slice(0, 500));
+if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Riprova.");
 
   const stemOrder = ["drums","bass","vocals","other"];
   const bufMap = {};
