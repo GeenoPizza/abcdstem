@@ -32,7 +32,7 @@
   --phase-d:#5dda9d;
   --phase-d-text:#9de7c6;
 }
-body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh;padding:32px 20px 72px;font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh;padding:36px 22px 80px;font-size:16px}
 .app{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 
 /* ── Header ── */
@@ -106,10 +106,22 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 
 /* ── Transport ── */
 .transport-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+#transport-bar{padding:14px 4px 2px;display:flex;flex-direction:column;gap:12px}
+#transport-top{display:flex;align-items:baseline;gap:10px}
+#transport-top .time-display{font-size:1.8rem}
+#track-name{font-size:11px;color:var(--neutral-500);margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+#transport-btns{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.tbn-ic{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.tbn-ic:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.tbn-sep{width:1px;height:28px;background:var(--border);margin:0 2px}
+.tbn-txt{height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;padding:0 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.tbn-txt:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.tbn-grn{height:42px;border-radius:12px;border:1px solid rgba(93,218,157,0.22);background:rgba(93,218,157,0.07);color:var(--accent);cursor:pointer;padding:0 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.tbn-grn:hover{background:rgba(93,218,157,0.13)}
 .time-display{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--accent);min-width:90px}
 .time-dur{font-family:'DM Mono',monospace;font-size:11px;color:var(--neutral-600)}
 .tbns{margin-left:auto;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.btn-play-main{width:46px;height:46px;border-radius:13px;border:none;background:linear-gradient(135deg,#3e5c55,#2e4741);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(93,218,157,0.18);transition:all .2s}
+.btn-play-main{width:52px;height:52px;border-radius:14px;border:none;background:linear-gradient(135deg,#3e5c55,#2e4741);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(93,218,157,0.18);transition:all .2s}
 .btn-play-main:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(93,218,157,0.32)}
 .btn-ic{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .btn-ic:hover{background:rgba(255,255,255,0.1);color:var(--text)}
@@ -136,21 +148,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .ch-scroll::-webkit-scrollbar{height:2px}
 .ch-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 
-.ch{flex-shrink:0;width:112px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
+.ch{flex-shrink:0;width:120px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
 
 /* LED Display */
 .ch-display{width:100%;background:#060809;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:3px}
 .ch-label-led{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1}
-.led-meters{display:flex;gap:3px;align-items:flex-end;height:44px;margin-top:2px}
+.led-meters{display:flex;gap:3px;align-items:flex-end;height:50px;margin-top:2px}
 .led-col{display:flex;flex-direction:column;gap:1.5px}
-.led-seg{width:8px;height:4px;border-radius:1px}
+.led-seg{width:9px;height:4.5px;border-radius:1.5px}
 .ch-db-led{font-family:'DM Mono',monospace;font-size:7px;color:#2a3035;margin-top:2px;letter-spacing:.05em}
 
 /* Fader */
-.fader-track{width:7px;height:160px;border-radius:99px;background:rgba(255,255,255,0.06);position:relative;cursor:pointer;touch-action:none;user-select:none}
+.fader-track{width:8px;height:175px;border-radius:99px;background:rgba(255,255,255,0.06);position:relative;cursor:pointer;touch-action:none;user-select:none}
 .fader-fill{position:absolute;bottom:0;left:0;right:0;border-radius:99px}
 .fader-unity{position:absolute;left:-4px;right:-4px;height:1px;background:rgba(255,255,255,0.18);pointer-events:none}
-.fader-thumb{position:absolute;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:5px;cursor:grab;border:1px solid}
+.fader-thumb{position:absolute;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:5px;cursor:grab;border:1px solid}
 .fader-thumb:active{cursor:grabbing}
 .ch-pct{font-size:10px;font-weight:700;font-family:'DM Mono',monospace}
 .sm-row{display:flex;gap:4px}
@@ -159,7 +171,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .btn-dl-stem:hover{border-color:rgba(93,218,157,0.3);color:var(--accent);background:rgba(93,218,157,0.06)}
 
 /* Master channel */
-.ch-master{flex-shrink:0;width:112px;border-radius:16px;border:1px solid rgba(93,218,157,0.18);background:rgba(93,218,157,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.ch-master{flex-shrink:0;width:120px;border-radius:16px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
 
 /* overview removed */
 
@@ -253,23 +265,27 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
         <button class="collapse-btn" id="col-btn">▲</button>
       </div>
     </div>
-    <!-- Waveform sempre visibile con controlli integrati -->
-    <div id="waveform-wrap" style="position:relative;padding:0;background:rgba(0,0,0,0.45);border-radius:12px;border:1px solid rgba(255,255,255,0.06);overflow:hidden">
-      <!-- Overlay tempo + play sul canvas -->
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;pointer-events:none;padding:0 14px;gap:12px;z-index:2">
-        <button id="btn-play" class="btn-play-main" style="pointer-events:all;flex-shrink:0;width:42px;height:42px;border-radius:11px">▶</button>
-        <button id="btn-stop" class="btn-ic" style="pointer-events:all;flex-shrink:0;width:34px;height:34px" title="Stop">■</button>
-        <span class="time-display" id="tnow" style="font-size:1.6rem;text-shadow:0 0 12px rgba(0,0,0,0.8);pointer-events:none">0:00</span>
-        <span class="time-dur" id="tdur" style="text-shadow:0 0 8px rgba(0,0,0,0.8);pointer-events:none">/ 0:00</span>
-        <div id="track-name" style="font-size:11px;color:rgba(255,255,255,0.3);margin-left:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none;text-shadow:0 0 8px rgba(0,0,0,0.9)"></div>
-      </div>
-      <canvas id="waveform-canvas" width="920" height="72" style="display:block;width:100%;height:72px;cursor:pointer"></canvas>
+    <!-- Waveform sempre visibile -->
+    <div id="waveform-wrap" style="background:rgba(0,0,0,0.45);border-radius:12px;border:1px solid rgba(255,255,255,0.06);overflow:hidden">
+      <canvas id="waveform-canvas" width="920" height="76" style="display:block;width:100%;height:76px;cursor:pointer"></canvas>
     </div>
-    <!-- Collapsibile: solo controlli secondari -->
-    <div class="collapsible" id="mixer-body" style="max-height:200px">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px">
-        <button class="btn-txt" id="btn-reset">↺ Reset fader</button>
-        <button class="btn-grn" id="btn-new">+ Nuovo brano</button>
+    <!-- Transport bar: sotto la waveform, centrata -->
+    <div class="collapsible" id="mixer-body" style="max-height:240px">
+      <div id="transport-bar">
+        <!-- Riga 1: tempo + titolo -->
+        <div id="transport-top">
+          <span class="time-display" id="tnow">0:00</span>
+          <span class="time-dur" id="tdur">/ 0:00</span>
+          <div id="track-name"></div>
+        </div>
+        <!-- Riga 2: bottoni centrati -->
+        <div id="transport-btns">
+          <button class="btn-play-main" id="btn-play">▶</button>
+          <button class="tbn-ic" id="btn-stop" title="Stop">■</button>
+          <div class="tbn-sep"></div>
+          <button class="tbn-txt" id="btn-reset">↺ Reset</button>
+          <button class="tbn-grn" id="btn-new">＋ Nuovo brano</button>
+        </div>
       </div>
     </div>
   </div>
@@ -587,13 +603,13 @@ function updateVU(){
       const seg=$(`led-master-${ch}-${row}`);if(!seg)continue;
       const lit=row<mActiveLeds;
       seg.style.opacity=lit?1:0.06;
-      if(lit)seg.style.background=row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#3ab87d":"#5dda9d";
+      if(lit)seg.style.background=row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#c8c8c8":"#e8e8e8";
     }
   }
 }
 
 function makeLedDisplay(id,cfg){
-  const color=cfg?cfg.color:"#5dda9d";
+  const color=cfg?cfg.color:"rgba(255,255,255,0.7)";
   const label=cfg?cfg.label:"MASTER";
   let html=`<div class="ch-display">
     <div class="led-meters">`;
@@ -603,7 +619,7 @@ function makeLedDisplay(id,cfg){
   for(let ch=0;ch<2;ch++){
     html+=`<div class="led-col">`;
     for(let row=LED_ROWS-1;row>=0;row--){
-      const c=cfg?(row>=LED_ROWS-2?cfg.ledPeak:row>=LED_ROWS-4?cfg.ledMid:cfg.ledOn):(row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#3ab87d":"#5dda9d");
+      const c=cfg?(row>=LED_ROWS-2?cfg.ledPeak:row>=LED_ROWS-4?cfg.ledMid:cfg.ledOn):(row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#c8c8c8":"#e8e8e8");
       html+=`<div class="led-seg" id="led-${id}-${ch}-${row}" style="background:${c};opacity:0.06"></div>`;
     }
     html+=`</div>`;
@@ -654,13 +670,13 @@ function buildChannels(){
   mDiv.innerHTML=`
     ${makeLedDisplay("master",null)}
     <div class="fader-track" id="ft-master">
-      <div class="fader-fill" id="ff-master" style="height:${(masterVol/150)*100}%;background:${mu?"rgba(255,255,255,0.05)":"#5dda9d"};opacity:${mu?.18:.6}"></div>
+      <div class="fader-fill" id="ff-master" style="height:${(masterVol/150)*100}%;background:${mu?"rgba(255,255,255,0.04)":"rgba(255,255,255,0.55)"};opacity:1"></div>
       <div class="fader-unity" style="top:${(1-100/150)*100}%"></div>
-      <div class="fader-thumb" id="fth-master" style="top:calc(${tT}% - 10px);background:linear-gradient(180deg,${mu?"#1e2326":"#5dda9daa"},${mu?"#161a1c":"#5dda9d22"});border-color:${mu?"#2a2e32":"#5dda9d"};box-shadow:${mu?"none":"0 0 8px rgba(93,218,157,0.28)"}"></div>
+      <div class="fader-thumb" id="fth-master" style="top:calc(${tT}% - 10px);background:linear-gradient(180deg,${mu?"#1e2326":"rgba(255,255,255,0.7)"},${mu?"#161a1c":"rgba(255,255,255,0.2)"});border-color:${mu?"#2a2e32":"rgba(255,255,255,0.6)"};box-shadow:${mu?"none":"0 0 8px rgba(255,255,255,0.2)"}"></div>
     </div>
-    <div class="ch-pct" id="pct-master" style="color:${mu?"var(--neutral-600)":"#5dda9d"}">${Math.round(masterVol)}%</div>
+    <div class="ch-pct" id="pct-master" style="color:${mu?"var(--neutral-600)":"rgba(255,255,255,0.85)"}">${Math.round(masterVol)}%</div>
     <button id="btn-mmut" style="width:54px;height:20px;border-radius:5px;border:1px solid ${mu?"#f97316":"var(--border)"};background:${mu?"rgba(249,115,22,0.18)":"var(--surface)"};color:${mu?"#f97316":"var(--neutral-500)"};cursor:pointer;font-size:8px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.05em;transition:all .2s">${mu?"MUTE":"MASTER"}</button>
-    <button class="btn-dl-stem" id="btn-dl-mix-ch" style="border-color:rgba(93,218,157,0.25);color:#5dda9d">⬇ Mix</button>
+    <button class="btn-dl-stem" id="btn-dl-mix-ch" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6)">⬇ Mix</button>
   `;
   wrap.appendChild(mDiv);
   setupFader("master",null,true);
@@ -695,9 +711,9 @@ function updateFaderUI(id,cfg){
 function updateMasterFaderUI(){
   const mu=masterMuted,tT=(1-masterVol/150)*100;
   const ff=$("ff-master"),fth=$("fth-master"),pct=$("pct-master");
-  if(ff){ff.style.height=`${(masterVol/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.05)":"#5dda9d";ff.style.opacity=mu?.18:.6;}
-  if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":"#5dda9daa"},${mu?"#161a1c":"#5dda9d22"})`;fth.style.borderColor=mu?"#2a2e32":"#5dda9d";fth.style.boxShadow=mu?"none":"0 0 8px rgba(93,218,157,0.28)";}
-  if(pct){pct.textContent=Math.round(masterVol)+"%";pct.style.color=mu?"var(--neutral-600)":"#5dda9d";}
+  if(ff){ff.style.height=`${(masterVol/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.04)":"rgba(255,255,255,0.55)";ff.style.opacity=1;}
+  if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":"rgba(255,255,255,0.7)"},${mu?"#161a1c":"rgba(255,255,255,0.2)"})`;fth.style.borderColor=mu?"#2a2e32":"rgba(255,255,255,0.6)";fth.style.boxShadow=mu?"none":"0 0 8px rgba(255,255,255,0.2)";}
+  if(pct){pct.textContent=Math.round(masterVol)+"%";pct.style.color=mu?"var(--neutral-600)":"rgba(255,255,255,0.85)";}
 }
 
 function updateOv(){
