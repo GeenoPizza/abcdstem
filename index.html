@@ -1,161 +1,188 @@
-
-Stemmixer · HTML
-Copy
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Stem Mixer — Batterista Online</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ABCD Method: Stem — Batterista Online</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: #0b0d0e; color: #e8e8e8;
-  font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
-  min-height: 100vh; padding: 32px 16px 64px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0d0e;
+  --bg2:#111416;
+  --surface:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.1);
+  --border2:rgba(255,255,255,0.15);
+  --accent:#5dda9d;
+  --accent2:#3a9d7a;
+  --accent3:#2a7c5f;
+  --text:#e8e8e8;
+  --text2:#a0a0a0;
+  --text3:#6b6b6b;
+  --neutral-400:#a3a3a3;
+  --neutral-500:#737373;
+  --neutral-600:#525252;
+  /* ABCD phase colors */
+  --phase-a:#5f8dff;
+  --phase-a-text:#98b5f5;
+  --phase-b:#f1b54f;
+  --phase-b-text:#f4d48a;
+  --phase-c:#ff865c;
+  --phase-c-text:#ffb08a;
+  --phase-d:#5dda9d;
+  --phase-d-text:#9de7c6;
 }
-.app { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh;padding:28px 16px 64px}
+.app{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 
-/* Header */
-.header { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-.header h1 { font-size:2rem; font-weight:700; letter-spacing:-0.02em; line-height:1; }
-.header h1 span { color:#5dda9d; }
-.header-sub { font-size:10px; text-transform:uppercase; letter-spacing:0.3em; color:#555; margin-top:6px; }
-.header-right a { color:#444; text-decoration:none; font-size:11px; transition:color .2s; }
-.header-right a:hover { color:#5dda9d; }
+/* ── Header ── */
+.header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-abcd{display:flex;gap:3px}
+.logo-abcd span{width:22px;height:22px;border-radius:5px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace}
+.logo-abcd .la{background:rgba(95,141,255,0.15);color:var(--phase-a);border:1px solid rgba(95,141,255,0.25)}
+.logo-abcd .lb{background:rgba(241,181,79,0.15);color:var(--phase-b);border:1px solid rgba(241,181,79,0.25)}
+.logo-abcd .lc{background:rgba(255,134,92,0.15);color:var(--phase-c);border:1px solid rgba(255,134,92,0.25)}
+.logo-abcd .ld{background:rgba(93,218,157,0.15);color:var(--phase-d);border:1px solid rgba(93,218,157,0.25)}
+.logo-title{display:flex;flex-direction:column}
+.logo-title h1{font-size:1.3rem;font-weight:700;letter-spacing:-.02em;color:var(--text);line-height:1}
+.logo-title h1 em{font-style:normal;color:var(--accent)}
+.logo-title small{font-size:9px;text-transform:uppercase;letter-spacing:.35em;color:var(--neutral-500);margin-top:3px}
+.header-right a{color:var(--neutral-500);text-decoration:none;font-size:11px;transition:color .2s}
+.header-right a:hover{color:var(--accent)}
 
-/* Cards */
-.card { background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.07); border-radius:20px; padding:24px; }
-.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
-.card-label { font-size:10px; text-transform:uppercase; letter-spacing:0.35em; color:#555; }
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.card-label{font-size:9px;text-transform:uppercase;letter-spacing:.4em;color:var(--neutral-500);font-weight:600}
 
-/* Setup card — shown when SPACE_ID is not configured */
-.setup-card { background:rgba(93,218,157,0.04); border:1px solid rgba(93,218,157,0.15); border-radius:20px; padding:28px; }
-.setup-title { font-size:1rem; font-weight:600; margin-bottom:8px; }
-.setup-desc { font-size:13px; color:#888; line-height:1.75; margin-bottom:20px; }
-.setup-desc a { color:#5dda9d; text-decoration:none; }
-.setup-desc a:hover { text-decoration:underline; }
-.setup-desc code { background:rgba(255,255,255,0.06); padding:2px 7px; border-radius:5px; font-family:'DM Mono',monospace; font-size:12px; color:#e8e8e8; }
-.input-row { display:flex; gap:10px; flex-wrap:wrap; }
-.space-input { flex:1; min-width:200px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px; color:#e8e8e8; font-family:'DM Mono',monospace; font-size:13px; outline:none; transition:border-color .2s; }
-.space-input:focus { border-color:#5dda9d; }
-.space-input::placeholder { color:#3a3a3a; }
-.btn-primary { background:linear-gradient(135deg,#3a9d7a,#2a7c5f); border:none; border-radius:12px; padding:12px 22px; color:#fff; font-weight:600; font-size:13px; cursor:pointer; white-space:nowrap; font-family:'DM Sans',sans-serif; box-shadow:0 0 16px rgba(93,218,157,0.2); transition:all .2s; }
-.btn-primary:hover { box-shadow:0 0 24px rgba(93,218,157,0.4); transform:translateY(-1px); }
+/* ── Setup ── */
+.setup-card{background:rgba(93,218,157,0.03);border:1px solid rgba(93,218,157,0.15);border-radius:20px;padding:24px}
+.setup-title{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:8px}
+.setup-desc{font-size:13px;color:var(--neutral-400);line-height:1.75;margin-bottom:18px}
+.setup-desc code{background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text)}
+.input-row{display:flex;gap:10px;flex-wrap:wrap}
+.space-input{flex:1;min-width:200px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;transition:border-color .2s}
+.space-input:focus{border-color:var(--accent)}
+.space-input::placeholder{color:var(--neutral-600)}
+.btn-primary{background:linear-gradient(135deg,#3e5c55,#2e4741);border:none;border-radius:12px;padding:11px 20px;color:#fff;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;box-shadow:0 0 14px rgba(93,218,157,0.15);transition:all .2s}
+.btn-primary:hover{box-shadow:0 0 22px rgba(93,218,157,0.3);transform:translateY(-1px)}
 
-/* Upload */
-.upload-zone { border:2px dashed rgba(93,218,157,0.2); border-radius:16px; padding:52px 24px; text-align:center; cursor:pointer; transition:all .25s; position:relative; overflow:hidden; background:rgba(93,218,157,0.02); }
-.upload-zone:hover, .upload-zone.over { border-color:rgba(93,218,157,0.55); background:rgba(93,218,157,0.06); }
-.upload-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-.upload-icon { font-size:2.8rem; margin-bottom:14px; }
-.upload-title { font-size:1.05rem; font-weight:600; margin-bottom:6px; }
-.upload-sub { font-size:12px; color:#555; }
-.upload-fmt { font-size:11px; color:#3a3a3a; margin-top:8px; }
+/* ── Upload ── */
+.upload-zone{border:2px dashed rgba(93,218,157,0.2);border-radius:16px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;background:rgba(93,218,157,0.02)}
+.upload-zone:hover,.upload-zone.over{border-color:rgba(93,218,157,0.45);background:rgba(93,218,157,0.05)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2.2rem;margin-bottom:12px}
+.upload-title{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.upload-sub{font-size:12px;color:var(--neutral-400)}
+.upload-fmt{font-size:11px;color:var(--neutral-600);margin-top:6px}
+.upload-warn{margin-top:14px;background:rgba(241,181,79,0.06);border:1px solid rgba(241,181,79,0.18);border-radius:12px;padding:12px 16px;font-size:11px;color:#c49a35;line-height:1.7}
+.upload-warn b{color:var(--phase-b)}
 
-/* Status */
-.status-inner { display:flex; flex-direction:column; gap:16px; }
-.status-top { display:flex; align-items:center; gap:14px; }
-.spinner { width:36px; height:36px; border-radius:50%; border:3px solid rgba(93,218,157,0.12); border-top-color:#5dda9d; animation:spin .85s linear infinite; flex-shrink:0; }
-@keyframes spin { to{transform:rotate(360deg)} }
-.s-title { font-size:1rem; font-weight:600; }
-.s-sub   { font-size:12px; color:#666; margin-top:3px; }
-.prog-track { height:4px; background:rgba(255,255,255,0.06); border-radius:99px; overflow:hidden; }
-.prog-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#3a9d7a,#5dda9d); width:0%; transition:width .5s ease; box-shadow:0 0 8px rgba(93,218,157,0.4); }
-.prog-fill.slide { width:35%; animation:slide 1.3s ease-in-out infinite; }
-@keyframes slide { 0%{transform:translateX(-250%)} 100%{transform:translateX(400%)} }
-.steps { display:flex; gap:7px; flex-wrap:wrap; }
-.pill { font-size:10px; padding:4px 10px; border-radius:99px; border:1px solid rgba(255,255,255,0.07); color:#444; background:rgba(255,255,255,0.02); transition:all .3s; }
-.pill.on   { border-color:rgba(93,218,157,0.4); color:#5dda9d; background:rgba(93,218,157,0.08); }
-.pill.done { border-color:rgba(93,218,157,0.2); color:#3a9d7a; }
-.pill.done::before { content:"✓ "; }
+/* ── Status ── */
+.status-inner{display:flex;flex-direction:column;gap:14px}
+.status-top{display:flex;align-items:center;gap:14px}
+.spinner{width:32px;height:32px;border-radius:50%;border:3px solid rgba(93,218,157,0.1);border-top-color:var(--accent);animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.s-title{font-size:.95rem;font-weight:600;color:var(--text)}
+.s-sub{font-size:11px;color:var(--neutral-400);margin-top:3px}
+.prog-track{height:3px;background:rgba(255,255,255,0.05);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0%;transition:width .6s ease;box-shadow:0 0 6px rgba(93,218,157,0.35)}
+.prog-fill.slide{width:25%;animation:slide 1.2s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-350%)}100%{transform:translateX(550%)}}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:9px;padding:3px 9px;border-radius:99px;border:1px solid rgba(255,255,255,0.08);color:var(--neutral-600);background:rgba(255,255,255,0.02);transition:all .3s;font-weight:500}
+.pill.on{border-color:rgba(93,218,157,0.35);color:var(--accent);background:rgba(93,218,157,0.07)}
+.pill.done{border-color:rgba(93,218,157,0.15);color:var(--accent2)}
+.pill.done::before{content:"✓ "}
 
-/* Error */
-.err-card { background:rgba(239,68,68,0.05); border:1px solid rgba(239,68,68,0.18); border-radius:20px; padding:24px; display:none; }
-.err-title { font-weight:600; color:#f87171; margin-bottom:6px; }
-.err-msg { font-size:13px; color:#777; line-height:1.65; white-space:pre-wrap; }
-.btn-retry { margin-top:14px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.25); color:#f87171; border-radius:10px; padding:9px 18px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
-.btn-retry:hover { background:rgba(239,68,68,0.22); }
+/* ── Error ── */
+.err-card{background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.18);border-radius:20px;padding:22px;display:none}
+.err-title{font-weight:600;color:#f87171;margin-bottom:6px}
+.err-msg{font-size:12px;color:var(--neutral-400);line-height:1.65;white-space:pre-wrap}
+.btn-retry{margin-top:12px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-retry:hover{background:rgba(239,68,68,0.2)}
 
-/* Transport */
-#waveform-wrap { background:rgba(0,0,0,0.35); border-radius:12px; padding:14px 16px; cursor:pointer; margin-bottom:14px; }
-#waveform-canvas { width:100%; height:64px; display:block; }
-.transport-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.time-now { font-family:'DM Mono',monospace; font-size:1.6rem; font-weight:500; color:#5dda9d; min-width:84px; }
-.time-dur { font-family:'DM Mono',monospace; font-size:13px; color:#3a3a3a; }
-.tbns { margin-left:auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.btn-play-main { width:52px; height:52px; border-radius:15px; border:none; background:linear-gradient(135deg,#3a9d7a,#2a7c5f); color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(93,218,157,0.25); transition:all .2s; }
-.btn-play-main:hover { transform:scale(1.05); box-shadow:0 0 28px rgba(93,218,157,0.4); }
-.btn-ic  { width:42px; height:42px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#ccc; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; transition:background .2s; }
-.btn-ic:hover { background:rgba(255,255,255,0.1); }
-.btn-txt { height:42px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#aaa; cursor:pointer; padding:0 14px; font-size:11px; font-weight:600; display:flex; align-items:center; gap:6px; transition:background .2s; font-family:'DM Sans',sans-serif; white-space:nowrap; }
-.btn-txt:hover { background:rgba(255,255,255,0.1); }
-.btn-grn { height:42px; border-radius:12px; border:1px solid rgba(93,218,157,0.22); background:rgba(93,218,157,0.07); color:#5dda9d; cursor:pointer; padding:0 14px; font-size:11px; font-weight:600; display:flex; align-items:center; gap:6px; transition:all .2s; font-family:'DM Sans',sans-serif; white-space:nowrap; }
-.btn-grn:hover { background:rgba(93,218,157,0.14); }
-.master-row { display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); margin-top:16px; }
-.master-lbl { font-size:10px; text-transform:uppercase; letter-spacing:.3em; color:#444; width:50px; }
-.btn-mut { width:30px; height:30px; border-radius:9px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; }
-.btn-mut.on { background:#f97316; border-color:#f97316; }
-input[type=range] { -webkit-appearance:none; appearance:none; background:transparent; cursor:pointer; flex:1; }
-input[type=range]::-webkit-slider-track { height:4px; border-radius:99px; background:rgba(255,255,255,0.08); }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:#5dda9d; margin-top:-6px; box-shadow:0 0 8px rgba(93,218,157,0.4); }
-.rv { font-family:'DM Mono',monospace; font-size:11px; color:#666; width:38px; text-align:right; }
+/* ── Waveform ── */
+#waveform-wrap{background:rgba(0,0,0,0.4);border-radius:12px;padding:12px 14px;cursor:pointer;border:1px solid rgba(255,255,255,0.05)}
+#waveform-canvas{width:100%;height:52px;display:block}
 
-/* Channels */
-.ch-scroll { display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; }
-.ch-scroll::-webkit-scrollbar { height:3px; }
-.ch-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:2px; }
-.ch { flex-shrink:0; width:106px; border-radius:18px; border:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.025); padding:14px 10px 16px; display:flex; flex-direction:column; align-items:center; gap:10px; transition:box-shadow .3s,border-color .3s; }
-.ch-emoji { font-size:22px; line-height:1; }
-.ch-name  { font-size:10px; text-transform:uppercase; letter-spacing:.2em; font-weight:700; }
-.vu-wrap  { display:flex; gap:3px; }
-.vu-strip { width:5px; height:44px; border-radius:99px; background:rgba(255,255,255,0.05); overflow:hidden; position:relative; }
-.vu-fill  { position:absolute; bottom:0; left:0; right:0; border-radius:99px; transition:height .06s; }
-.ch-db { font-family:'DM Mono',monospace; font-size:9px; color:#555; }
-.fader-track { width:6px; height:164px; border-radius:99px; background:rgba(255,255,255,0.06); position:relative; cursor:pointer; touch-action:none; user-select:none; }
-.fader-fill  { position:absolute; bottom:0; left:0; right:0; border-radius:99px; transition:height .06s; }
-.fader-unity { position:absolute; left:-5px; right:-5px; height:1px; background:rgba(255,255,255,0.17); pointer-events:none; }
-.fader-thumb { position:absolute; left:50%; transform:translateX(-50%); width:22px; height:22px; border-radius:6px; cursor:grab; border:1px solid; transition:box-shadow .2s; }
-.fader-thumb:active { cursor:grabbing; }
-.ch-pct { font-size:12px; font-weight:700; font-family:'DM Mono',monospace; }
-.sm-row { display:flex; gap:5px; }
-.btn-sm { width:30px; height:26px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#666; cursor:pointer; font-size:10px; font-weight:700; font-family:'DM Sans',sans-serif; transition:all .15s; }
+/* ── Transport ── */
+.transport-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.time-display{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--accent);min-width:90px}
+.time-dur{font-family:'DM Mono',monospace;font-size:11px;color:var(--neutral-600)}
+.tbns{margin-left:auto;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.btn-play-main{width:46px;height:46px;border-radius:13px;border:none;background:linear-gradient(135deg,#3e5c55,#2e4741);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(93,218,157,0.18);transition:all .2s}
+.btn-play-main:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(93,218,157,0.32)}
+.btn-ic{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-ic:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.btn-txt{height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;padding:0 12px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-txt:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.btn-grn{height:36px;border-radius:10px;border:1px solid rgba(93,218,157,0.2);background:rgba(93,218,157,0.07);color:var(--accent);cursor:pointer;padding:0 12px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-grn:hover{background:rgba(93,218,157,0.13)}
+.btn-dl{height:36px;border-radius:10px;border:1px solid rgba(93,218,157,0.3);background:rgba(93,218,157,0.08);color:var(--accent);cursor:pointer;padding:0 14px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-dl:hover{background:rgba(93,218,157,0.15);box-shadow:0 0 12px rgba(93,218,157,0.18)}
 
-/* Solo banner */
-.solo-ban { display:none; align-items:center; gap:8px; font-size:11px; color:#fbbf24; font-weight:600; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.2); border-radius:10px; padding:5px 14px; }
-.solo-ban button { background:none; border:none; color:#fbbf24; cursor:pointer; opacity:.6; font-size:15px; line-height:1; padding:0; }
-.solo-ban button:hover { opacity:1; }
+/* ── Collapse ── */
+.collapse-btn{width:24px;height:24px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.collapse-btn:hover{background:rgba(255,255,255,0.1)}
+.collapsible{overflow:hidden;transition:max-height .35s ease,opacity .3s ease}
+.collapsible.collapsed{max-height:0!important;opacity:0;pointer-events:none}
 
-/* Collapse */
-.collapse-btn { width:26px; height:26px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#888; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; transition:background .2s; }
-.collapse-btn:hover { background:rgba(255,255,255,0.1); }
-.collapsible { overflow:hidden; transition:max-height .35s ease,opacity .3s ease; }
-.collapsible.collapsed { max-height:0 !important; opacity:0; pointer-events:none; }
+/* ── Solo banner ── */
+.solo-ban{display:none;align-items:center;gap:7px;font-size:9px;color:#fbbf24;font-weight:700;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:4px 10px;letter-spacing:.05em}
+.solo-ban button{background:none;border:none;color:#fbbf24;cursor:pointer;opacity:.6;font-size:13px;line-height:1;padding:0}
+.solo-ban button:hover{opacity:1}
 
-/* Overview */
-.ov { display:flex; flex-direction:column; gap:8px; }
-.ov-row { display:flex; align-items:center; gap:12px; }
-.ov-name { font-size:13px; width:68px; flex-shrink:0; }
-.ov-track { flex:1; height:6px; border-radius:99px; background:rgba(255,255,255,0.06); overflow:hidden; }
-.ov-bar { height:100%; border-radius:99px; opacity:.75; transition:width .2s; }
-.ov-val { font-family:'DM Mono',monospace; font-size:11px; color:#555; width:38px; text-align:right; }
-.badges { display:flex; gap:4px; }
-.badge { font-size:9px; font-weight:700; padding:2px 6px; border-radius:4px; }
+/* ── Channel strip ── */
+.ch-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;align-items:stretch}
+.ch-scroll::-webkit-scrollbar{height:2px}
+.ch-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 
-/* Tip */
-.tip { font-size:11px; color:#3a3a3a; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:10px 14px; line-height:1.6; margin-top:14px; }
-.tip b { color:#666; }
+.ch{flex-shrink:0;width:96px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
 
-/* Footer */
-footer { border-top:1px solid rgba(255,255,255,0.07); padding-top:32px; text-align:center; margin-top:12px; }
-footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:#2a2a2a; margin-bottom:6px; }
-.flinks { display:flex; align-items:center; justify-content:center; gap:16px; font-size:11px; margin-bottom:4px; }
-.flinks a { color:#2a2a2a; text-decoration:none; transition:color .2s; }
-.flinks a:hover { color:#5dda9d; }
-.ver { font-size:11px; color:#222; margin-bottom:20px; }
-.coffee { display:inline-flex; align-items:center; gap:8px; border-radius:99px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); padding:12px 24px; font-size:13px; font-weight:600; color:#555; text-decoration:none; transition:all .2s; }
-.coffee:hover { border-color:#5dda9d; color:#5dda9d; }
+/* LED Display */
+.ch-display{width:100%;background:#060809;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.ch-label-led{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1}
+.led-meters{display:flex;gap:3px;align-items:flex-end;height:36px;margin-top:2px}
+.led-col{display:flex;flex-direction:column-reverse;gap:1.5px}
+.led-seg{width:7px;height:3.5px;border-radius:1px}
+.ch-db-led{font-family:'DM Mono',monospace;font-size:7px;color:#2a3035;margin-top:2px;letter-spacing:.05em}
+
+/* Fader */
+.fader-track{width:6px;height:140px;border-radius:99px;background:rgba(255,255,255,0.06);position:relative;cursor:pointer;touch-action:none;user-select:none}
+.fader-fill{position:absolute;bottom:0;left:0;right:0;border-radius:99px}
+.fader-unity{position:absolute;left:-4px;right:-4px;height:1px;background:rgba(255,255,255,0.18);pointer-events:none}
+.fader-thumb{position:absolute;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:5px;cursor:grab;border:1px solid}
+.fader-thumb:active{cursor:grabbing}
+.ch-pct{font-size:10px;font-weight:700;font-family:'DM Mono',monospace}
+.sm-row{display:flex;gap:4px}
+.btn-sm{width:26px;height:22px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-500);cursor:pointer;font-size:8px;font-weight:700;font-family:'DM Mono',monospace;transition:all .15s;letter-spacing:.05em}
+.btn-dl-stem{width:100%;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--neutral-600);cursor:pointer;font-size:8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:2px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-dl-stem:hover{border-color:rgba(93,218,157,0.3);color:var(--accent);background:rgba(93,218,157,0.06)}
+
+/* Master channel */
+.ch-master{flex-shrink:0;width:96px;border-radius:16px;border:1px solid rgba(93,218,157,0.18);background:rgba(93,218,157,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
+
+/* ── Overview ── */
+.ov{display:flex;flex-direction:column;gap:7px}
+.ov-row{display:flex;align-items:center;gap:10px}
+.ov-name{font-size:11px;width:60px;flex-shrink:0;color:var(--neutral-400)}
+.ov-track{flex:1;height:4px;border-radius:99px;background:rgba(255,255,255,0.05);overflow:hidden}
+.ov-bar{height:100%;border-radius:99px;opacity:.75;transition:width .2s}
+.ov-val{font-family:'DM Mono',monospace;font-size:10px;color:var(--neutral-600);width:36px;text-align:right}
+.badges{display:flex;gap:3px}
+.badge{font-size:7px;font-weight:700;padding:2px 5px;border-radius:3px;letter-spacing:.05em}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding-top:28px;text-align:center;margin-top:8px}
+footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(--neutral-600);margin-bottom:5px}
+.flinks{display:flex;align-items:center;justify-content:center;gap:14px;font-size:10px;margin-bottom:4px}
+.flinks a{color:var(--neutral-500);text-decoration:none;transition:color .2s}
+.flinks a:hover{color:var(--accent)}
+.ver{font-size:10px;color:#2a2a2a;margin-bottom:18px}
+.coffee{display:inline-flex;align-items:center;gap:8px;border-radius:99px;border:1px solid var(--border);background:var(--surface);padding:12px 24px;font-size:13px;font-weight:600;color:var(--neutral-400);text-decoration:none;transition:all .2s}
+.coffee:hover{border-color:var(--accent);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -163,24 +190,26 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
 
   <!-- Header -->
   <div class="header">
-    <div>
-      <h1>Stem <span>Mixer</span></h1>
-      <div class="header-sub">AI Stem Separator · Powered by Demucs</div>
+    <div class="logo">
+      <div class="logo-abcd">
+        <span class="la">A</span><span class="lb">B</span><span class="lc">C</span><span class="ld">D</span>
+      </div>
+      <div class="logo-title">
+        <h1>Method: <em>Stem</em></h1>
+        <small>AI Stem Separator · Powered by Demucs</small>
+      </div>
     </div>
     <div class="header-right">
       <a href="https://batterista.online" target="_blank">batterista.online</a>
     </div>
   </div>
 
-  <!-- Setup (visibile solo se SPACE_ID non è configurato) -->
-  <div class="setup-card" id="setup-card" style="display:none;">
+  <!-- Setup -->
+  <div class="setup-card" id="setup-card" style="display:none">
     <div class="setup-title">⚙️ Configura il tuo Hugging Face Space</div>
-    <div class="setup-desc">
-      Crea il tuo Space gratuito su Hugging Face seguendo la guida inclusa nel pacchetto.<br>
-      Una volta creato, inserisci il tuo Space ID (es. <code>tuonome/stem-mixer</code>):
-    </div>
+    <div class="setup-desc">Inserisci il tuo Space ID (es. <code>tuonome/abcdstem</code>):</div>
     <div class="input-row">
-      <input class="space-input" type="text" id="space-input" placeholder="tuonome/stem-mixer" />
+      <input class="space-input" type="text" id="space-input" placeholder="tuonome/abcdstem"/>
       <button class="btn-primary" id="btn-save-space">Salva →</button>
     </div>
   </div>
@@ -188,30 +217,29 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
   <!-- Upload -->
   <div class="card" id="upload-card">
     <div class="card-header">
-      <span class="card-label">Carica la tua canzone</span>
-      <button class="btn-txt" id="btn-change-space" style="height:28px;font-size:10px;padding:0 10px;display:none;">⚙️ Cambia Space</button>
+      <span class="card-label">Carica il brano</span>
+      <button class="btn-txt" id="btn-change-space" style="height:24px;font-size:9px;padding:0 8px;display:none">⚙️ Space</button>
     </div>
     <div class="upload-zone" id="upload-zone">
-      <input type="file" id="file-input" accept=".mp3,.wav,.flac,.ogg,.m4a,audio/*" />
+      <input type="file" id="file-input" accept=".mp3,.wav,.flac,.ogg,.m4a,audio/*"/>
       <div class="upload-icon">🎵</div>
-      <div class="upload-title">Trascina il tuo MP3 qui</div>
+      <div class="upload-title">Trascina il tuo brano qui</div>
       <div class="upload-sub">oppure clicca per selezionare il file</div>
       <div class="upload-fmt">MP3 · WAV · FLAC · OGG · M4A</div>
     </div>
-    <div class="tip">
-      ⏱ La separazione AI richiede circa <b>1–3 minuti</b>.<br>
-      Risultato: <b>Drums · Bass · Vocals · Other</b> — pronti sui fader.
+    <div class="upload-warn">
+      ⏱ <b>Attenzione ai tempi:</b> la separazione AI richiede mediamente <b>2–3 minuti</b>, ma per brani lunghi o complessi possono volerci <b>5 minuti o più</b>. Puoi lasciare la tab in background — riceverai una <b>notifica browser</b> quando è pronto (consenti le notifiche quando richiesto).
     </div>
   </div>
 
   <!-- Status -->
-  <div class="card" id="status-card" style="display:none;">
+  <div class="card" id="status-card" style="display:none">
     <div class="status-inner">
       <div class="status-top">
         <div class="spinner"></div>
         <div>
           <div class="s-title" id="s-title">Avvio separazione…</div>
-          <div class="s-sub"   id="s-sub">Connessione allo Space</div>
+          <div class="s-sub" id="s-sub">Connessione allo Space</div>
         </div>
       </div>
       <div class="prog-track"><div class="prog-fill slide" id="prog"></div></div>
@@ -221,7 +249,7 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
         <div class="pill" id="p-ai">⚙️ Separazione AI</div>
         <div class="pill" id="p-dec">🔊 Decodifica</div>
       </div>
-      <div id="s-file" style="font-size:12px;color:#444;margin-top:4px;"></div>
+      <div id="s-file" style="font-size:11px;color:var(--neutral-600);margin-top:2px"></div>
     </div>
   </div>
 
@@ -232,46 +260,43 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
     <button class="btn-retry" id="btn-retry">↩ Riprova</button>
   </div>
 
-  <!-- Mixer Transport -->
-  <div class="card" id="mixer-card" style="display:none;">
+  <!-- Transport -->
+  <div class="card" id="mixer-card" style="display:none">
     <div class="card-header">
       <span class="card-label">Transport</span>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="solo-ban" id="solo-ban">SOLO ATTIVO <button id="clear-solo">✕</button></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="solo-ban" id="solo-ban">SOLO <button id="clear-solo">✕</button></div>
         <button class="collapse-btn" id="col-btn">▲</button>
       </div>
     </div>
-    <div class="collapsible" id="mixer-body" style="max-height:500px;">
-      <div id="waveform-wrap"><canvas id="waveform-canvas" width="900" height="64"></canvas></div>
-      <div id="track-name" style="font-size:12px;color:#444;margin-bottom:14px;"></div>
-      <div class="transport-row">
-        <span class="time-now" id="tnow">0:00</span>
+    <!-- Waveform sempre visibile -->
+    <div id="waveform-wrap"><canvas id="waveform-canvas" width="920" height="52"></canvas></div>
+    <!-- Collapsibile -->
+    <div class="collapsible" id="mixer-body" style="max-height:300px">
+      <div id="track-name" style="font-size:11px;color:var(--neutral-500);margin:10px 0 12px"></div>
+      <div class="transport-controls">
+        <span class="time-display" id="tnow">0:00</span>
         <span class="time-dur" id="tdur">/ 0:00</span>
         <div class="tbns">
           <button class="btn-play-main" id="btn-play">▶</button>
-          <button class="btn-ic"  id="btn-stop"  title="Stop">■</button>
-          <button class="btn-txt" id="btn-reset">↺ Reset fader</button>
-          <button class="btn-grn" id="btn-new">+ Nuova canzone</button>
+          <button class="btn-ic" id="btn-stop" title="Stop">■</button>
+          <button class="btn-txt" id="btn-reset">↺ Reset</button>
+          <button class="btn-dl" id="btn-dl-mix">⬇ Scarica Mix</button>
+          <button class="btn-grn" id="btn-new">+ Nuovo brano</button>
         </div>
-      </div>
-      <div class="master-row">
-        <span class="master-lbl">Master</span>
-        <button class="btn-mut" id="btn-mmut">🔊</button>
-        <input type="range" id="master-r" min="0" max="150" value="100" />
-        <span class="rv" id="master-v">100%</span>
       </div>
     </div>
   </div>
 
   <!-- Channels -->
-  <div class="card" id="ch-card" style="display:none;">
+  <div class="card" id="ch-card" style="display:none">
     <div class="card-header"><span class="card-label">Stem Channels</span></div>
     <div class="ch-scroll" id="ch-wrap"></div>
   </div>
 
   <!-- Overview -->
-  <div class="card" id="ov-card" style="display:none;">
-    <div class="card-header"><span class="card-label">Overview</span></div>
+  <div class="card" id="ov-card" style="display:none">
+    <div class="card-header"><span class="card-label">Mix Overview</span></div>
     <div class="ov" id="ov-rows"></div>
   </div>
 
@@ -279,320 +304,245 @@ footer p { font-size:11px; text-transform:uppercase; letter-spacing:.3em; color:
     <p>Copyright © Batterista Online — Tutti i diritti riservati</p>
     <div class="flinks">
       <a href="https://batterista.online" target="_blank">www.batterista.online</a>
-      <span style="color:#252525">•</span>
-      <a href="/cdn-cgi/l/email-protection#70191e161f30121104041502190304115e1f1e1c191e15"><span class="__cf_email__" data-cfemail="aec7c0c8c1eecccfdadacbdcc7dddacf80c1c0c2c7c0cb">[email&#160;protected]</span></a>
+      <span style="color:var(--neutral-600)">•</span>
+      <a href="mailto:info@batterista.online">info@batterista.online</a>
     </div>
-    <div class="ver">Stem Mixer v1.0 · Powered by Demucs (Meta AI) via Hugging Face</div>
+    <div class="ver">ABCD Method: Stem v1.1 · Powered by Demucs (Meta AI) via Hugging Face</div>
     <a href="https://www.buymeacoffee.com/batterista" target="_blank" class="coffee">
       Aiutami a mantenere questa app gratuita: ☕ Offrimi un caffè
     </a>
   </footer>
+</div>
 
-</div><!-- /app -->
+<script>
+'use strict';
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const HARDCODED_SPACE_ID = "GeenoPizza/abcdstem";
 
-// ─── ⚙️ CONFIGURA QUI IL TUO SPACE ID ────────────────────────────────────────
-// Dopo aver creato lo Space su Hugging Face, metti qui il tuo Space ID
-// Formato: "tuonomeutente/nome-space"  es: "mario/stem-mixer"
-// Se lo lasci vuoto, l'app chiede all'utente di inserirlo (non utile in produzione)
-const HARDCODED_SPACE_ID = "GeenoPizza/abcdstem"; // ← METTI QUI IL TUO SPACE ID
-
-// ─── Stem configs ─────────────────────────────────────────────────────────────
+// ABCD phase colors per gli stem (A=drums,B=bass,C=vocals,D=other)
 const STEM_CFGS = [
-  { id:"drums",  label:"Drums",  emoji:"🥁", color:"#f97316", glow:"rgba(249,115,22,0.35)" },
-  { id:"bass",   label:"Bass",   emoji:"🎸", color:"#a855f7", glow:"rgba(168,85,247,0.35)" },
-  { id:"vocals", label:"Vocals", emoji:"🎤", color:"#5dda9d", glow:"rgba(93,218,157,0.35)" },
-  { id:"other",  label:"Other",  emoji:"✨", color:"#ec4899", glow:"rgba(236,72,153,0.35)" },
+  { id:"drums",  label:"Drums",  color:"#5f8dff", glow:"rgba(95,141,255,0.28)",  ledOn:"#5f8dff",  ledMid:"#4a73e8",  ledPeak:"#ff4466" },
+  { id:"bass",   label:"Bass",   color:"#f1b54f", glow:"rgba(241,181,79,0.28)",  ledOn:"#f1b54f",  ledMid:"#d49a38",  ledPeak:"#ff4466" },
+  { id:"vocals", label:"Vocals", color:"#5dda9d", glow:"rgba(93,218,157,0.28)",  ledOn:"#5dda9d",  ledMid:"#3ab87d",  ledPeak:"#ff4466" },
+  { id:"other",  label:"Other",  color:"#ff865c", glow:"rgba(255,134,92,0.28)",  ledOn:"#ff865c",  ledMid:"#e06840",  ledPeak:"#ff4466" },
 ];
 
-// ─── State ────────────────────────────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────────────────────────
 let spaceId = HARDCODED_SPACE_ID || localStorage.getItem("hf_space_id") || "";
-let stems = STEM_CFGS.map(c => ({ id:c.id, volume:100, muted:false, solo:false, buffer:null, waveform:[], vuLevel:0 }));
+let stems = STEM_CFGS.map(c=>({id:c.id,volume:100,muted:false,solo:false,buffer:null,waveform:[],vuLevel:0}));
 let masterVol=100, masterMuted=false;
 let isPlaying=false, curTime=0, totalDur=0, trackName="";
 let transCollapsed=false;
 let audioCtx=null, masterGain=null;
 let stemNodes=[], startAt=0, pauseOff=0, animId=null, vuTimer=null;
 
-// ─── Audio ────────────────────────────────────────────────────────────────────
-function getCtx() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    masterGain = audioCtx.createGain();
-    masterGain.connect(audioCtx.destination);
-  }
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmt=s=>{if(!s||isNaN(s))return"0:00";return`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,"0")}`};
+const hasSolo=()=>stems.some(s=>s.solo);
+const effMuted=s=>s.muted||(hasSolo()&&!s.solo);
+const effGain=s=>(effMuted(s)||masterMuted)?0:(s.volume/100)*(masterVol/100);
+const $=id=>document.getElementById(id);
+const show=(id,v=true)=>{const e=$(id);if(e)e.style.display=v?"block":"none"};
+
+function getCtx(){
+  if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.connect(audioCtx.destination);}
   return audioCtx;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-const fmt = s => { if(!s||isNaN(s))return"0:00"; return`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,"0")}`; };
-const hasSolo  = () => stems.some(s => s.solo);
-const effMuted = s  => s.muted || (hasSolo() && !s.solo);
-const effGain  = s  => (effMuted(s) || masterMuted) ? 0 : (s.volume/100) * (masterVol/100);
-const $        = id => document.getElementById(id);
-
-function show(id, v=true) {
-  const el = $(id);
-  if (el) el.style.display = v ? "block" : "none";
+// ── Space ID ──────────────────────────────────────────────────────────────────
+function initUI(){
+  if(spaceId){show("setup-card",false);show("upload-card",true);if(!HARDCODED_SPACE_ID)$("btn-change-space").style.display="flex";}
+  else{show("setup-card",true);show("upload-card",false);}
 }
-
-// ─── Space ID setup ───────────────────────────────────────────────────────────
-function initUI() {
-  if (spaceId) {
-    show("setup-card", false);
-    show("upload-card", true);
-    if (!HARDCODED_SPACE_ID) $("btn-change-space").style.display = "flex";
-  } else {
-    show("setup-card", true);
-    show("upload-card", false);
-  }
-}
-
-$("btn-save-space").onclick = () => {
-  const v = $("space-input").value.trim();
-  if (!v.includes("/")) { alert('Formato non valido. Usa: tuonome/nome-space'); return; }
-  spaceId = v;
-  localStorage.setItem("hf_space_id", spaceId);
-  show("setup-card", false);
-  show("upload-card", true);
-  $("btn-change-space").style.display = "flex";
+$("btn-save-space").onclick=()=>{
+  const v=$("space-input").value.trim();
+  if(!v.includes("/"))return alert("Formato: tuonome/nome-space");
+  spaceId=v;localStorage.setItem("hf_space_id",spaceId);
+  show("setup-card",false);show("upload-card",true);$("btn-change-space").style.display="flex";
 };
-$("space-input").onkeydown = e => { if(e.key==="Enter") $("btn-save-space").click(); };
-$("btn-change-space").onclick = () => {
-  show("upload-card", false);
-  show("setup-card", true);
-  $("space-input").value = spaceId;
-};
+$("space-input").onkeydown=e=>{if(e.key==="Enter")$("btn-save-space").click()};
+$("btn-change-space").onclick=()=>{show("upload-card",false);show("setup-card",true);$("space-input").value=spaceId};
 
-// ─── Upload / drag-drop ───────────────────────────────────────────────────────
-const zone = $("upload-zone"), fi = $("file-input");
-zone.addEventListener("dragover",  e => { e.preventDefault(); zone.classList.add("over"); });
-zone.addEventListener("dragleave", () => zone.classList.remove("over"));
-zone.addEventListener("drop", e => {
-  e.preventDefault(); zone.classList.remove("over");
-  const f = e.dataTransfer.files[0]; if(f) go(f);
-});
-fi.addEventListener("change", e => { if(e.target.files[0]) go(e.target.files[0]); });
+// ── Upload ────────────────────────────────────────────────────────────────────
+const zone=$("upload-zone"),fi=$("file-input");
+zone.addEventListener("dragover",e=>{e.preventDefault();zone.classList.add("over")});
+zone.addEventListener("dragleave",()=>zone.classList.remove("over"));
+zone.addEventListener("drop",e=>{e.preventDefault();zone.classList.remove("over");const f=e.dataTransfer.files[0];if(f)go(f)});
+fi.addEventListener("change",e=>{if(e.target.files[0])go(e.target.files[0])});
 
-// ─── Status helpers ───────────────────────────────────────────────────────────
-function setSt(title, sub, slide=false, pct=0) {
-  $("s-title").textContent = title;
-  $("s-sub").textContent   = sub || "";
-  const p = $("prog");
-  if (slide) { p.classList.add("slide"); p.style.width = "35%"; }
-  else        { p.classList.remove("slide"); p.style.width = pct + "%"; }
+// ── Status ────────────────────────────────────────────────────────────────────
+function setSt(title,sub,slide=false,pct=0){
+  $("s-title").textContent=title;$("s-sub").textContent=sub||"";
+  const p=$("prog");
+  if(slide){p.classList.add("slide");p.style.width="25%";}
+  else{p.classList.remove("slide");p.style.width=pct+"%";}
 }
-function pill(id, state) {
-  const e = $(id); if(!e) return;
-  e.classList.remove("on","done");
-  if(state) e.classList.add(state);
+function pill(id,state){const e=$(id);if(!e)return;e.classList.remove("on","done");if(state)e.classList.add(state)}
+
+// ── Notifications ─────────────────────────────────────────────────────────────
+async function requestNotifPermission(){
+  if("Notification"in window&&Notification.permission==="default")await Notification.requestPermission();
+}
+function sendNotif(title,body){
+  if("Notification"in window&&Notification.permission==="granted")
+    new Notification(title,{body,icon:"https://batterista.online/favicon.ico"});
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
-async function go(file) {
-  trackName = file.name.replace(/\.[^.]+$/, "");
-  show("upload-card", false); show("err-card", false); show("status-card", true);
-  $("s-file").textContent = "🎵 " + file.name;
-  setSt("Connessione allo Space…", spaceId, true);
-  pill("p-connect","on"); pill("p-upload",""); pill("p-ai",""); pill("p-dec","");
-
-  try {
-    const bufs = await separateStems(file);
+// ── Main ──────────────────────────────────────────────────────────────────────
+async function go(file){
+  trackName=file.name.replace(/\.[^.]+$/,"");
+  show("upload-card",false);show("err-card",false);show("status-card",true);
+  $("s-file").textContent="🎵 "+file.name;
+  setSt("Connessione allo Space…",spaceId,true);
+  pill("p-connect","on");pill("p-upload","");pill("p-ai","");pill("p-dec","");
+  await requestNotifPermission();
+  try{
+    const bufs=await separateStems(file);
+    sendNotif("ABCD Method: Stem","✅ Separazione completata! "+trackName+" è pronto.");
     buildMixer(bufs);
-  } catch(err) {
-    show("status-card", false); show("err-card", true);
-    $("err-msg").textContent = err.message || String(err);
-    console.error(err);
+  }catch(err){
+    show("status-card",false);show("err-card",true);
+    $("err-msg").textContent=err.message||String(err);
   }
 }
 
-async function separateStems(file) {
-  const ctx = getCtx();
-  const spaceUrl = `https://${spaceId.replace("/", "-")}.hf.space`;
+// ── Separation ────────────────────────────────────────────────────────────────
+async function separateStems(file){
+  const ctx=getCtx();
+  const spaceUrl=`https://${spaceId.replace("/","-")}.hf.space`;
 
-  // 1. Upload file
-  pill("p-connect","done"); pill("p-upload","on");
-  setSt("Upload del brano…", "Invio a Hugging Face", true);
+  pill("p-connect","done");pill("p-upload","on");
+  setSt("Upload del brano…","Invio a Hugging Face",true);
 
-  const formData = new FormData();
-  formData.append("files", file);
-
+  const formData=new FormData();
+  formData.append("files",file);
   let uploadedPath;
-  try {
-    const r = await fetch(`${spaceUrl}/upload`, { method:"POST", body: formData });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const json = await r.json();
-    uploadedPath = Array.isArray(json) ? json[0] : json;
-  } catch(e) {
-    throw new Error(
-      `Impossibile raggiungere lo Space.\n` +
-      `• Verifica che sia online: huggingface.co/spaces/${spaceId}\n` +
-      `• Se è in sleep clicca "Restart" su HF e riprova tra 30 secondi\n\n` +
-      `Dettaglio: ${e.message}`
-    );
+  try{
+    const r=await fetch(`${spaceUrl}/upload`,{method:"POST",body:formData});
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const json=await r.json();
+    uploadedPath=Array.isArray(json)?json[0]:json;
+  }catch(e){
+    throw new Error(`Impossibile raggiungere lo Space.\n• Verifica che sia online: huggingface.co/spaces/${spaceId}\n• Se è in sleep clicca "Restart" su HF e riprova\n\nDettaglio: ${e.message}`);
   }
 
-  pill("p-upload","done"); pill("p-ai","on");
-  setSt("Separazione AI in corso…", "Demucs sta analizzando il brano…", true);
+  pill("p-upload","done");pill("p-ai","on");
+  setSt("Separazione AI in corso…","Demucs sta analizzando il brano…",true);
 
-  // Timer visivo durante la separazione
-  const aiStart = Date.now();
-  const phases = [
-    "Analisi della forma d'onda…",
-    "Separazione drums…",
-    "Separazione bass…",
-    "Separazione vocals…",
-    "Separazione other…",
-    "Finalizzazione stems…",
-  ];
-  let phaseIdx = 0;
-  const timerInterval = setInterval(() => {
-    const elapsed = Math.floor((Date.now() - aiStart) / 1000);
-    const m = Math.floor(elapsed / 60);
-    const s = elapsed % 60;
-    const timeStr = m > 0 ? `${m}m ${s}s` : `${s}s`;
-    const phase = phases[phaseIdx % phases.length];
+  const aiStart=Date.now();
+  const phases=["Analisi della forma d'onda…","Separazione drums…","Separazione bass…","Separazione vocals…","Separazione other…","Finalizzazione stems…","Ancora un momento…"];
+  let phaseIdx=0;
+  const timerInterval=setInterval(()=>{
+    const el=Math.floor((Date.now()-aiStart)/1000);
+    const m=Math.floor(el/60),s=el%60;
+    const timeStr=m>0?`${m}m ${s}s`:`${s}s`;
+    $("s-sub").textContent=`${phases[phaseIdx%phases.length]} — ${timeStr} trascorsi`;
     phaseIdx++;
-    $("s-sub").textContent = `${phase} — ${timeStr} trascorsi`;
-    // Progress bar simulata: sale fino al 75% in ~90 secondi
-    const fakePct = Math.min(75, (elapsed / 90) * 75);
-    const p = $("prog");
-    p.classList.remove("slide");
-    p.style.width = fakePct + "%";
-  }, 4000);
+    const p=$("prog");p.classList.remove("slide");
+    p.style.width=Math.min(75,(el/120)*75)+"%";
+  },4000);
 
-  // 2. Predict
   let predictData;
-  try {
-    const r = await fetch(`${spaceUrl}/run/predict`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fn_index: 0,
-        data: [{ name: uploadedPath, data: null, is_file: true }],
-        session_hash: Math.random().toString(36).slice(2)
-      })
+  try{
+    const r=await fetch(`${spaceUrl}/run/predict`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({fn_index:0,data:[{name:uploadedPath,data:null,is_file:true}],session_hash:Math.random().toString(36).slice(2)})
     });
     clearInterval(timerInterval);
-    if (!r.ok) throw new Error(`HTTP ${r.status} — ${await r.text().then(t=>t.slice(0,200))}`);
-    predictData = await r.json();
-  } catch(e) {
-    clearInterval(timerInterval);
-    throw new Error(`Errore durante la separazione AI.\n\nDettaglio: ${e.message}`);
-  }
+    if(!r.ok)throw new Error(`HTTP ${r.status} — ${await r.text().then(t=>t.slice(0,200))}`);
+    predictData=await r.json();
+  }catch(e){clearInterval(timerInterval);throw new Error(`Errore separazione AI.\n\nDettaglio: ${e.message}`);}
 
-  pill("p-ai","done"); pill("p-dec","on");
-  setSt("Decodifica audio…", "Preparazione dei canali", false, 80);
+  pill("p-ai","done");pill("p-dec","on");
+  setSt("Decodifica audio…","Preparazione dei canali",false,82);
 
-  const outputs = predictData?.data;
-  if (!outputs?.length) throw new Error("Il modello non ha restituito audio. Riprova.");
+  const outputs=predictData?.data;
+  if(!outputs?.length)throw new Error("Il modello non ha restituito audio. Riprova.");
 
-  const stemOrder = ["drums","bass","vocals","other"];
-  const bufMap = {};
-
-  for (let i = 0; i < outputs.length; i++) {
-    const out    = outputs[i];
-    const stemId = stemOrder[i] || `stem_${i}`;
-    setSt(`Decodifica ${stemId}…`, "", false, 80 + i * 5);
-
-    let url = null;
-    if      (typeof out === "string")        url = out;
-    else if (out?.url)                       url = out.url;
-    else if (out?.name)                      url = `${spaceUrl}/file=${out.name}`;
-
-    try {
+  const stemOrder=["drums","bass","vocals","other"];
+  const bufMap={};
+  for(let i=0;i<outputs.length;i++){
+    const out=outputs[i];
+    const stemId=stemOrder[i]||`stem_${i}`;
+    setSt(`Decodifica ${stemId}…`,"",false,82+i*4);
+    let url=null;
+    if(typeof out==="string")url=out;
+    else if(out?.url)url=out.url;
+    else if(out?.name)url=`${spaceUrl}/file=${out.name}`;
+    try{
       let ab;
-      if (out?.data?.startsWith("data:")) {
-        const b64 = out.data.split(",")[1];
-        const bin = atob(b64);
-        const u8  = new Uint8Array(bin.length);
-        for (let j=0; j<bin.length; j++) u8[j] = bin.charCodeAt(j);
-        ab = u8.buffer;
-      } else if (url) {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        ab = await resp.arrayBuffer();
-      } else {
-        continue;
-      }
-      bufMap[stemId] = await ctx.decodeAudioData(ab);
-    } catch(e) {
-      console.warn(`Stem ${stemId} non decodificato:`, e);
-    }
+      if(out?.data?.startsWith("data:")){
+        const b64=out.data.split(",")[1],bin=atob(b64),u8=new Uint8Array(bin.length);
+        for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);ab=u8.buffer;
+      }else if(url){
+        const resp=await fetch(url);if(!resp.ok)throw new Error(`HTTP ${resp.status}`);ab=await resp.arrayBuffer();
+      }else continue;
+      bufMap[stemId]=await ctx.decodeAudioData(ab);
+    }catch(e){console.warn(`Stem ${stemId}:`,e)}
   }
-
-  if (!Object.keys(bufMap).length)
-    throw new Error("Nessuno stem decodificato. Prova con un file WAV o un brano più corto.");
-
-  pill("p-dec","done");
-  setSt("Separazione completata!", "", false, 100);
-  await new Promise(r => setTimeout(r, 400));
+  if(!Object.keys(bufMap).length)throw new Error("Nessuno stem decodificato. Prova con un file WAV o un brano più corto.");
+  pill("p-dec","done");setSt("Separazione completata!","",false,100);
+  await new Promise(r=>setTimeout(r,400));
   return bufMap;
 }
 
-// ─── Build mixer ──────────────────────────────────────────────────────────────
-function buildMixer(bufMap) {
-  stems.forEach(s => {
-    const buf = bufMap[s.id] || null;
-    s.buffer=buf; s.waveform=buf?makeWave(buf):[]; s.volume=100; s.muted=false; s.solo=false; s.vuLevel=0;
-  });
-  totalDur = Math.max(...stems.filter(s=>s.buffer).map(s=>s.buffer.duration), 0);
-  show("status-card", false);
-  show("mixer-card", true); show("ch-card", true); show("ov-card", true);
-  $("track-name").textContent = "🎵 " + trackName;
-  $("tdur").textContent = "/ " + fmt(totalDur);
-  buildChannels(); drawWave(); updateOv();
+// ── Build mixer ───────────────────────────────────────────────────────────────
+function buildMixer(bufMap){
+  stems.forEach(s=>{const buf=bufMap[s.id]||null;s.buffer=buf;s.waveform=buf?makeWave(buf):[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0;});
+  totalDur=Math.max(...stems.filter(s=>s.buffer).map(s=>s.buffer.duration),0);
+  show("status-card",false);show("mixer-card",true);show("ch-card",true);show("ov-card",true);
+  $("track-name").textContent="🎵 "+trackName;
+  $("tdur").textContent="/ "+fmt(totalDur);
+  buildChannels();drawWave();updateOv();
 }
 
-function makeWave(buf) {
-  const raw=buf.getChannelData(0), N=500, block=Math.floor(raw.length/N), wv=[];
+function makeWave(buf){
+  const raw=buf.getChannelData(0),N=500,block=Math.floor(raw.length/N),wv=[];
   for(let i=0;i<N;i++){let s=0;for(let j=0;j<block;j++)s+=Math.abs(raw[i*block+j]);wv.push(s/block);}
-  const mx=Math.max(...wv,0.001); return wv.map(v=>v/mx);
+  const mx=Math.max(...wv,0.001);return wv.map(v=>v/mx);
 }
 
-// ─── Waveform ─────────────────────────────────────────────────────────────────
-function drawWave() {
-  const canvas=$("waveform-canvas"), c=canvas.getContext("2d");
-  const W=canvas.width, H=canvas.height;
+// ── Waveform ──────────────────────────────────────────────────────────────────
+function drawWave(){
+  const canvas=$("waveform-canvas"),c=canvas.getContext("2d");
+  const W=canvas.width,H=canvas.height;
   c.clearRect(0,0,W,H);
-  const primary=stems.find(s=>s.waveform.length); if(!primary)return;
-  const wv=primary.waveform, bW=2, gap=1, tot=Math.floor(W/(bW+gap));
-  const step=Math.floor(wv.length/tot), prog=totalDur>0?curTime/totalDur:0;
+  const primary=stems.find(s=>s.waveform.length);if(!primary)return;
+  const wv=primary.waveform,bW=2,gap=1,tot=Math.floor(W/(bW+gap));
+  const step=Math.floor(wv.length/tot),prog=totalDur>0?curTime/totalDur:0;
   for(let i=0;i<tot;i++){
-    const v=wv[i*step]||0, bH=Math.max(2,v*H*.9), x=i*(bW+gap), y=(H-bH)/2;
-    c.fillStyle=i/tot<prog?"#5dda9d":"rgba(255,255,255,0.1)";
-    c.beginPath(); if(c.roundRect)c.roundRect(x,y,bW,bH,1); else c.rect(x,y,bW,bH); c.fill();
+    const v=wv[i*step]||0,bH=Math.max(2,v*H*.88),x=i*(bW+gap),y=(H-bH)/2;
+    c.fillStyle=i/tot<prog?"#5dda9d":"rgba(255,255,255,0.09)";
+    c.beginPath();if(c.roundRect)c.roundRect(x,y,bW,bH,1);else c.rect(x,y,bW,bH);c.fill();
   }
 }
-
-$("waveform-wrap").onclick = e => {
-  const c=$("waveform-canvas"), r=c.getBoundingClientRect();
-  pauseOff=(e.clientX-r.left)/r.width*totalDur;
-  curTime=pauseOff; $("tnow").textContent=fmt(curTime); drawWave();
-  if(isPlaying){stopAll();startPlay();}
+$("waveform-wrap").onclick=e=>{
+  const c=$("waveform-canvas"),r=c.getBoundingClientRect();
+  pauseOff=(e.clientX-r.left)/r.width*totalDur;curTime=pauseOff;
+  $("tnow").textContent=fmt(curTime);drawWave();if(isPlaying){stopAll();startPlay();}
 };
 
-// ─── Playback ─────────────────────────────────────────────────────────────────
-function stopAll() {
-  stemNodes.forEach(n=>{try{n.source.stop();}catch(_){}});
-  stemNodes=[]; if(animId)cancelAnimationFrame(animId); if(vuTimer)clearInterval(vuTimer);
-  isPlaying=false; stems.forEach(s=>s.vuLevel=0); updateVU();
+// ── Playback ──────────────────────────────────────────────────────────────────
+function stopAll(){
+  stemNodes.forEach(n=>{try{n.source.stop()}catch(_){}});
+  stemNodes=[];if(animId)cancelAnimationFrame(animId);if(vuTimer)clearInterval(vuTimer);
+  isPlaying=false;stems.forEach(s=>s.vuLevel=0);updateVU();
 }
-
-function startPlay() {
-  const ctx=getCtx(); if(ctx.state==="suspended")ctx.resume();
-  const off=pauseOff; startAt=ctx.currentTime-off;
+function startPlay(){
+  const ctx=getCtx();if(ctx.state==="suspended")ctx.resume();
+  const off=pauseOff;startAt=ctx.currentTime-off;
   stemNodes=stems.filter(s=>s.buffer).map(s=>{
-    const src=ctx.createBufferSource(); src.buffer=s.buffer;
-    const gn=ctx.createGain(), an=ctx.createAnalyser(); an.fftSize=256;
-    gn.gain.value=effGain(s); src.connect(an); an.connect(gn); gn.connect(masterGain);
-    src.start(0,off); return{id:s.id,source:src,gainNode:gn,analyser:an};
+    const src=ctx.createBufferSource();src.buffer=s.buffer;
+    const gn=ctx.createGain(),an=ctx.createAnalyser();an.fftSize=256;
+    gn.gain.value=effGain(s);src.connect(an);an.connect(gn);gn.connect(masterGain);
+    src.start(0,off);return{id:s.id,source:src,gainNode:gn,analyser:an};
   });
   isPlaying=true;
   function tick(){
-    const el=ctx.currentTime-startAt; curTime=Math.min(el,totalDur);
-    $("tnow").textContent=fmt(curTime); drawWave();
+    const el=ctx.currentTime-startAt;curTime=Math.min(el,totalDur);
+    $("tnow").textContent=fmt(curTime);drawWave();
     if(el<totalDur){animId=requestAnimationFrame(tick);}
     else{stopAll();pauseOff=0;curTime=0;$("tnow").textContent="0:00";drawWave();updatePlayBtn();}
   }
@@ -600,85 +550,157 @@ function startPlay() {
   const buf=new Uint8Array(128);
   vuTimer=setInterval(()=>{
     stemNodes.forEach(n=>{
-      n.analyser.getByteTimeDomainData(buf); let pk=0;
+      n.analyser.getByteTimeDomainData(buf);let pk=0;
       for(let i=0;i<buf.length;i++){const v=Math.abs(buf[i]-128)/128;if(v>pk)pk=v;}
-      const s=stems.find(x=>x.id===n.id); if(s)s.vuLevel=pk*100;
-    }); updateVU();
+      const s=stems.find(x=>x.id===n.id);if(s)s.vuLevel=pk*100;
+    });updateVU();
   },55);
   updatePlayBtn();
 }
-
-function updateGains() {
+function updateGains(){
   if(!audioCtx)return;
   stemNodes.forEach(n=>{const s=stems.find(x=>x.id===n.id);if(s)n.gainNode.gain.setTargetAtTime(effGain(s),audioCtx.currentTime,.02);});
 }
-function updatePlayBtn(){ $("btn-play").textContent=isPlaying?"⏸":"▶"; }
+function updatePlayBtn(){$("btn-play").textContent=isPlaying?"⏸":"▶"}
+
+// ── LED VU meters ─────────────────────────────────────────────────────────────
+const LED_ROWS=10;
 function updateVU(){
   stems.forEach(s=>{
     const lv=effMuted(s)?0:Math.min(100,s.vuLevel);
-    const a=$("vu0-"+s.id),b=$("vu1-"+s.id);
-    if(a)a.style.height=lv+"%"; if(b)b.style.height=(lv*.88)+"%";
+    const cfg=STEM_CFGS.find(c=>c.id===s.id);
+    const activeLeds=Math.round((lv/100)*LED_ROWS);
+    for(let ch=0;ch<2;ch++){
+      for(let row=0;row<LED_ROWS;row++){
+        const seg=$(`led-${s.id}-${ch}-${row}`);if(!seg)continue;
+        const lit=row<activeLeds;
+        seg.style.opacity=lit?1:0.06;
+        if(lit){
+          if(row>=LED_ROWS-2)seg.style.background=cfg.ledPeak;
+          else if(row>=LED_ROWS-4)seg.style.background=cfg.ledMid;
+          else seg.style.background=cfg.ledOn;
+        }
+      }
+    }
+    const dbEl=$("db-led-"+s.id);
+    if(dbEl)dbEl.textContent=effMuted(s)?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
   });
+  // Master VU
+  const activeStems=stems.filter(s=>s.buffer);
+  const masterLv=masterMuted||!activeStems.length?0:Math.min(100,activeStems.reduce((a,s)=>a+s.vuLevel,0)/activeStems.length);
+  const mActiveLeds=Math.round((masterLv/100)*LED_ROWS);
+  for(let ch=0;ch<2;ch++){
+    for(let row=0;row<LED_ROWS;row++){
+      const seg=$(`led-master-${ch}-${row}`);if(!seg)continue;
+      const lit=row<mActiveLeds;
+      seg.style.opacity=lit?1:0.06;
+      if(lit)seg.style.background=row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#3ab87d":"#5dda9d";
+    }
+  }
 }
 
-// ─── Channels ─────────────────────────────────────────────────────────────────
+function makeLedDisplay(id,cfg){
+  const color=cfg?cfg.color:"#5dda9d";
+  const label=cfg?cfg.label:"MASTER";
+  let html=`<div class="ch-display">
+    <div class="ch-label-led" style="color:${color}">${label}</div>
+    <div class="led-meters">`;
+  for(let ch=0;ch<2;ch++){
+    html+=`<div class="led-col">`;
+    for(let row=LED_ROWS-1;row>=0;row--){
+      const c=cfg?(row>=LED_ROWS-2?cfg.ledPeak:row>=LED_ROWS-4?cfg.ledMid:cfg.ledOn):(row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#3ab87d":"#5dda9d");
+      html+=`<div class="led-seg" id="led-${id}-${ch}-${row}" style="background:${c};opacity:0.06"></div>`;
+    }
+    html+=`</div>`;
+  }
+  html+=`</div><div class="ch-db-led" id="db-led-${id}">0dB</div></div>`;
+  return html;
+}
+
+// ── Build channels ────────────────────────────────────────────────────────────
 function buildChannels(){
-  const wrap=$("ch-wrap"); wrap.innerHTML="";
+  const wrap=$("ch-wrap");wrap.innerHTML="";
+
   stems.forEach(s=>{
-    const cfg=STEM_CFGS.find(c=>c.id===s.id); if(!cfg)return;
-    const mu=effMuted(s), pct=Math.round(s.volume);
-    const db=s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(1);
+    const cfg=STEM_CFGS.find(c=>c.id===s.id);if(!cfg)return;
+    const mu=effMuted(s);
     const tT=(1-s.volume/150)*100;
     const div=document.createElement("div");
-    div.className="ch"; div.id="ch-"+s.id;
-    if(s.buffer){div.style.border=`1px solid ${cfg.color}28`;div.style.boxShadow=`0 0 22px ${cfg.glow}`;}
+    div.className="ch";div.id="ch-"+s.id;
+    if(s.buffer){div.style.borderColor=cfg.color+"22";div.style.boxShadow=`0 0 16px ${cfg.glow}`;}
     div.innerHTML=`
-      <div class="ch-emoji">${cfg.emoji}</div>
-      <div class="ch-name" style="color:${cfg.color}">${cfg.label}</div>
-      <div class="vu-wrap">
-        <div class="vu-strip"><div class="vu-fill" id="vu0-${s.id}" style="background:linear-gradient(to top,${cfg.color},#fff)"></div></div>
-        <div class="vu-strip"><div class="vu-fill" id="vu1-${s.id}" style="background:linear-gradient(to top,${cfg.color},#fff)"></div></div>
-      </div>
-      <div class="ch-db" id="db-${s.id}">${mu?"MUTE":db+" dB"}</div>
+      ${makeLedDisplay(s.id,cfg)}
       <div class="fader-track" id="ft-${s.id}">
-        <div class="fader-fill" id="ff-${s.id}" style="height:${(s.volume/150)*100}%;background:${mu?"rgba(255,255,255,0.07)":cfg.color};opacity:${mu?.25:.7}"></div>
+        <div class="fader-fill" id="ff-${s.id}" style="height:${(s.volume/150)*100}%;background:${mu?"rgba(255,255,255,0.05)":cfg.color};opacity:${mu?.18:.6}"></div>
         <div class="fader-unity" style="top:${(1-100/150)*100}%"></div>
-        <div class="fader-thumb" id="fth-${s.id}" style="top:calc(${tT}% - 11px);background:linear-gradient(180deg,${mu?"#2e2e2e":cfg.color+"cc"},${mu?"#1a1a1a":cfg.color+"44"});border-color:${mu?"#3a3a3a":cfg.color};box-shadow:${mu?"none":"0 0 10px "+cfg.glow}"></div>
+        <div class="fader-thumb" id="fth-${s.id}" style="top:calc(${tT}% - 10px);background:linear-gradient(180deg,${mu?"#1e2326":cfg.color+"aa"},${mu?"#161a1c":cfg.color+"22"});border-color:${mu?"#2a2e32":cfg.color};box-shadow:${mu?"none":"0 0 8px "+cfg.glow}"></div>
       </div>
-      <div class="ch-pct" id="pct-${s.id}" style="color:${cfg.color}">${pct}%</div>
+      <div class="ch-pct" id="pct-${s.id}" style="color:${mu?"var(--neutral-600)":cfg.color}">${Math.round(s.volume)}%</div>
       <div class="sm-row">
-        <button class="btn-sm" id="solo-${s.id}" style="background:${s.solo?cfg.color:"rgba(255,255,255,0.05)"};color:${s.solo?"#000":"#666"};border-color:${s.solo?cfg.color:"rgba(255,255,255,0.1)"}">S</button>
-        <button class="btn-sm" id="mute-${s.id}" style="background:${s.muted?"#f97316":"rgba(255,255,255,0.05)"};color:${s.muted?"#fff":"#666"};border-color:${s.muted?"#f97316":"rgba(255,255,255,0.1)"}">M</button>
+        <button class="btn-sm" id="solo-${s.id}" style="background:${s.solo?cfg.color:"var(--surface)"};color:${s.solo?"#000":"var(--neutral-500)"};border-color:${s.solo?cfg.color:"var(--border)"}">S</button>
+        <button class="btn-sm" id="mute-${s.id}" style="background:${s.muted?"#f97316":"var(--surface)"};color:${s.muted?"#fff":"var(--neutral-500)"};border-color:${s.muted?"#f97316":"var(--border)"}">M</button>
       </div>
-      ${!s.buffer?`<div style="font-size:9px;color:#444;text-align:center;">non disp.</div>`:""}
+      ${s.buffer?`<button class="btn-dl-stem" id="dl-${s.id}">⬇ ${cfg.label}</button>`:`<div style="font-size:7px;color:var(--neutral-600);text-align:center">n/a</div>`}
     `;
     wrap.appendChild(div);
     setupFader(s.id,cfg);
-    $("solo-"+s.id).onclick=()=>{s.solo=!s.solo;buildChannels();updateGains();};
-    $("mute-"+s.id).onclick=()=>{s.muted=!s.muted;buildChannels();updateGains();};
+    $("solo-"+s.id).onclick=()=>{s.solo=!s.solo;buildChannels();updateGains()};
+    $("mute-"+s.id).onclick=()=>{s.muted=!s.muted;buildChannels();updateGains()};
+    if(s.buffer)$("dl-"+s.id).onclick=()=>downloadStem(s.id,cfg.label);
   });
+
+  // Master channel
+  const mDiv=document.createElement("div");
+  mDiv.className="ch-master";mDiv.id="ch-master";
+  const mu=masterMuted,tT=(1-masterVol/150)*100;
+  mDiv.innerHTML=`
+    ${makeLedDisplay("master",null)}
+    <div class="fader-track" id="ft-master">
+      <div class="fader-fill" id="ff-master" style="height:${(masterVol/150)*100}%;background:${mu?"rgba(255,255,255,0.05)":"#5dda9d"};opacity:${mu?.18:.6}"></div>
+      <div class="fader-unity" style="top:${(1-100/150)*100}%"></div>
+      <div class="fader-thumb" id="fth-master" style="top:calc(${tT}% - 10px);background:linear-gradient(180deg,${mu?"#1e2326":"#5dda9daa"},${mu?"#161a1c":"#5dda9d22"});border-color:${mu?"#2a2e32":"#5dda9d"};box-shadow:${mu?"none":"0 0 8px rgba(93,218,157,0.28)"}"></div>
+    </div>
+    <div class="ch-pct" id="pct-master" style="color:${mu?"var(--neutral-600)":"#5dda9d"}">${Math.round(masterVol)}%</div>
+    <button id="btn-mmut" style="width:54px;height:20px;border-radius:5px;border:1px solid ${mu?"#f97316":"var(--border)"};background:${mu?"rgba(249,115,22,0.18)":"var(--surface)"};color:${mu?"#f97316":"var(--neutral-500)"};cursor:pointer;font-size:8px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.05em;transition:all .2s">${mu?"MUTE":"MASTER"}</button>
+  `;
+  wrap.appendChild(mDiv);
+  setupFader("master",null,true);
+  $("btn-mmut").onclick=()=>{masterMuted=!masterMuted;buildChannels();updateGains()};
+
   $("solo-ban").style.display=hasSolo()?"flex":"none";
   updateOv();
 }
 
-function setupFader(id,cfg){
-  const track=$("ft-"+id); if(!track)return;
-  const s=stems.find(x=>x.id===id);
-  const gv=y=>{const r=track.getBoundingClientRect();return Math.max(0,Math.min(150,Math.round((1-(y-r.top)/r.height)*150)));};
-  const apply=y=>{s.volume=gv(y);updateFaderUI(id,cfg);updateGains();};
-  track.addEventListener("mousedown",e=>{apply(e.clientY);const mv=ev=>apply(ev.clientY),up=()=>{window.removeEventListener("mousemove",mv);window.removeEventListener("mouseup",up);};window.addEventListener("mousemove",mv);window.addEventListener("mouseup",up);e.preventDefault();});
-  track.addEventListener("touchstart",e=>{apply(e.touches[0].clientY);const mv=ev=>apply(ev.touches[0].clientY),end=()=>{window.removeEventListener("touchmove",mv);window.removeEventListener("touchend",end);};window.addEventListener("touchmove",mv);window.addEventListener("touchend",end);e.preventDefault();},{passive:false});
+function setupFader(id,cfg,isMaster=false){
+  const track=$("ft-"+id);if(!track)return;
+  const gv=y=>{const r=track.getBoundingClientRect();return Math.max(0,Math.min(150,Math.round((1-(y-r.top)/r.height)*150)))};
+  const apply=y=>{
+    const val=gv(y);
+    if(isMaster){masterVol=val;updateMasterFaderUI();}
+    else{const s=stems.find(x=>x.id===id);if(s){s.volume=val;updateFaderUI(id,cfg);}}
+    updateGains();
+  };
+  track.addEventListener("mousedown",e=>{apply(e.clientY);const mv=ev=>apply(ev.clientY),up=()=>{window.removeEventListener("mousemove",mv);window.removeEventListener("mouseup",up)};window.addEventListener("mousemove",mv);window.addEventListener("mouseup",up);e.preventDefault()});
+  track.addEventListener("touchstart",e=>{apply(e.touches[0].clientY);const mv=ev=>apply(ev.touches[0].clientY),end=()=>{window.removeEventListener("touchmove",mv);window.removeEventListener("touchend",end)};window.addEventListener("touchmove",mv);window.addEventListener("touchend",end);e.preventDefault()},{passive:false});
 }
 
 function updateFaderUI(id,cfg){
   const s=stems.find(x=>x.id===id);if(!cfg)cfg=STEM_CFGS.find(c=>c.id===id);
-  const mu=effMuted(s);
-  const ff=$("ff-"+id),fth=$("fth-"+id),pct=$("pct-"+id),db=$("db-"+id);
-  if(ff){ff.style.height=`${(s.volume/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.07)":cfg.color;ff.style.opacity=mu?.25:.7;}
-  if(fth){fth.style.top=`calc(${(1-s.volume/150)*100}% - 11px)`;fth.style.background=`linear-gradient(180deg,${mu?"#2e2e2e":cfg.color+"cc"},${mu?"#1a1a1a":cfg.color+"44"})`;fth.style.borderColor=mu?"#3a3a3a":cfg.color;fth.style.boxShadow=mu?"none":`0 0 10px ${cfg.glow}`;}
-  if(pct)pct.textContent=Math.round(s.volume)+"%";
-  if(db)db.textContent=mu?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(1))+" dB";
+  const mu=effMuted(s),tT=(1-s.volume/150)*100;
+  const ff=$("ff-"+id),fth=$("fth-"+id),pct=$("pct-"+id),db=$("db-led-"+id);
+  if(ff){ff.style.height=`${(s.volume/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.05)":cfg.color;ff.style.opacity=mu?.18:.6;}
+  if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":cfg.color+"aa"},${mu?"#161a1c":cfg.color+"22"})`;fth.style.borderColor=mu?"#2a2e32":cfg.color;fth.style.boxShadow=mu?"none":`0 0 8px ${cfg.glow}`;}
+  if(pct){pct.textContent=Math.round(s.volume)+"%";pct.style.color=mu?"var(--neutral-600)":cfg.color;}
+  if(db)db.textContent=mu?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
   updateOv();
+}
+
+function updateMasterFaderUI(){
+  const mu=masterMuted,tT=(1-masterVol/150)*100;
+  const ff=$("ff-master"),fth=$("fth-master"),pct=$("pct-master");
+  if(ff){ff.style.height=`${(masterVol/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.05)":"#5dda9d";ff.style.opacity=mu?.18:.6;}
+  if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":"#5dda9daa"},${mu?"#161a1c":"#5dda9d22"})`;fth.style.borderColor=mu?"#2a2e32":"#5dda9d";fth.style.boxShadow=mu?"none":"0 0 8px rgba(93,218,157,0.28)";}
+  if(pct){pct.textContent=Math.round(masterVol)+"%";pct.style.color=mu?"var(--neutral-600)":"#5dda9d";}
 }
 
 function updateOv(){
@@ -691,29 +713,73 @@ function updateOv(){
       <div class="ov-track"><div class="ov-bar" style="width:${mu?0:(s.volume/150)*100}%;background:${cfg.color}"></div></div>
       <span class="ov-val">${mu?"mute":Math.round(s.volume)+"%"}</span>
       <div class="badges">
-        ${s.solo?`<span class="badge" style="background:${cfg.color}22;color:${cfg.color}">S</span>`:""}
-        ${s.muted?`<span class="badge" style="background:rgba(249,115,22,.18);color:#fb923c">M</span>`:""}
+        ${s.solo?`<span class="badge" style="background:${cfg.color}15;color:${cfg.color}">SOLO</span>`:""}
+        ${s.muted?`<span class="badge" style="background:rgba(249,115,22,.14);color:#fb923c">MUTE</span>`:""}
       </div>`;
     wrap.appendChild(d);
   });
 }
 
-// ─── Transport events ─────────────────────────────────────────────────────────
-$("btn-play").onclick  = ()=>{ if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay(); };
-$("btn-stop").onclick  = ()=>{ pauseOff=0;curTime=0;stopAll();$("tnow").textContent="0:00";drawWave();updatePlayBtn(); };
-$("btn-reset").onclick = ()=>{ stems.forEach(s=>{s.volume=100;s.muted=false;s.solo=false;});buildChannels();updateGains(); };
-$("btn-new").onclick   = ()=>{
+// ── Download ──────────────────────────────────────────────────────────────────
+function downloadStem(id,label){
+  const s=stems.find(x=>x.id===id);if(!s?.buffer)return;
+  const wav=bufferToWav(s.buffer);
+  const blob=new Blob([wav],{type:"audio/wav"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${trackName}_${label}.wav`;a.click();URL.revokeObjectURL(a.href);
+}
+
+async function downloadMix(){
+  const ctx=getCtx();
+  const active=stems.filter(s=>s.buffer);
+  if(!active.length)return;
+  const len=Math.max(...active.map(s=>s.buffer.length));
+  const offCtx=new OfflineAudioContext(2,len,ctx.sampleRate);
+  const offMaster=offCtx.createGain();offMaster.connect(offCtx.destination);
+  active.forEach(s=>{
+    const src=offCtx.createBufferSource();src.buffer=s.buffer;
+    const gn=offCtx.createGain();gn.gain.value=effGain(s);
+    src.connect(gn);gn.connect(offMaster);src.start(0);
+  });
+  const rendered=await offCtx.startRendering();
+  const wav=bufferToWav(rendered);
+  const blob=new Blob([wav],{type:"audio/wav"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${trackName}_mix.wav`;a.click();URL.revokeObjectURL(a.href);
+}
+
+function bufferToWav(buffer){
+  const nCh=buffer.numberOfChannels,sr=buffer.sampleRate,len=buffer.length;
+  const out=new ArrayBuffer(44+len*nCh*2);const v=new DataView(out);
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+  w(0,"RIFF");v.setUint32(4,36+len*nCh*2,true);w(8,"WAVE");w(12,"fmt ");
+  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nCh,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*nCh*2,true);
+  v.setUint16(32,nCh*2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,len*nCh*2,true);
+  let offset=44;
+  for(let i=0;i<len;i++)for(let ch=0;ch<nCh;ch++){
+    const s=Math.max(-1,Math.min(1,buffer.getChannelData(ch)[i]));
+    v.setInt16(offset,s<0?s*0x8000:s*0x7FFF,true);offset+=2;
+  }
+  return out;
+}
+
+// ── Events ────────────────────────────────────────────────────────────────────
+$("btn-play").onclick=()=>{if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay()};
+$("btn-stop").onclick=()=>{pauseOff=0;curTime=0;stopAll();$("tnow").textContent="0:00";drawWave();updatePlayBtn()};
+$("btn-reset").onclick=()=>{stems.forEach(s=>{s.volume=100;s.muted=false;s.solo=false;});masterVol=100;masterMuted=false;buildChannels();updateGains()};
+$("btn-new").onclick=()=>{
   stopAll();pauseOff=0;curTime=0;
-  stems.forEach(s=>{s.buffer=null;s.waveform=[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0;});
-  totalDur=0;trackName="";
-  show("mixer-card",false);show("ch-card",false);show("ov-card",false);show("upload-card",true);
-  $("file-input").value="";
+  stems.forEach(s=>{s.buffer=null;s.waveform=[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0});
+  masterVol=100;masterMuted=false;totalDur=0;trackName="";
+  show("mixer-card",false);show("ch-card",false);show("ov-card",false);show("upload-card",true);$("file-input").value="";
 };
-$("clear-solo").onclick = ()=>{ stems.forEach(s=>s.solo=false);buildChannels();updateGains(); };
-$("btn-retry").onclick  = ()=>{ show("err-card",false);show("upload-card",true);$("file-input").value=""; };
-$("btn-mmut").onclick   = ()=>{ masterMuted=!masterMuted;$("btn-mmut").textContent=masterMuted?"🔇":"🔊";$("btn-mmut").classList.toggle("on",masterMuted);updateGains(); };
-$("master-r").oninput   = e=>{ masterVol=+e.target.value;$("master-v").textContent=masterVol+"%";updateGains(); };
-$("col-btn").onclick    = ()=>{ transCollapsed=!transCollapsed;$("mixer-body").classList.toggle("collapsed",transCollapsed);$("col-btn").textContent=transCollapsed?"▼":"▲"; };
+$("btn-dl-mix").onclick=downloadMix;
+$("clear-solo").onclick=()=>{stems.forEach(s=>s.solo=false);buildChannels();updateGains()};
+$("btn-retry").onclick=()=>{show("err-card",false);show("upload-card",true);$("file-input").value=""};
+$("col-btn").onclick=()=>{
+  transCollapsed=!transCollapsed;
+  $("mixer-body").classList.toggle("collapsed",transCollapsed);
+  $("col-btn").textContent=transCollapsed?"▼":"▲";
+};
 
 initUI();
 </script>
