@@ -121,8 +121,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .time-display{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--accent);min-width:90px}
 .time-dur{font-family:'DM Mono',monospace;font-size:11px;color:var(--neutral-600)}
 .tbns{margin-left:auto;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.btn-play-main{width:52px;height:52px;border-radius:14px;border:none;background:linear-gradient(135deg,#3e5c55,#2e4741);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(93,218,157,0.18);transition:all .2s}
-.btn-play-main:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(93,218,157,0.32)}
+.btn-play-main{width:42px;height:42px;border-radius:12px;border:1px solid rgba(93,218,157,0.3);background:linear-gradient(135deg,#3e5c55,#2e4741);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(93,218,157,0.18);transition:all .2s}
+.btn-play-main:hover{background:linear-gradient(135deg,#4a6e65,#384f4a);box-shadow:0 0 22px rgba(93,218,157,0.32)}
 .btn-ic{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .btn-ic:hover{background:rgba(255,255,255,0.1);color:var(--text)}
 .btn-txt{height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;padding:0 12px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
@@ -149,13 +149,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
 #scroll-hint{text-align:center;font-size:10px;color:var(--neutral-600);letter-spacing:.15em;margin-top:10px;user-select:none;transition:opacity .4s}
 #scroll-hint.hidden{opacity:0}
-.ch-scroll{display:flex;gap:12px;align-items:stretch;padding-bottom:4px;}
+.ch-scroll{display:flex;gap:12px;align-items:stretch;padding-bottom:4px;justify-content:center;flex-wrap:nowrap;}
 
 
-.ch{flex-shrink:0;width:120px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
+.ch{flex-shrink:0;width:120px;min-width:120px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s}
 
 /* LED Display */
-.ch-display{width:100%;background:#060809;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.ch-display{width:100%;border-radius:8px;padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:3px}
 .ch-label-led{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1}
 .led-meters{display:flex;gap:3px;align-items:flex-end;height:50px;margin-top:2px}
 .led-col{display:flex;flex-direction:column;gap:1.5px}
@@ -175,7 +175,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .btn-dl-stem:hover{border-color:rgba(93,218,157,0.3);color:var(--accent);background:rgba(93,218,157,0.06)}
 
 /* Master channel */
-.ch-master{flex-shrink:0;width:120px;border-radius:16px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.04);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.ch-master{flex-shrink:0;width:120px;min-width:120px;border-radius:16px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.04);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
 .ch-master .fader-track{height:231px}
 
 
@@ -316,7 +316,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
         <div id="transport-btns">
           <button class="btn-play-main" id="btn-play">▶</button>
           <button class="tbn-ic" id="btn-stop" title="Stop">■</button>
-          <button class="tbn-ic" id="btn-repeat" title="Repeat" style="font-size:13px">🔁</button>
+          <button class="tbn-ic" id="btn-repeat" title="Repeat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
           <div class="tbn-sep"></div>
           <button class="tbn-txt" id="btn-reset">↺ Reset</button>
           <button class="tbn-grn" id="btn-new">＋ Nuovo brano</button>
@@ -684,7 +684,15 @@ function updateVU(){
 function makeLedDisplay(id,cfg){
   const color=cfg?cfg.color:"rgba(255,255,255,0.7)";
   const label=cfg?cfg.label:"MASTER";
-  let html=`<div class="ch-display">
+  // Retroilluminazione: colore del canale a bassissima opacità + bordo sottile
+  const bgColor=cfg
+    ? cfg.color.replace('#','')
+    : 'ffffff';
+  // Converti hex in rgb per usare rgba
+  const r=parseInt(bgColor.slice(0,2),16),g=parseInt(bgColor.slice(2,4),16),b=parseInt(bgColor.slice(4,6),16);
+  const displayBg=`rgba(${r},${g},${b},0.06)`;
+  const displayBorder=`rgba(${r},${g},${b},0.18)`;
+  let html=`<div class="ch-display" style="background:${displayBg};border:1px solid ${displayBorder};">
     <div class="led-meters">`;
   // row 0 = fondo (verde basso), row LED_ROWS-1 = cima (peak rosso)
   // Con flex-direction:column, rendiamo: primo figlio = cima, ultimo = fondo
