@@ -144,7 +144,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .solo-ban button:hover{opacity:1}
 
 /* ── Channel strip ── */
-.ch-scroll-outer{overflow-x:auto;margin:-14px;padding:14px 14px 14px 14px;}
+.ch-scroll-outer{overflow-x:auto;margin:-18px;padding:18px;}
 .ch-scroll-outer::-webkit-scrollbar{height:2px}
 .ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
 #scroll-hint{text-align:center;font-size:10px;color:var(--neutral-600);letter-spacing:.15em;margin-top:10px;user-select:none;transition:opacity .4s}
@@ -176,6 +176,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 
 /* Master channel */
 .ch-master{flex-shrink:0;width:120px;border-radius:16px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.04);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.ch-master .fader-track{height:231px}
 
 
 /* ── Pan Knob ── */
@@ -271,6 +272,12 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
     <button class="btn-retry" id="btn-retry">↩ Riprova</button>
   </div>
 
+  <!-- Export toast -->
+  <div id="export-toast" style="display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a1f22;border:1px solid rgba(93,218,157,0.25);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--accent);box-shadow:0 4px 24px rgba(0,0,0,0.5);z-index:999;white-space:nowrap;align-items:center;gap:10px">
+    <span style="display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid rgba(93,218,157,0.2);border-top-color:#5dda9d;animation:spin .8s linear infinite"></span>
+    <span id="export-toast-msg">Preparazione file…</span>
+  </div>
+
   <!-- Session banner -->
   <div id="session-banner" style="display:none;background:rgba(93,218,157,0.06);border:1px solid rgba(93,218,157,0.2);border-radius:14px;padding:16px 20px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
     <div>
@@ -319,7 +326,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
   </div>
 
   <!-- Channels -->
-  <div class="card" id="ch-card" style="overflow:visible;display:none">
+  <div class="card" id="ch-card" style="overflow:visible;display:none;padding:22px 22px 22px 22px">
     <div class="card-header"><span class="card-label">Stem Channels</span></div>
     <div class="ch-scroll-outer">
       <div class="ch-scroll" id="ch-wrap"></div>
@@ -333,13 +340,13 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
     <div class="flinks">
       <a href="https://batterista.online" target="_blank">www.batterista.online</a>
       <span style="color:var(--neutral-600)">•</span>
-      <a href="/cdn-cgi/l/email-protection#6e070008012e0c0f1a1a0b1c071d1a0f4001000207000b"><span class="__cf_email__" data-cfemail="563f383039163437222233243f2522377839383a3f3833">[email&#160;protected]</span></a>
+      <a id="footer-email" href="#"></a>
     </div>
     <div class="ver">ABCD Method: Stem v1.1</div>
   </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
@@ -833,6 +840,8 @@ function updateOv(){
 
 // ── Download ──────────────────────────────────────────────────────────────────
 async function exportAudio(buffer, filename){
+  const toast=$("export-toast"),msg=$("export-toast-msg");
+  if(toast){toast.style.display="flex";if(msg)msg.textContent="Preparazione "+filename.replace(/.*_/,"").replace(/\.wav$/i,"")+"…";}
   const base=filename.replace(/\.wav$/i,"");
   // Usa lamejs per MP3 vero se disponibile
   if(typeof lamejs !== "undefined"){
@@ -855,6 +864,7 @@ async function exportAudio(buffer, filename){
       const blob=new Blob(out,{type:"audio/mp3"});
       const a=document.createElement("a");a.href=URL.createObjectURL(blob);
       a.download=base+".mp3";a.click();URL.revokeObjectURL(a.href);
+      if(toast)toast.style.display="none";
       return;
     }catch(e){console.warn("lamejs fallback",e);}
   }
@@ -1006,6 +1016,8 @@ $("btn-resume-session") && ($("btn-resume-session").onclick=async()=>{
 const outer=document.querySelector('.ch-scroll-outer');
 if(outer){outer.addEventListener('scroll',()=>{const h=document.getElementById('scroll-hint');if(h)h.classList.add('hidden');},{once:true});}
 
+// Email link costruito via JS (evita obfuscation Cloudflare)
+(function(){const e=$("footer-email");if(e){const m="info"+"@"+"batterista"+".online";e.href="mailto:"+m;e.textContent=m;}})();
 initUI();
 checkSession();
 </script>
