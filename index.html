@@ -144,7 +144,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 .solo-ban button:hover{opacity:1}
 
 /* ── Channel strip ── */
-.ch-scroll-outer{overflow-x:auto;margin:-12px;padding:12px;}
+.ch-scroll-outer{overflow-x:auto;margin:-14px;padding:14px 14px 14px 14px;}
 .ch-scroll-outer::-webkit-scrollbar{height:2px}
 .ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
 #scroll-hint{text-align:center;font-size:10px;color:var(--neutral-600);letter-spacing:.15em;margin-top:10px;user-select:none;transition:opacity .4s}
@@ -177,6 +177,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 /* Master channel */
 .ch-master{flex-shrink:0;width:120px;border-radius:16px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.04);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px}
 
+
+/* ── Pan Knob ── */
+.pan-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%}
+.pan-knob-outer{position:relative;width:36px;height:36px;cursor:grab;touch-action:none;user-select:none}
+.pan-knob-outer:active{cursor:grabbing}
+.pan-knob-track{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1)}
+.pan-knob-fill{position:absolute;inset:0;border-radius:50%}
+.pan-knob-dot{position:absolute;width:3px;height:10px;background:currentColor;border-radius:99px;left:50%;top:4px;transform-origin:50% 14px;margin-left:-1.5px}
+.pan-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--neutral-600);letter-spacing:.05em}
+
 /* overview removed */
 
 /* ── Footer ── */
@@ -189,6 +199,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
 .coffee{display:inline-flex;align-items:center;gap:8px;border-radius:99px;border:1px solid var(--border);background:var(--surface);padding:12px 24px;font-size:13px;font-weight:600;color:var(--neutral-400);text-decoration:none;transition:all .2s}
 .coffee:hover{border-color:var(--accent);color:var(--accent)}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -260,6 +271,18 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
     <button class="btn-retry" id="btn-retry">↩ Riprova</button>
   </div>
 
+  <!-- Session banner -->
+  <div id="session-banner" style="display:none;background:rgba(93,218,157,0.06);border:1px solid rgba(93,218,157,0.2);border-radius:14px;padding:16px 20px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--text)">🎛 Sessione attiva</div>
+      <div id="session-track-name" style="font-size:11px;color:var(--neutral-500);margin-top:2px"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button id="btn-resume-session" style="height:34px;border-radius:9px;border:1px solid rgba(93,218,157,0.3);background:rgba(93,218,157,0.1);color:var(--accent);cursor:pointer;padding:0 16px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">↩ Riprendi</button>
+      <button id="btn-discard-session" style="height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-500);cursor:pointer;padding:0 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">✕</button>
+    </div>
+  </div>
+
   <!-- Transport -->
   <div class="card" id="mixer-card" style="display:none">
     <div class="card-header">
@@ -286,6 +309,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
         <div id="transport-btns">
           <button class="btn-play-main" id="btn-play">▶</button>
           <button class="tbn-ic" id="btn-stop" title="Stop">■</button>
+          <button class="tbn-ic" id="btn-repeat" title="Repeat" style="font-size:13px">🔁</button>
           <div class="tbn-sep"></div>
           <button class="tbn-txt" id="btn-reset">↺ Reset</button>
           <button class="tbn-grn" id="btn-new">＋ Nuovo brano</button>
@@ -295,7 +319,7 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
   </div>
 
   <!-- Channels -->
-  <div class="card" id="ch-card" style="display:none">
+  <div class="card" id="ch-card" style="overflow:visible;display:none">
     <div class="card-header"><span class="card-label">Stem Channels</span></div>
     <div class="ch-scroll-outer">
       <div class="ch-scroll" id="ch-wrap"></div>
@@ -309,13 +333,13 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
     <div class="flinks">
       <a href="https://batterista.online" target="_blank">www.batterista.online</a>
       <span style="color:var(--neutral-600)">•</span>
-      <a href="/cdn-cgi/l/email-protection#c6afa8a0a986a4a7b2b2a3b4afb5b2a7e8a9a8aaafa8a3"><span class="__cf_email__" data-cfemail="e1888f878ea183809595849388929580cf8e8f8d888f84">[email&#160;protected]</span></a>
+      <a href="/cdn-cgi/l/email-protection#6e070008012e0c0f1a1a0b1c071d1a0f4001000207000b"><span class="__cf_email__" data-cfemail="563f383039163437222233243f2522377839383a3f3833">[email&#160;protected]</span></a>
     </div>
     <div class="ver">ABCD Method: Stem v1.1</div>
   </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
@@ -331,9 +355,9 @@ const STEM_CFGS = [
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let spaceId = HARDCODED_SPACE_ID || localStorage.getItem("hf_space_id") || "";
-let stems = STEM_CFGS.map(c=>({id:c.id,volume:100,muted:false,solo:false,buffer:null,waveform:[],vuLevel:0}));
+let stems = STEM_CFGS.map(c=>({id:c.id,volume:100,pan:0,muted:false,solo:false,buffer:null,waveform:[],vuLevel:0}));
 let masterVol=100, masterMuted=false;
-let isPlaying=false, curTime=0, totalDur=0, trackName="";
+let isPlaying=false, curTime=0, totalDur=0, trackName="", repeatOn=false;
 let transCollapsed=false;
 let audioCtx=null, masterGain=null;
 let stemNodes=[], startAt=0, pauseOff=0, animId=null, vuTimer=null;
@@ -355,6 +379,17 @@ function getCtx(){
 function initUI(){
   if(spaceId){show("setup-card",false);show("upload-card",true);if(!HARDCODED_SPACE_ID)$("btn-change-space").style.display="flex";}
   else{show("setup-card",true);show("upload-card",false);}
+  const rb=$("btn-resume-session");
+  if(rb)rb.onclick=async()=>{
+    $("session-banner").style.display="none";
+    show("upload-card",false);show("status-card",true);
+    setSt("Ripristino sessione…","Caricamento buffer audio",true);
+    const ok=await restoreSession();
+    if(ok){buildMixer({});}
+    else{show("status-card",false);show("upload-card",true);}
+  };
+  const db=$("btn-discard-session");
+  if(db)db.onclick=()=>{sessionStorage.removeItem("abcd_stem_session");$("session-banner").style.display="none";};
 }
 $("btn-save-space").onclick=()=>{
   const v=$("space-input").value.trim();
@@ -505,18 +540,37 @@ async function separateStems(file){
 
 // ── Build mixer ───────────────────────────────────────────────────────────────
 function buildMixer(bufMap){
-  stems.forEach(s=>{const buf=bufMap[s.id]||null;s.buffer=buf;s.waveform=buf?makeWave(buf):[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0;});
+  // Se bufMap ha dati, usa quelli; se vuoto ({}) usa i buffer già in stems (ripristino sessione)
+  if(Object.keys(bufMap).length>0){
+    stems.forEach(s=>{const buf=bufMap[s.id]||null;s.buffer=buf;s.waveform=buf?makeWave(buf):[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0;});
+  }
   totalDur=Math.max(...stems.filter(s=>s.buffer).map(s=>s.buffer.duration),0);
   show("status-card",false);show("mixer-card",true);show("ch-card",true);
+  saveSession();
   $("track-name").textContent="🎵 "+trackName;
   $("tdur").textContent="/ "+fmt(totalDur);
   buildChannels();drawWave();
 }
 
 function makeWave(buf){
-  const raw=buf.getChannelData(0),N=500,block=Math.floor(raw.length/N),wv=[];
-  for(let i=0;i<N;i++){let s=0;for(let j=0;j<block;j++)s+=Math.abs(raw[i*block+j]);wv.push(s/block);}
-  const mx=Math.max(...wv,0.001);return wv.map(v=>v/mx);
+  const N=800, block=Math.floor(buf.length/N);
+  const nCh=buf.numberOfChannels;
+  const channels=[];
+  for(let c=0;c<nCh;c++) channels.push(buf.getChannelData(c));
+  const wv=[];
+  for(let i=0;i<N;i++){
+    let rms=0;
+    for(let j=0;j<block;j++){
+      let s=0;
+      for(let c=0;c<nCh;c++) s+=channels[c][i*block+j];
+      s/=nCh; rms+=s*s;
+    }
+    wv.push(Math.sqrt(rms/block));
+  }
+  // Normalizza con percentile 98 per non far schiacciare tutto da un picco isolato
+  const sorted=[...wv].sort((a,b)=>a-b);
+  const p98=sorted[Math.floor(sorted.length*0.98)]||0.001;
+  return wv.map(v=>Math.min(1,v/p98));
 }
 
 // ── Waveform ──────────────────────────────────────────────────────────────────
@@ -551,15 +605,16 @@ function startPlay(){
   stemNodes=stems.filter(s=>s.buffer).map(s=>{
     const src=ctx.createBufferSource();src.buffer=s.buffer;
     const gn=ctx.createGain(),an=ctx.createAnalyser();an.fftSize=256;
-    gn.gain.value=effGain(s);src.connect(an);an.connect(gn);gn.connect(masterGain);
-    src.start(0,off);return{id:s.id,source:src,gainNode:gn,analyser:an};
+    const pn=ctx.createStereoPanner();pn.pan.value=s.pan||0;
+    gn.gain.value=effGain(s);src.connect(an);an.connect(gn);gn.connect(pn);pn.connect(masterGain);
+    src.start(0,off);return{id:s.id,source:src,gainNode:gn,panNode:pn,analyser:an};
   });
   isPlaying=true;
   function tick(){
     const el=ctx.currentTime-startAt;curTime=Math.min(el,totalDur);
     $("tnow").textContent=fmt(curTime);drawWave();
     if(el<totalDur){animId=requestAnimationFrame(tick);}
-    else{stopAll();pauseOff=0;curTime=0;$("tnow").textContent="0:00";drawWave();updatePlayBtn();}
+    else if(repeatOn){pauseOff=0;curTime=0;stopAll();startPlay();}else{stopAll();pauseOff=0;curTime=0;$("tnow").textContent="0:00";drawWave();updatePlayBtn();}
   }
   animId=requestAnimationFrame(tick);
   const buf=new Uint8Array(128);
@@ -568,8 +623,8 @@ function startPlay(){
       n.analyser.getByteTimeDomainData(buf);let pk=0;
       for(let i=0;i<buf.length;i++){const v=Math.abs(buf[i]-128)/128;if(v>pk)pk=v;}
       // Amplifica e applica curva logaritmica per range visivo più ampio
-      const amp=Math.min(1,pk*2.8);
-      const logVal=amp>0?Math.log10(1+amp*9)/1*100:0;
+      const amp=Math.min(1,pk*1.6);
+      const logVal=amp>0?Math.log10(1+amp*9)*100:0;
       const s=stems.find(x=>x.id===n.id);if(s)s.vuLevel=logVal;
     });updateVU();
   },55);
@@ -577,7 +632,7 @@ function startPlay(){
 }
 function updateGains(){
   if(!audioCtx)return;
-  stemNodes.forEach(n=>{const s=stems.find(x=>x.id===n.id);if(s)n.gainNode.gain.setTargetAtTime(effGain(s),audioCtx.currentTime,.02);});
+  stemNodes.forEach(n=>{const s=stems.find(x=>x.id===n.id);if(s){n.gainNode.gain.setTargetAtTime(effGain(s),audioCtx.currentTime,.02);if(n.panNode)n.panNode.pan.setTargetAtTime(s.pan||0,audioCtx.currentTime,.02);}});
 }
 function updatePlayBtn(){$("btn-play").textContent=isPlaying?"⏸":"▶"}
 
@@ -655,6 +710,13 @@ function buildChannels(){
     if(s.buffer){div.style.borderColor=cfg.color+"22";div.style.boxShadow=`0 0 16px ${cfg.glow}`;}
     div.innerHTML=`
       ${makeLedDisplay(s.id,cfg)}
+      <div class="pan-wrap">
+        <div class="pan-knob-outer" id="pan-${s.id}" title="Pan">
+          <div class="pan-knob-track"></div>
+          <div class="pan-knob-dot" id="pan-dot-${s.id}" style="color:${cfg.color};transform:rotate(${(s.pan||0)*135}deg)"></div>
+        </div>
+        <div class="pan-label" id="pan-lbl-${s.id}">${s.pan===0||!s.pan?"C":s.pan>0?"R"+(s.pan*100).toFixed(0):"L"+(-s.pan*100).toFixed(0)}</div>
+      </div>
       <div class="fader-track" id="ft-${s.id}">
         <div class="fader-fill" id="ff-${s.id}" style="height:${(s.volume/150)*100}%;background:${mu?"rgba(255,255,255,0.05)":cfg.color};opacity:${mu?.18:.6}"></div>
         <div class="fader-unity" style="top:${(1-100/150)*100}%"></div>
@@ -669,6 +731,7 @@ function buildChannels(){
     `;
     wrap.appendChild(div);
     setupFader(s.id,cfg);
+    setupPanKnob(s.id,cfg);
     $("solo-"+s.id).onclick=()=>{s.solo=!s.solo;buildChannels();updateGains()};
     $("mute-"+s.id).onclick=()=>{s.muted=!s.muted;buildChannels();updateGains()};
     if(s.buffer)$("dl-"+s.id).onclick=()=>downloadStem(s.id,cfg.label);
@@ -695,6 +758,29 @@ function buildChannels(){
   $("btn-mmut").onclick=()=>{masterMuted=!masterMuted;buildChannels();updateGains()};
 
   $("solo-ban").style.display=hasSolo()?"flex":"none";
+}
+
+
+function setupPanKnob(id,cfg){
+  const knob=$("pan-"+id);if(!knob)return;
+  const s=stems.find(x=>x.id===id);
+  let startY=0,startPan=0,dragging=false;
+  const update=pan=>{
+    s.pan=Math.max(-1,Math.min(1,pan));
+    const dot=$("pan-dot-"+id);
+    const lbl=$("pan-lbl-"+id);
+    if(dot)dot.style.transform=`rotate(${s.pan*135}deg)`;
+    if(lbl)lbl.textContent=Math.abs(s.pan)<0.02?"C":s.pan>0?"R"+(s.pan*100).toFixed(0):"L"+(-s.pan*100).toFixed(0);
+    updateGains();
+  };
+  knob.addEventListener("mousedown",e=>{dragging=true;startY=e.clientY;startPan=s.pan||0;e.preventDefault();});
+  window.addEventListener("mousemove",e=>{if(!dragging)return;update(startPan-(e.clientY-startY)/80);});
+  window.addEventListener("mouseup",()=>dragging=false);
+  knob.addEventListener("touchstart",e=>{dragging=true;startY=e.touches[0].clientY;startPan=s.pan||0;e.preventDefault();},{passive:false});
+  window.addEventListener("touchmove",e=>{if(!dragging)return;update(startPan-(e.touches[0].clientY-startY)/80);});
+  window.addEventListener("touchend",()=>dragging=false);
+  // Doppio click → reset a centro
+  knob.addEventListener("dblclick",()=>update(0));
 }
 
 function setupFader(id,cfg,isMaster=false){
@@ -747,44 +833,36 @@ function updateOv(){
 
 // ── Download ──────────────────────────────────────────────────────────────────
 async function exportAudio(buffer, filename){
-  // Prova MP3 via MediaRecorder (Chrome/Edge supportano audio/webm;codecs=opus, Safari supporta mp4)
-  // Se non disponibile, fallback WAV
-  const ctx=getCtx();
-  const offCtx=new OfflineAudioContext(buffer.numberOfChannels, buffer.length, buffer.sampleRate);
-  const src=offCtx.createBufferSource(); src.buffer=buffer;
-  src.connect(offCtx.destination); src.start(0);
-  const rendered=await offCtx.startRendering();
-
-  // Tenta export MP3/OGG via MediaRecorder
-  const streamCtx=new AudioContext();
-  const dest=streamCtx.createMediaStreamDestination();
-  const src2=streamCtx.createBufferSource(); src2.buffer=rendered;
-  src2.connect(dest); 
-
-  const mimeTypes=["audio/mp4","audio/webm;codecs=opus","audio/ogg;codecs=opus"];
-  const mime=mimeTypes.find(m=>MediaRecorder.isTypeSupported(m));
-
-  if(mime){
-    const chunks=[];
-    const rec=new MediaRecorder(dest.stream,{mimeType:mime,audioBitsPerSecond:192000});
-    rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
-    rec.onstop=()=>{
-      streamCtx.close();
-      const ext=mime.includes("mp4")?"m4a":mime.includes("ogg")?"ogg":"webm";
-      const blob=new Blob(chunks,{type:mime});
+  const base=filename.replace(/\.wav$/i,"");
+  // Usa lamejs per MP3 vero se disponibile
+  if(typeof lamejs !== "undefined"){
+    try{
+      const sr=buffer.sampleRate;
+      const L=buffer.getChannelData(0);
+      const R=buffer.numberOfChannels>1?buffer.getChannelData(1):L;
+      const mp3enc=new lamejs.Mp3Encoder(2,sr,192);
+      const chunk=1152, out=[];
+      const toS16=f=>{const s=Math.max(-1,Math.min(1,f));return s<0?s*0x8000:s*0x7fff;};
+      for(let i=0;i<L.length;i+=chunk){
+        const lc=new Int16Array(Math.min(chunk,L.length-i));
+        const rc=new Int16Array(lc.length);
+        for(let j=0;j<lc.length;j++){lc[j]=toS16(L[i+j]);rc[j]=toS16(R[i+j]);}
+        const d=mp3enc.encodeBuffer(lc,rc);
+        if(d.length>0)out.push(new Int8Array(d));
+      }
+      const end=mp3enc.flush();
+      if(end.length>0)out.push(new Int8Array(end));
+      const blob=new Blob(out,{type:"audio/mp3"});
       const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-      a.download=filename.replace(".wav","."+ext);a.click();URL.revokeObjectURL(a.href);
-    };
-    src2.start(0);
-    rec.start();
-    setTimeout(()=>rec.stop(), rendered.duration*1000+200);
-  } else {
-    // Fallback WAV
-    streamCtx.close();
-    const wav=bufferToWav(rendered);
-    const blob=new Blob([wav],{type:"audio/wav"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);
+      a.download=base+".mp3";a.click();URL.revokeObjectURL(a.href);
+      return;
+    }catch(e){console.warn("lamejs fallback",e);}
   }
+  // Fallback WAV
+  const wav=bufferToWav(buffer);
+  const blob=new Blob([wav],{type:"audio/wav"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download=base+".wav";a.click();URL.revokeObjectURL(a.href);
 }
 
 async function downloadStem(id,label){
@@ -826,6 +904,7 @@ function bufferToWav(buffer){
 // ── Events ────────────────────────────────────────────────────────────────────
 $("btn-play").onclick=()=>{if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay()};
 $("btn-stop").onclick=()=>{pauseOff=0;curTime=0;stopAll();$("tnow").textContent="0:00";drawWave();updatePlayBtn()};
+$("btn-repeat").onclick=()=>{repeatOn=!repeatOn;$("btn-repeat").style.color=repeatOn?"#5dda9d":"";$("btn-repeat").style.borderColor=repeatOn?"rgba(93,218,157,0.4)":"";$("btn-repeat").style.background=repeatOn?"rgba(93,218,157,0.08)":"";};
 $("btn-reset").onclick=()=>{stems.forEach(s=>{s.volume=100;s.muted=false;s.solo=false;});masterVol=100;masterMuted=false;buildChannels();updateGains()};
 $("btn-new").onclick=()=>{
   stopAll();pauseOff=0;curTime=0;
@@ -850,12 +929,85 @@ document.addEventListener("keydown", e => {
   }
 });
 
-initUI();
+// ── Session persistence ───────────────────────────────────────────────────────
+function saveSession(){
+  try{
+    const data={
+      trackName,
+      totalDur,
+      stems:stems.map(s=>({id:s.id,volume:s.volume,pan:s.pan||0,muted:s.muted,solo:s.solo})),
+      masterVol,
+      masterMuted,
+      buffers:stems.filter(s=>s.buffer).map(s=>{
+        // Salva come Float32Array raw (canale 0+1)
+        const nCh=s.buffer.numberOfChannels,len=s.buffer.length,sr=s.buffer.sampleRate;
+        const chData=[];
+        for(let c=0;c<nCh;c++) chData.push(Array.from(s.buffer.getChannelData(c)));
+        return{id:s.id,sr,nCh,len,chData};
+      })
+    };
+    sessionStorage.setItem("abcd_stem_session",JSON.stringify(data));
+  }catch(e){console.warn("saveSession failed",e);}
+}
+
+async function restoreSession(){
+  try{
+    const raw=sessionStorage.getItem("abcd_stem_session");
+    if(!raw)return false;
+    const data=JSON.parse(raw);
+    if(!data.buffers?.length)return false;
+    const ctx=getCtx();
+    trackName=data.trackName||"";
+    totalDur=data.totalDur||0;
+    masterVol=data.masterVol??100;
+    masterMuted=data.masterMuted||false;
+    // Ripristina volumi/pan/mute/solo
+    data.stems?.forEach(saved=>{
+      const s=stems.find(x=>x.id===saved.id);
+      if(s){s.volume=saved.volume;s.pan=saved.pan||0;s.muted=saved.muted;s.solo=saved.solo;}
+    });
+    // Ricostruisci AudioBuffer
+    for(const b of data.buffers){
+      const abuf=ctx.createBuffer(b.nCh,b.len,b.sr);
+      for(let c=0;c<b.nCh;c++) abuf.copyToChannel(new Float32Array(b.chData[c]),c);
+      const s=stems.find(x=>x.id===b.id);
+      if(s){s.buffer=abuf;s.waveform=makeWave(abuf);}
+    }
+    return true;
+  }catch(e){console.warn("restoreSession failed",e);return false;}
+}
+
+async function checkSession(){
+  const hasSession=sessionStorage.getItem("abcd_stem_session");
+  if(!hasSession)return;
+  try{
+    const data=JSON.parse(hasSession);
+    if(!data.trackName)return;
+    const banner=$("session-banner");
+    $("session-track-name").textContent=data.trackName;
+    banner.style.display="flex";
+  }catch(_){}
+}
+
+$("btn-resume-session") && ($("btn-resume-session").onclick=async()=>{
+  $("session-banner").style.display="none";
+  show("upload-card",false);show("status-card",true);
+  setSt("Ripristino sessione…","Caricamento buffer audio",true);
+  const ok=await restoreSession();
+  if(ok){buildMixer({});}
+  else{show("status-card",false);show("upload-card",true);}
+});
+($("btn-discard-session")||{}).onclick=()=>{
+  sessionStorage.removeItem("abcd_stem_session");
+  $("session-banner").style.display="none";
+};
+
 // Nascondi scroll hint dopo primo scroll
 const outer=document.querySelector('.ch-scroll-outer');
 if(outer){outer.addEventListener('scroll',()=>{const h=document.getElementById('scroll-hint');if(h)h.classList.add('hidden');},{once:true});}
 
 initUI();
+checkSession();
 </script>
 </body>
 </html>
