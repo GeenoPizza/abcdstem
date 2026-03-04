@@ -25,170 +25,315 @@
   --neutral-400:#a3a3a3;
   --neutral-500:#737373;
   --neutral-600:#525252;
-  --phase-a:#5f8dff;
-  --phase-b:#f1b54f;
-  --phase-c:#ff865c;
-  --phase-d:#5dda9d;
 }
 
-body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh;padding:28px 22px 80px;font-size:17px}
-.app{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans','Helvetica Neue',sans-serif;
+  min-height:100vh;
+  padding:32px 22px 80px;
+  font-size:16px;
+}
+.app{max-width:1060px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 
 /* ── Header ── */
 .header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--border)}
 .logo h1{font-size:2.2rem;font-weight:300;letter-spacing:-.01em;color:#d4d4d8;line-height:1}
-.logo h1 .la{font-weight:600;color:#88a7d0}
-.logo h1 .lb{font-weight:600;color:#c2b68a}
-.logo h1 .lc{font-weight:600;color:#d9a88a}
-.logo h1 .ld{font-weight:600;color:#8ab7aa}
-.logo h1 .method{padding-left:8px;font-weight:300;color:#a3a3a3}
+.logo h1 .la{font-weight:700;color:#88a7d0}
+.logo h1 .lb{font-weight:700;color:#c2b68a}
+.logo h1 .lc{font-weight:700;color:#d9a88a}
+.logo h1 .ld{font-weight:700;color:#8ab7aa}
+.logo h1 .method{padding-left:8px;font-weight:300;color:#888}
 .logo h1 .stem{color:#8ab7aa;font-weight:600}
-.logo-sub{font-size:11px;color:var(--neutral-500);margin-top:6px}
-.header-right a{color:var(--neutral-500);text-decoration:none;font-size:11px;transition:color .2s}
+.logo-sub{font-size:12px;color:var(--neutral-500);margin-top:5px}
+.header-right{font-size:12px}
+.header-right a{color:var(--neutral-500);text-decoration:none;transition:color .2s}
 .header-right a:hover{color:var(--accent)}
 
 /* ── Session banner ── */
-#session-banner{display:none;background:rgba(93,218,157,0.06);border:1px solid rgba(93,218,157,0.2);border-radius:14px;padding:14px 20px;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#session-banner{
+  display:none;
+  background:rgba(93,218,157,0.06);
+  border:1px solid rgba(93,218,157,0.2);
+  border-radius:14px;
+  padding:14px 20px;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
 #session-banner.visible{display:flex}
 
-/* ── MAIN CARD — unica card che cambia stato ── */
-.main-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative}
+/* ── Upload strip ── */
+#upload-strip{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  overflow:hidden;
+  transition:border-color .4s;
+}
+#upload-strip.processing{border-color:rgba(93,218,157,0.22)}
 
-/* Pannelli interni — transizione con opacity + transform */
-.panel{position:absolute;inset:0;padding:24px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .35s ease, transform .35s ease;transform:translateY(8px)}
-.panel.active{opacity:1;pointer-events:all;transform:translateY(0);position:relative;inset:auto}
+/* Idle */
+#state-idle{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:15px 20px;
+  cursor:pointer;
+  transition:background .2s;
+  position:relative;
+}
+#state-idle:hover{background:rgba(255,255,255,0.03)}
+#state-idle.drag-over{background:rgba(93,218,157,0.05)}
+#state-idle input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.idle-icon{font-size:1.7rem;flex-shrink:0}
+.idle-text{flex:1;min-width:0}
+.idle-title{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.idle-sub{font-size:13px;color:var(--neutral-500)}
+.idle-arrow{color:var(--neutral-600);font-size:1rem;flex-shrink:0}
+.idle-warn{
+  font-size:12px;color:#8a6820;
+  background:rgba(241,181,79,0.05);
+  border-top:1px solid rgba(241,181,79,0.1);
+  padding:8px 20px;line-height:1.6;
+}
 
-/* Altezze panel — il main-card si adatta al panel active */
-#panel-upload{min-height:340px}
-#panel-processing{min-height:220px}
-#panel-mixer{min-height:240px;padding:20px 22px 18px}
-
-/* ── Upload panel ── */
-.upload-zone{border:2px dashed rgba(93,218,157,0.2);border-radius:14px;padding:44px 24px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;background:rgba(93,218,157,0.02);flex:1}
-.upload-zone:hover,.upload-zone.over{border-color:rgba(93,218,157,0.45);background:rgba(93,218,157,0.05)}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-icon{font-size:2.4rem;margin-bottom:12px}
-.upload-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:6px}
-.upload-sub{font-size:13px;color:var(--neutral-400)}
-.upload-fmt{font-size:12px;color:var(--neutral-600);margin-top:5px}
-.upload-warn{margin-top:14px;background:rgba(241,181,79,0.06);border:1px solid rgba(241,181,79,0.18);border-radius:12px;padding:11px 15px;font-size:12px;color:#c49a35;line-height:1.7}
-.upload-warn b{color:var(--phase-b)}
-.upload-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.card-label{font-size:10px;text-transform:uppercase;letter-spacing:.4em;color:var(--neutral-500);font-weight:600}
-.btn-txt{height:32px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;padding:0 11px;font-size:10px;font-weight:600;display:inline-flex;align-items:center;gap:5px;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
-.btn-txt:hover{background:rgba(255,255,255,0.1);color:var(--text)}
-
-/* ── Processing panel ── */
-#panel-processing{justify-content:center;gap:18px}
-.proc-top{display:flex;align-items:center;gap:16px}
-.spinner{width:34px;height:34px;border-radius:50%;border:3px solid rgba(93,218,157,0.1);border-top-color:var(--accent);animation:spin .8s linear infinite;flex-shrink:0}
+/* Processing */
+#state-processing{display:none;flex-direction:column;gap:11px;padding:16px 20px}
+#state-processing.visible{display:flex}
+.proc-row{display:flex;align-items:center;gap:14px}
+.spinner{width:28px;height:28px;border-radius:50%;border:2.5px solid rgba(93,218,157,0.12);border-top-color:var(--accent);animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.s-title{font-size:1rem;font-weight:600;color:var(--text)}
+.s-title{font-size:.95rem;font-weight:600;color:var(--text)}
 .s-sub{font-size:12px;color:var(--neutral-400);margin-top:3px}
-.prog-track{height:3px;background:rgba(255,255,255,0.05);border-radius:99px;overflow:hidden}
-.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0%;transition:width .6s ease;box-shadow:0 0 6px rgba(93,218,157,0.35)}
+.prog-track{height:2px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0%;transition:width .6s ease}
 .prog-fill.slide{width:25%;animation:slide 1.2s ease-in-out infinite}
 @keyframes slide{0%{transform:translateX(-350%)}100%{transform:translateX(550%)}}
-.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps{display:flex;gap:5px;flex-wrap:wrap}
 .pill{font-size:10px;padding:3px 9px;border-radius:99px;border:1px solid rgba(255,255,255,0.08);color:var(--neutral-600);background:rgba(255,255,255,0.02);transition:all .3s;font-weight:500}
 .pill.on{border-color:rgba(93,218,157,0.35);color:var(--accent);background:rgba(93,218,157,0.07)}
 .pill.done{border-color:rgba(93,218,157,0.15);color:var(--accent2)}
 .pill.done::before{content:"✓ "}
 
-/* ── Error ── */
-#err-zone{display:none;background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.18);border-radius:14px;padding:18px;margin-top:12px}
-.err-title{font-weight:600;color:#f87171;margin-bottom:6px;font-size:.9rem}
-.err-msg{font-size:12px;color:var(--neutral-400);line-height:1.65;white-space:pre-wrap}
-.btn-retry{margin-top:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171;border-radius:9px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.btn-retry:hover{background:rgba(239,68,68,0.2)}
+/* Error */
+#state-error{display:none;flex-direction:column;gap:10px;padding:16px 20px;background:rgba(239,68,68,0.04)}
+#state-error.visible{display:flex}
+.err-title{font-weight:600;color:#f87171;font-size:.9rem}
+.err-msg{font-size:12px;color:var(--neutral-400);line-height:1.6;white-space:pre-wrap}
+.btn-retry{width:fit-content;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171;border-radius:9px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.btn-retry:hover{background:rgba(239,68,68,0.18)}
 
-/* ── Mixer panel ── */
-#panel-mixer{gap:14px}
-.mixer-top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.solo-ban{display:none;align-items:center;gap:7px;font-size:9px;color:#fbbf24;font-weight:700;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:4px 10px;letter-spacing:.05em}
-.solo-ban button{background:none;border:none;color:#fbbf24;cursor:pointer;opacity:.6;font-size:13px;line-height:1;padding:0}
-.solo-ban button:hover{opacity:1}
-.collapse-btn{width:24px;height:24px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;transition:background .2s}
-.collapse-btn:hover{background:rgba(255,255,255,0.1)}
+/* ── MIXER CARD ── sempre visibile, "spento" poi "acceso" ── */
+#mixer-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px 22px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  transition:border-color .7s, box-shadow .7s;
+}
+#mixer-card.powered{
+  border-color:rgba(255,255,255,0.13);
+  box-shadow:0 0 48px rgba(93,218,157,0.04);
+}
 
 /* Waveform */
-#waveform-wrap{background:rgba(0,0,0,0.45);border-radius:12px;border:1px solid rgba(255,255,255,0.06);overflow:hidden}
-#waveform-canvas{display:block;width:100%;height:76px;cursor:pointer}
+#waveform-wrap{
+  background:rgba(0,0,0,0.5);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.06);
+  overflow:hidden;
+  transition:border-color .5s;
+}
+#mixer-card.powered #waveform-wrap{border-color:rgba(255,255,255,0.09)}
+#waveform-canvas{display:block;width:100%;height:78px;cursor:pointer}
 
 /* Transport */
-.collapsible{overflow:hidden;transition:max-height .35s ease,opacity .3s ease}
-.collapsible.collapsed{max-height:0!important;opacity:0;pointer-events:none}
-#transport-bar{padding:12px 2px 2px;display:flex;flex-direction:column;gap:11px}
-#transport-top{display:flex;align-items:baseline;gap:10px}
-#transport-top .time-display{font-size:1.8rem}
-#track-name{font-size:13px;color:var(--neutral-500);margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-#transport-btns{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
-.time-display{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--accent);min-width:90px}
-.time-dur{font-family:'DM Mono',monospace;font-size:13px;color:var(--neutral-600)}
-.tbn-ic{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.tbn-ic:hover{background:rgba(255,255,255,0.1);color:var(--text)}
-.tbn-sep{width:1px;height:28px;background:var(--border);margin:0 2px}
-.tbn-txt{height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-400);cursor:pointer;padding:0 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:'DM Sans',sans-serif}
-.tbn-txt:hover{background:rgba(255,255,255,0.1);color:var(--text)}
-.tbn-grn{height:42px;border-radius:12px;border:1px solid rgba(93,218,157,0.22);background:rgba(93,218,157,0.07);color:var(--accent);cursor:pointer;padding:0 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:'DM Sans',sans-serif}
-.tbn-grn:hover{background:rgba(93,218,157,0.13)}
-.btn-play-main{width:42px;height:42px;border-radius:12px;border:1px solid rgba(93,218,157,0.3);background:linear-gradient(135deg,#3e5c55,#2e4741);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(93,218,157,0.18);transition:all .2s}
-.btn-play-main:hover{background:linear-gradient(135deg,#4a6e65,#384f4a);box-shadow:0 0 22px rgba(93,218,157,0.32)}
+#transport{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#transport-left{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
+.time-display{
+  font-family:'DM Mono',monospace;font-size:1.9rem;font-weight:500;
+  color:rgba(255,255,255,0.15);min-width:90px;
+  transition:color .6s;
+}
+#mixer-card.powered .time-display{color:var(--accent)}
+.time-dur{font-family:'DM Mono',monospace;font-size:14px;color:rgba(255,255,255,0.2);transition:color .6s}
+#mixer-card.powered .time-dur{color:var(--neutral-500)}
+#track-name{font-size:13px;color:var(--neutral-500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px;margin-left:4px}
 
-/* ── Channels card ── */
-#ch-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 22px 22px;overflow:visible;display:none;opacity:0;transform:translateY(12px);transition:opacity .4s ease,transform .4s ease}
-#ch-card.visible{display:block;opacity:1;transform:translateY(0)}
-.ch-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.ch-scroll-outer{overflow-x:auto;margin:-22px;padding:22px;}
+/* Transport buttons */
+#transport-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.solo-ban{
+  display:none;align-items:center;gap:6px;
+  font-size:10px;color:#fbbf24;font-weight:700;
+  background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);
+  border-radius:8px;padding:5px 11px;
+}
+.solo-ban button{background:none;border:none;color:#fbbf24;cursor:pointer;opacity:.6;font-size:13px;line-height:1;padding:0}
+.solo-ban button:hover{opacity:1}
+
+/* Bottoni transport — off/on */
+.tbn{
+  height:42px;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.03);
+  color:rgba(255,255,255,0.18);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:7px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;
+  padding:0 16px;white-space:nowrap;
+  transition:all .3s;
+}
+.tbn.icon-btn{width:42px;padding:0;font-size:16px}
+.tbn.sep-btn{width:1px;height:26px;background:rgba(255,255,255,0.07);padding:0;border:none;cursor:default;pointer-events:none;min-width:1px}
+
+/* Powered state */
+#mixer-card.powered .tbn{
+  border-color:var(--border);
+  background:var(--surface);
+  color:var(--neutral-400);
+}
+#mixer-card.powered .tbn:hover{background:rgba(255,255,255,0.09);color:var(--text)}
+#mixer-card.powered #btn-play{
+  background:linear-gradient(135deg,#3e5c55,#2e4741);
+  border-color:rgba(93,218,157,0.3);
+  color:#fff;
+  box-shadow:0 0 16px rgba(93,218,157,0.18);
+}
+#mixer-card.powered #btn-play:hover{
+  background:linear-gradient(135deg,#4a6e65,#384f4a);
+  box-shadow:0 0 24px rgba(93,218,157,0.28);
+}
+#mixer-card.powered #btn-new{
+  border-color:rgba(93,218,157,0.22);
+  background:rgba(93,218,157,0.07);
+  color:var(--accent);
+}
+#mixer-card.powered #btn-new:hover{background:rgba(93,218,157,0.12)}
+#mixer-card.powered #btn-repeat.repeat-on{
+  border-color:rgba(93,218,157,0.35);
+  background:rgba(93,218,157,0.08);
+  color:#5dda9d;
+}
+
+/* ── CHANNEL CARD ── */
+#ch-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:22px;
+  overflow:visible;
+}
+.ch-scroll-outer{overflow-x:auto;margin:-22px;padding:22px}
 .ch-scroll-outer::-webkit-scrollbar{height:2px}
 .ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
-#scroll-hint{text-align:center;font-size:10px;color:var(--neutral-600);letter-spacing:.15em;margin-top:10px;user-select:none}
-.ch-scroll{display:flex;gap:12px;align-items:stretch;padding-bottom:4px;justify-content:center;flex-wrap:nowrap}
+.ch-scroll{display:flex;gap:12px;justify-content:center;flex-wrap:nowrap;padding-bottom:4px}
+#scroll-hint{text-align:center;font-size:11px;color:var(--neutral-600);letter-spacing:.15em;margin-top:10px;user-select:none;display:none}
 
 /* Channel strip */
-.ch{flex-shrink:0;width:120px;min-width:120px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;transition:box-shadow .3s,border-color .3s;opacity:0;transform:translateY(16px);animation:chIn .4s ease forwards}
-@keyframes chIn{to{opacity:1;transform:translateY(0)}}
-.ch-master{flex-shrink:0;width:120px;min-width:120px;border-radius:16px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.04);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0;transform:translateY(16px);animation:chIn .4s ease forwards}
+.ch{
+  flex-shrink:0;width:122px;min-width:122px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.02);
+  padding:10px 7px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  transition:box-shadow .6s,border-color .6s;
+}
+.ch-master{
+  flex-shrink:0;width:122px;min-width:122px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.025);
+  padding:10px 7px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  transition:box-shadow .6s,border-color .6s;
+}
 .ch-master .fader-track{height:231px}
 
 /* LED display */
-.ch-display{width:100%;border-radius:8px;padding:6px 4px 5px;display:flex;flex-direction:column;align-items:center;gap:3px}
-.ch-label-led{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1}
-.led-meters{display:flex;gap:3px;align-items:flex-end;height:50px;margin-top:2px}
+.ch-display{
+  width:100%;border-radius:8px;padding:6px 4px 5px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:background .6s;
+}
+.ch-label-led{
+  font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1;
+  transition:color .6s;
+}
+.led-meters{display:flex;gap:3px;height:50px;margin-top:2px}
 .led-col{display:flex;flex-direction:column;gap:1.5px}
 .led-seg{width:9px;height:4.5px;border-radius:1.5px}
-.ch-db-led{font-family:'DM Mono',monospace;font-size:8px;color:#2a3035;margin-top:2px;letter-spacing:.05em}
+.ch-db-led{font-family:'DM Mono',monospace;font-size:8px;color:var(--neutral-600);margin-top:2px;letter-spacing:.05em}
 
 /* Fader */
 .fader-track{width:8px;height:175px;border-radius:99px;background:rgba(255,255,255,0.06);position:relative;cursor:pointer;touch-action:none;user-select:none}
-.fader-fill{position:absolute;bottom:0;left:0;right:0;border-radius:99px}
-.fader-unity{position:absolute;left:-4px;right:-4px;height:1px;background:rgba(255,255,255,0.18);pointer-events:none}
-.fader-thumb{position:absolute;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:5px;cursor:grab;border:1px solid}
+.fader-fill{position:absolute;bottom:0;left:0;right:0;border-radius:99px;transition:background .6s,opacity .6s}
+.fader-unity{position:absolute;left:-4px;right:-4px;height:1px;background:rgba(255,255,255,0.16);pointer-events:none}
+.fader-thumb{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:26px;height:26px;border-radius:5px;cursor:grab;border:1px solid;
+  transition:background .6s,border-color .6s,box-shadow .6s;
+}
 .fader-thumb:active{cursor:grabbing}
-.ch-pct{font-size:11px;font-weight:700;font-family:'DM Mono',monospace}
+.ch-pct{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;transition:color .6s}
+
 .sm-row{display:flex;gap:4px}
-.btn-sm{width:28px;height:24px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-500);cursor:pointer;font-size:8px;font-weight:700;font-family:'DM Mono',monospace;transition:all .15s;letter-spacing:.05em}
-.btn-dl-stem{width:100%;height:22px;border-radius:5px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--neutral-600);cursor:pointer;font-size:8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:2px;transition:all .2s;font-family:'DM Sans',sans-serif}
-.btn-dl-stem:hover{border-color:rgba(93,218,157,0.3);color:var(--accent);background:rgba(93,218,157,0.06)}
+.btn-sm{
+  width:30px;height:25px;border-radius:6px;
+  border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.02);
+  color:rgba(255,255,255,0.2);
+  cursor:pointer;font-size:9px;font-weight:700;
+  font-family:'DM Mono',monospace;
+  transition:all .15s;letter-spacing:.05em;
+}
+.btn-dl-stem{
+  width:100%;height:23px;border-radius:5px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);
+  color:rgba(255,255,255,0.18);
+  cursor:pointer;font-size:9px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  transition:all .3s;font-family:'DM Sans',sans-serif;
+}
 
 /* Pan knob */
 .pan-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%}
 .pan-knob-outer{position:relative;width:36px;height:36px;cursor:grab;touch-action:none;user-select:none}
 .pan-knob-outer:active{cursor:grabbing}
-.pan-knob-track{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1)}
-.pan-knob-dot{position:absolute;width:3px;height:10px;background:currentColor;border-radius:99px;left:50%;top:4px;transform-origin:50% 14px;margin-left:-1.5px}
+.pan-knob-track{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08)}
+.pan-knob-dot{
+  position:absolute;width:3px;height:10px;
+  background:rgba(255,255,255,0.18);
+  border-radius:99px;left:50%;top:4px;
+  transform-origin:50% 14px;margin-left:-1.5px;
+  transition:background .6s;
+}
 .pan-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--neutral-600);letter-spacing:.05em}
 
 /* ── Export toast ── */
-#export-toast{display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a1f22;border:1px solid rgba(93,218,157,0.25);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--accent);box-shadow:0 4px 24px rgba(0,0,0,0.5);z-index:999;white-space:nowrap;align-items:center;gap:10px}
+#export-toast{
+  display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:#1a1f22;border:1px solid rgba(93,218,157,0.25);
+  border-radius:12px;padding:12px 20px;
+  font-size:14px;font-weight:600;color:var(--accent);
+  box-shadow:0 4px 24px rgba(0,0,0,0.5);z-index:999;
+  white-space:nowrap;align-items:center;gap:10px;
+}
 
 /* ── Footer ── */
-footer{border-top:1px solid var(--border);padding-top:24px;text-align:center;margin-top:8px}
-footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(--neutral-600);margin-bottom:5px}
-.flinks{display:flex;align-items:center;justify-content:center;gap:14px;font-size:10px;margin-bottom:4px}
+footer{border-top:1px solid var(--border);padding-top:22px;text-align:center;margin-top:4px}
+footer p{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:var(--neutral-600);margin-bottom:5px}
+.flinks{display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;margin-bottom:4px}
 .flinks a{color:var(--neutral-500);text-decoration:none;transition:color .2s}
 .flinks a:hover{color:var(--accent)}
-.ver{font-size:10px;color:#2a2a2a;margin-bottom:18px}
+.ver{font-size:10px;color:#2a2a2a;margin-bottom:16px}
 </style>
 </head>
 <body>
@@ -201,57 +346,43 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
       <div class="logo-sub">AI Stem Separator · batterista.online</div>
     </div>
     <div class="header-right">
-      <span style="color:var(--neutral-600);font-size:11px">Prodotto da</span> <a href="https://batterista.online" target="_blank">batterista.online</a>
+      <span style="color:var(--neutral-600)">Prodotto da</span> <a href="https://batterista.online" target="_blank">batterista.online</a>
     </div>
   </div>
 
   <!-- Session banner -->
   <div id="session-banner">
     <div>
-      <div style="font-size:13px;font-weight:600;color:var(--text)">🎛 Sessione attiva</div>
-      <div id="session-track-name" style="font-size:11px;color:var(--neutral-500);margin-top:2px"></div>
+      <div style="font-size:14px;font-weight:600;color:var(--text)">🎛 Sessione attiva</div>
+      <div id="session-track-name" style="font-size:12px;color:var(--neutral-500);margin-top:2px"></div>
     </div>
     <div style="display:flex;gap:8px">
-      <button id="btn-resume-session" style="height:34px;border-radius:9px;border:1px solid rgba(93,218,157,0.3);background:rgba(93,218,157,0.1);color:var(--accent);cursor:pointer;padding:0 16px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">↩ Riprendi</button>
-      <button id="btn-discard-session" style="height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-500);cursor:pointer;padding:0 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">✕</button>
+      <button id="btn-resume-session" style="height:36px;border-radius:9px;border:1px solid rgba(93,218,157,0.3);background:rgba(93,218,157,0.1);color:var(--accent);cursor:pointer;padding:0 18px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif">↩ Riprendi</button>
+      <button id="btn-discard-session" style="height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--neutral-500);cursor:pointer;padding:0 14px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif">✕</button>
     </div>
   </div>
 
-  <!-- MAIN CARD unica -->
-  <div class="main-card" id="main-card">
-
-    <!-- Panel 1: Upload -->
-    <div class="panel active" id="panel-upload">
-      <div class="upload-top">
-        <span class="card-label">Carica il brano</span>
-        <button class="btn-txt" id="btn-change-space" style="display:none">⚙️ Space</button>
+  <!-- Upload strip (compatta, sempre in cima) -->
+  <div id="upload-strip">
+    <div id="state-idle">
+      <input type="file" id="file-input" accept=".mp3,.wav,.flac,.ogg,.m4a,audio/*"/>
+      <div class="idle-icon">🎵</div>
+      <div class="idle-text">
+        <div class="idle-title">Trascina il brano qui per separare gli stem</div>
+        <div class="idle-sub">Clicca per selezionare · MP3, WAV, FLAC, OGG, M4A</div>
       </div>
-      <div class="upload-zone" id="upload-zone">
-        <input type="file" id="file-input" accept=".mp3,.wav,.flac,.ogg,.m4a,audio/*"/>
-        <div class="upload-icon">🎵</div>
-        <div class="upload-title">Trascina il tuo brano qui</div>
-        <div class="upload-sub">oppure clicca per selezionare il file</div>
-        <div class="upload-fmt">MP3 · WAV · FLAC · OGG · M4A</div>
-      </div>
-      <div class="upload-warn">
-        ⏱ <b>Attenzione ai tempi:</b> la separazione AI richiede mediamente <b>2–3 minuti</b>, ma per brani lunghi può volerci <b>5 minuti o più</b>. Puoi lasciare la tab in background — riceverai una <b>notifica</b> quando è pronto.
-      </div>
-      <!-- Errore inline nel panel upload -->
-      <div id="err-zone">
-        <div class="err-title">⚠️ Errore</div>
-        <div class="err-msg" id="err-msg"></div>
-        <button class="btn-retry" id="btn-retry">↩ Riprova</button>
-      </div>
+      <div class="idle-arrow">→</div>
     </div>
+    <div class="idle-warn">⏱ La separazione AI richiede <b style="color:#c9a03a">2–5 minuti</b>. Puoi lasciare la tab in background — riceverai una <b style="color:#c9a03a">notifica</b> quando è pronto.</div>
 
-    <!-- Panel 2: Processing -->
-    <div class="panel" id="panel-processing">
-      <div class="proc-top">
+    <div id="state-processing">
+      <div class="proc-row">
         <div class="spinner"></div>
         <div>
-          <div class="s-title" id="s-title">Avvio separazione…</div>
-          <div class="s-sub" id="s-sub">Connessione allo Space</div>
+          <div class="s-title" id="s-title">Avvio…</div>
+          <div class="s-sub" id="s-sub"></div>
         </div>
+        <div id="s-file" style="font-size:11px;color:var(--neutral-600);margin-left:auto;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
       </div>
       <div class="prog-track"><div class="prog-fill slide" id="prog"></div></div>
       <div class="steps">
@@ -260,48 +391,41 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
         <div class="pill" id="p-ai">⚙️ Separazione</div>
         <div class="pill" id="p-dec">🔊 Decodifica</div>
       </div>
-      <div id="s-file" style="font-size:11px;color:var(--neutral-600);margin-top:4px"></div>
     </div>
 
-    <!-- Panel 3: Mixer (waveform + transport) -->
-    <div class="panel" id="panel-mixer">
-      <div class="mixer-top-row">
-        <div style="display:flex;align-items:baseline;gap:10px;flex:1;min-width:0">
-          <span class="time-display" id="tnow">0:00</span>
-          <span class="time-dur" id="tdur">/ 0:00</span>
-          <div id="track-name" style="font-size:13px;color:var(--neutral-500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1"></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="solo-ban" id="solo-ban">SOLO <button id="clear-solo">✕</button></div>
-          <button class="collapse-btn" id="col-btn">▲</button>
-        </div>
-      </div>
+    <div id="state-error">
+      <div class="err-title">⚠️ Errore</div>
+      <div class="err-msg" id="err-msg"></div>
+      <button class="btn-retry" id="btn-retry">↩ Riprova</button>
+    </div>
+  </div>
 
-      <!-- Waveform -->
-      <div id="waveform-wrap">
-        <canvas id="waveform-canvas" width="920" height="76"></canvas>
-      </div>
-
-      <!-- Transport buttons collapsible -->
-      <div class="collapsible" id="mixer-body" style="max-height:80px">
-        <div id="transport-btns">
-          <button class="btn-play-main" id="btn-play">▶</button>
-          <button class="tbn-ic" id="btn-stop" title="Stop">■</button>
-          <button class="tbn-ic" id="btn-repeat" title="Repeat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
-          <div class="tbn-sep"></div>
-          <button class="tbn-txt" id="btn-reset">↺ Reset</button>
-          <button class="tbn-grn" id="btn-new">＋ Nuovo brano</button>
-        </div>
-      </div>
+  <!-- MIXER — sempre visibile, si accende con .powered -->
+  <div id="mixer-card">
+    <div id="waveform-wrap">
+      <canvas id="waveform-canvas" width="920" height="78"></canvas>
     </div>
 
-  </div><!-- /main-card -->
+    <div id="transport">
+      <div id="transport-left">
+        <span class="time-display" id="tnow">0:00</span>
+        <span class="time-dur" id="tdur"></span>
+        <span id="track-name"></span>
+      </div>
+      <div id="transport-right">
+        <div class="solo-ban" id="solo-ban">SOLO <button id="clear-solo">✕</button></div>
+        <button class="tbn icon-btn" id="btn-play">▶</button>
+        <button class="tbn icon-btn" id="btn-stop">■</button>
+        <button class="tbn icon-btn" id="btn-repeat"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+        <div class="tbn sep-btn"></div>
+        <button class="tbn" id="btn-reset">↺ Reset</button>
+        <button class="tbn" id="btn-new">＋ Nuovo brano</button>
+      </div>
+    </div>
+  </div>
 
-  <!-- Channels card — appare sotto con animazione -->
+  <!-- Channels — sempre visibili, si accendono -->
   <div id="ch-card">
-    <div class="ch-card-header">
-      <span class="card-label">Stem Channels</span>
-    </div>
     <div class="ch-scroll-outer">
       <div class="ch-scroll" id="ch-wrap"></div>
       <div id="scroll-hint">‹ scorri ›</div>
@@ -321,21 +445,20 @@ footer p{font-size:10px;text-transform:uppercase;letter-spacing:.3em;color:var(-
       <span style="color:var(--neutral-600)">•</span>
       <a id="footer-email" href="#"></a>
     </div>
-    <div class="ver">ABCD Method: Stem v1.1</div>
+    <div class="ver">ABCD Method: Stem v1.2</div>
   </footer>
-</div><!-- /app -->
+</div>
 
 <script>
 'use strict';
 
-// ── CONFIG ────────────────────────────────────────────────────────────────────
 const HARDCODED_SPACE_ID = "GeenoPizza/abcdstem";
 
 const STEM_CFGS = [
-  { id:"drums",  label:"Drums",  color:"#5f8dff", glow:"rgba(95,141,255,0.28)",  ledOn:"#5f8dff",  ledMid:"#4a73e8",  ledPeak:"#ff4466" },
-  { id:"bass",   label:"Bass",   color:"#f1b54f", glow:"rgba(241,181,79,0.28)",  ledOn:"#f1b54f",  ledMid:"#d49a38",  ledPeak:"#ff4466" },
-  { id:"other",  label:"Other",  color:"#ff865c", glow:"rgba(255,134,92,0.28)",  ledOn:"#ff865c",  ledMid:"#e06840",  ledPeak:"#ff4466" },
-  { id:"vocals", label:"Vocals", color:"#5dda9d", glow:"rgba(93,218,157,0.28)",  ledOn:"#5dda9d",  ledMid:"#3ab87d",  ledPeak:"#ff4466" },
+  {id:"drums",  label:"Drums",  color:"#5f8dff", glow:"rgba(95,141,255,0.28)",  ledOn:"#5f8dff", ledMid:"#4a73e8", ledPeak:"#ff4466"},
+  {id:"bass",   label:"Bass",   color:"#f1b54f", glow:"rgba(241,181,79,0.28)",  ledOn:"#f1b54f", ledMid:"#d49a38", ledPeak:"#ff4466"},
+  {id:"other",  label:"Other",  color:"#ff865c", glow:"rgba(255,134,92,0.28)",  ledOn:"#ff865c", ledMid:"#e06840", ledPeak:"#ff4466"},
+  {id:"vocals", label:"Vocals", color:"#5dda9d", glow:"rgba(93,218,157,0.28)",  ledOn:"#5dda9d", ledMid:"#3ab87d", ledPeak:"#ff4466"},
 ];
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -343,87 +466,77 @@ let spaceId = HARDCODED_SPACE_ID || localStorage.getItem("hf_space_id") || "";
 let stems = STEM_CFGS.map(c=>({id:c.id,volume:100,pan:0,muted:false,solo:false,buffer:null,waveform:[],vuLevel:0}));
 let masterVol=100, masterMuted=false;
 let isPlaying=false, curTime=0, totalDur=0, trackName="", repeatOn=false;
-let transCollapsed=false;
 let audioCtx=null, masterGain=null;
 let stemNodes=[], startAt=0, pauseOff=0, animId=null, vuTimer=null;
+let powered=false; // mixer "acceso"?
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+const $=id=>document.getElementById(id);
 const fmt=s=>{if(!s||isNaN(s))return"0:00";return`${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,"0")}`};
 const hasSolo=()=>stems.some(s=>s.solo);
 const effMuted=s=>s.muted||(hasSolo()&&!s.solo);
 const effGain=s=>{if(effMuted(s)||masterMuted)return 0;const sv=Math.pow(s.volume/100,2);const mv=Math.pow(masterVol/100,2);return sv*mv;};
-const $=id=>document.getElementById(id);
+function getCtx(){if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.connect(audioCtx.destination);}return audioCtx;}
 
-function getCtx(){
-  if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.connect(audioCtx.destination);}
-  return audioCtx;
-}
-
-// ── Panel switching — il cuore del nuovo layout ────────────────────────────────
-function showPanel(id){
-  // Trova altezza target prima di attivare
-  const panels=['panel-upload','panel-processing','panel-mixer'];
-  panels.forEach(p=>{
-    const el=$(p);
-    el.classList.remove('active');
-    el.style.position='absolute';
-    el.style.inset='0';
-  });
-  const target=$(id);
-  target.classList.add('active');
-  target.style.position='relative';
-  target.style.inset='auto';
+// ── Upload strip state ────────────────────────────────────────────────────────
+function setUploadState(s){ // 'idle' | 'processing' | 'error'
+  const idle=$("state-idle"), proc=$("state-processing"), err=$("state-error");
+  const warn=document.querySelector(".idle-warn");
+  idle.style.display        = s==='idle'       ? 'flex'  : 'none';
+  if(warn) warn.style.display= s==='idle'       ? 'block' : 'none';
+  proc.classList.toggle("visible", s==='processing');
+  err.classList.toggle("visible",  s==='error');
+  $("upload-strip").classList.toggle("processing", s==='processing');
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 function initUI(){
   if(!spaceId){
-    // Setup inline — mostra input nello stesso panel upload
-    const warn=$("upload-zone");
-    warn.innerHTML=`<div style="text-align:center;padding:20px 0">
-      <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:10px">⚙️ Configura Hugging Face Space</div>
-      <div style="font-size:13px;color:var(--neutral-400);margin-bottom:16px">Inserisci il tuo Space ID (es. <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">tuonome/abcdstem</code>)</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-        <input id="space-input" style="flex:1;min-width:200px;max-width:320px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none" placeholder="tuonome/abcdstem"/>
-        <button id="btn-save-space" style="background:linear-gradient(135deg,#3e5c55,#2e4741);border:none;border-radius:12px;padding:10px 20px;color:#fff;font-weight:600;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">Salva →</button>
-      </div>
-    </div>`;
+    $("state-idle").innerHTML=`
+      <div style="padding:14px 0;width:100%">
+        <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px">⚙️ Configura Hugging Face Space</div>
+        <div style="font-size:13px;color:var(--neutral-400);margin-bottom:14px">Space ID (es. <code style="background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">tuonome/abcdstem</code>)</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="space-input" style="flex:1;min-width:200px;max-width:340px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:11px;padding:10px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none" placeholder="tuonome/abcdstem"/>
+          <button id="btn-save-space" style="background:linear-gradient(135deg,#3e5c55,#2e4741);border:none;border-radius:11px;padding:10px 22px;color:#fff;font-weight:600;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">Salva →</button>
+        </div>
+      </div>`;
     $("btn-save-space").onclick=()=>{
       const v=$("space-input").value.trim();
       if(!v.includes("/"))return alert("Formato: tuonome/nome-space");
       spaceId=v;localStorage.setItem("hf_space_id",spaceId);location.reload();
     };
     $("space-input").onkeydown=e=>{if(e.key==="Enter")$("btn-save-space").click()};
-  } else {
-    if(!HARDCODED_SPACE_ID) $("btn-change-space").style.display="inline-flex";
   }
 
-  // Session buttons
-  const rb=$("btn-resume-session");
-  if(rb) rb.onclick=async()=>{
+  $("btn-resume-session").onclick=async()=>{
     $("session-banner").classList.remove("visible");
-    showPanel("panel-processing");
+    setUploadState("processing");
     setSt("Ripristino sessione…","Caricamento buffer audio",true);
     const ok=await restoreSession();
     if(ok) buildMixer({});
-    else { showPanel("panel-upload"); }
+    else setUploadState("idle");
   };
-  const db=$("btn-discard-session");
-  if(db) db.onclick=()=>{sessionStorage.removeItem("abcd_stem_session");$("session-banner").classList.remove("visible");};
+  $("btn-discard-session").onclick=()=>{
+    sessionStorage.removeItem("abcd_stem_session");
+    $("session-banner").classList.remove("visible");
+  };
 
-  $("btn-change-space").onclick=()=>{spaceId="";localStorage.removeItem("hf_space_id");location.reload()};
+  // Costruisce i canali "spenti" subito
+  buildChannels();
+  drawWave();
 }
 
 // ── Upload ────────────────────────────────────────────────────────────────────
-const zone=$("upload-zone"), fi=$("file-input");
-zone.addEventListener("dragover",e=>{e.preventDefault();zone.classList.add("over")});
-zone.addEventListener("dragleave",()=>zone.classList.remove("over"));
-zone.addEventListener("drop",e=>{e.preventDefault();zone.classList.remove("over");const f=e.dataTransfer.files[0];if(f)go(f)});
+const idleEl=$("state-idle"), fi=$("file-input");
+idleEl.addEventListener("dragover",e=>{e.preventDefault();idleEl.classList.add("drag-over")});
+idleEl.addEventListener("dragleave",()=>idleEl.classList.remove("drag-over"));
+idleEl.addEventListener("drop",e=>{e.preventDefault();idleEl.classList.remove("drag-over");const f=e.dataTransfer.files[0];if(f)go(f)});
 fi.addEventListener("change",e=>{if(e.target.files[0])go(e.target.files[0])});
+$("btn-retry").onclick=()=>setUploadState("idle");
 
 // ── Status ────────────────────────────────────────────────────────────────────
 function setSt(title,sub,slide=false,pct=0){
-  $("s-title").textContent=title; $("s-sub").textContent=sub||"";
+  $("s-title").textContent=title;$("s-sub").textContent=sub||"";
   const p=$("prog");
   if(slide){p.classList.add("slide");p.style.width="25%";}
   else{p.classList.remove("slide");p.style.width=pct+"%";}
@@ -435,7 +548,7 @@ async function requestNotifPermission(){try{if("Notification"in window&&Notifica
 async function sendNotif(title,body){
   try{
     if(!("Notification"in window)||Notification.permission!=="granted")return;
-    if(navigator.serviceWorker&&navigator.serviceWorker.controller){const reg=await navigator.serviceWorker.ready;await reg.showNotification(title,{body});}
+    if(navigator.serviceWorker?.controller){const reg=await navigator.serviceWorker.ready;await reg.showNotification(title,{body});}
     else new Notification(title,{body});
   }catch(_){}
 }
@@ -443,20 +556,18 @@ async function sendNotif(title,body){
 // ── Main flow ─────────────────────────────────────────────────────────────────
 async function go(file){
   trackName=file.name.replace(/\.[^.]+$/,"");
-  $("err-zone").style.display="none";
-  showPanel("panel-processing");
-  $("s-file").textContent="🎵 "+file.name;
+  setUploadState("processing");
+  $("s-file").textContent=file.name;
   setSt("Connessione allo Space…",spaceId,true);
   pill("p-connect","on");pill("p-upload","");pill("p-ai","");pill("p-dec","");
   await requestNotifPermission();
   try{
     const bufs=await separateStems(file);
-    sendNotif("ABCD Method: Stem","✅ Pronto! "+trackName+" è pronto.");
+    sendNotif("ABCD Method: Stem","✅ "+trackName+" è pronto!");
     buildMixer(bufs);
   }catch(err){
     console.error(err);
-    showPanel("panel-upload");
-    $("err-zone").style.display="block";
+    setUploadState("error");
     $("err-msg").textContent=err.message||String(err);
   }
 }
@@ -469,14 +580,12 @@ async function separateStems(file){
   pill("p-connect","done");pill("p-upload","on");
   setSt("Upload del brano…","Invio a Hugging Face",true);
 
-  const formData=new FormData();
-  formData.append("files",file);
+  const formData=new FormData();formData.append("files",file);
   let uploadedPath;
   try{
     const r=await fetch(`${spaceUrl}/upload`,{method:"POST",body:formData});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
-    const json=await r.json();
-    uploadedPath=Array.isArray(json)?json[0]:json;
+    const json=await r.json();uploadedPath=Array.isArray(json)?json[0]:json;
   }catch(e){throw new Error(`Impossibile raggiungere lo Space.\n• Verifica che sia online: huggingface.co/spaces/${spaceId}\n• Se è in sleep clicca "Restart" su HF e riprova\n\nDettaglio: ${e.message}`);}
 
   pill("p-upload","done");pill("p-ai","on");
@@ -486,13 +595,10 @@ async function separateStems(file){
   const phases=["Analisi della forma d'onda…","Separazione drums…","Separazione bass…","Separazione vocals…","Separazione other…","Finalizzazione stems…","Ancora un momento…"];
   let phaseIdx=0;
   const timerInterval=setInterval(()=>{
-    const el=Math.floor((Date.now()-aiStart)/1000);
-    const m=Math.floor(el/60),s=el%60;
-    const timeStr=m>0?`${m}m ${s}s`:`${s}s`;
-    $("s-sub").textContent=`${phases[phaseIdx%phases.length]} — ${timeStr} trascorsi`;
+    const el=Math.floor((Date.now()-aiStart)/1000),m=Math.floor(el/60),s=el%60;
+    $("s-sub").textContent=`${phases[phaseIdx%phases.length]} — ${m>0?m+"m "+s+"s":s+"s"} trascorsi`;
     phaseIdx++;
-    const p=$("prog");p.classList.remove("slide");
-    p.style.width=Math.min(75,(el/120)*75)+"%";
+    const p=$("prog");p.classList.remove("slide");p.style.width=Math.min(75,(el/120)*75)+"%";
   },4000);
 
   let predictData;
@@ -515,8 +621,7 @@ async function separateStems(file){
   const stemOrder=["drums","bass","vocals","other"];
   const bufMap={};
   for(let i=0;i<outputs.length;i++){
-    const out=outputs[i];
-    const stemId=stemOrder[i]||`stem_${i}`;
+    const out=outputs[i],stemId=stemOrder[i]||`stem_${i}`;
     setSt(`Decodifica ${stemId}…`,"",false,82+i*4);
     let url=null;
     if(typeof out==="string")url=out;
@@ -527,9 +632,8 @@ async function separateStems(file){
       if(out?.data?.startsWith("data:")){
         const b64=out.data.split(",")[1],bin=atob(b64),u8=new Uint8Array(bin.length);
         for(let j=0;j<bin.length;j++)u8[j]=bin.charCodeAt(j);ab=u8.buffer;
-      }else if(url){
-        const resp=await fetch(url);if(!resp.ok)throw new Error(`HTTP ${resp.status}`);ab=await resp.arrayBuffer();
-      }else continue;
+      }else if(url){const resp=await fetch(url);if(!resp.ok)throw new Error(`HTTP ${resp.status}`);ab=await resp.arrayBuffer();}
+      else continue;
       bufMap[stemId]=await ctx.decodeAudioData(ab);
     }catch(e){console.warn(`Stem ${stemId}:`,e)}
   }
@@ -539,34 +643,31 @@ async function separateStems(file){
   return bufMap;
 }
 
-// ── Build mixer ───────────────────────────────────────────────────────────────
+// ── Build mixer — "accende" il mixer ─────────────────────────────────────────
 function buildMixer(bufMap){
   if(Object.keys(bufMap).length>0){
-    stems.forEach(s=>{const buf=bufMap[s.id]||null;s.buffer=buf;s.waveform=buf?makeWave(buf):[];s.volume=100;s.muted=false;s.solo=false;s.vuLevel=0;});
+    stems.forEach(s=>{
+      const buf=bufMap[s.id]||null;
+      s.buffer=buf;s.waveform=buf?makeWave(buf):[];
+      s.volume=100;s.pan=0;s.muted=false;s.solo=false;s.vuLevel=0;
+    });
   }
   totalDur=Math.max(...stems.filter(s=>s.buffer).map(s=>s.buffer.duration),0);
-
-  // Passa al panel mixer
-  showPanel("panel-mixer");
-
-  // Mostra ch-card con animazione
-  const chCard=$("ch-card");
-  chCard.style.display="block";
-  requestAnimationFrame(()=>requestAnimationFrame(()=>chCard.classList.add("visible")));
-
-  saveSession();
-  setTimeout(updateScrollHint,150);
+  powered=true;
+  $("mixer-card").classList.add("powered");
   $("track-name").textContent="🎵 "+trackName;
   $("tdur").textContent="/ "+fmt(totalDur);
-  buildChannels();
+  setUploadState("idle"); // torna alla strip compatta
+  powerOnChannels();      // accende i canali senza ricostruirli
   drawWave();
+  saveSession();
+  setTimeout(updateScrollHint,100);
 }
 
 // ── Waveform ──────────────────────────────────────────────────────────────────
 function makeWave(buf){
   const N=1200,nCh=buf.numberOfChannels,len=buf.length,block=Math.floor(len/N);
-  const channels=[];
-  for(let c=0;c<nCh;c++) channels.push(buf.getChannelData(c));
+  const channels=[];for(let c=0;c<nCh;c++)channels.push(buf.getChannelData(c));
   const wv=new Float32Array(N);
   for(let i=0;i<N;i++){
     let sumSq=0,count=0;
@@ -590,24 +691,31 @@ function drawWave(){
   }
   const W=rect.width,H=rect.height;
   c.clearRect(0,0,W,H);
+  if(!powered){
+    // "Spento": singola linea orizzontale piatta
+    c.fillStyle="rgba(255,255,255,0.05)";
+    c.fillRect(0,H/2-1,W,2);
+    return;
+  }
   const primary=stems.find(s=>s.waveform.length);if(!primary)return;
   const wv=primary.waveform,prog=totalDur>0?curTime/totalDur:0;
   const bW=1.5,gap=0.8,tot=Math.floor(W/(bW+gap)),progX=prog*W;
-  const grad=c.createLinearGradient(0,0,progX,0);
+  const grad=c.createLinearGradient(0,0,Math.max(1,progX),0);
   grad.addColorStop(0,"rgba(58,157,122,0.9)");grad.addColorStop(1,"rgba(93,218,157,1)");
   for(let i=0;i<tot;i++){
     const idx=Math.floor(i/tot*wv.length),v=wv[idx]||0;
     const bH=Math.max(1.5,v*H*0.92),x=i*(bW+gap),y=(H-bH)/2;
-    c.fillStyle=x<progX?grad:"rgba(255,255,255,0.08)";
+    c.fillStyle=x<progX?grad:"rgba(255,255,255,0.09)";
     c.beginPath();if(c.roundRect)c.roundRect(x,y,bW,bH,0.8);else c.rect(x,y,bW,bH);c.fill();
   }
   if(prog>0&&prog<1){
-    c.strokeStyle="rgba(93,218,157,0.6)";c.lineWidth=1;
+    c.strokeStyle="rgba(93,218,157,0.5)";c.lineWidth=1;
     c.beginPath();c.moveTo(progX,4);c.lineTo(progX,H-4);c.stroke();
   }
 }
 $("waveform-canvas").onclick=e=>{
-  const c=$("waveform-canvas"),r=c.getBoundingClientRect();
+  if(!powered)return;
+  const r=$("waveform-canvas").getBoundingClientRect();
   pauseOff=(e.clientX-r.left)/r.width*totalDur;curTime=pauseOff;
   $("tnow").textContent=fmt(curTime);drawWave();if(isPlaying){stopAll();startPlay();}
 };
@@ -619,6 +727,7 @@ function stopAll(){
   isPlaying=false;stems.forEach(s=>s.vuLevel=0);updateVU();updatePlayBtn();
 }
 function startPlay(){
+  if(!powered)return;
   const ctx=getCtx();if(ctx.state==="suspended")ctx.resume();
   const off=pauseOff;startAt=ctx.currentTime-off;
   stemNodes=stems.filter(s=>s.buffer).map(s=>{
@@ -642,8 +751,7 @@ function startPlay(){
     stemNodes.forEach(n=>{
       n.analyser.getByteTimeDomainData(buf);let pk=0;
       for(let i=0;i<buf.length;i++){const v=Math.abs(buf[i]-128)/128;if(v>pk)pk=v;}
-      const amp=Math.min(1,pk*1.6);
-      const logVal=amp>0?Math.log10(1+amp*9)*100:0;
+      const amp=Math.min(1,pk*1.6),logVal=amp>0?Math.log10(1+amp*9)*100:0;
       const s=stems.find(x=>x.id===n.id);if(s)s.vuLevel=logVal;
     });updateVU();
   },55);
@@ -651,9 +759,12 @@ function startPlay(){
 }
 function updateGains(){
   if(!audioCtx)return;
-  stemNodes.forEach(n=>{const s=stems.find(x=>x.id===n.id);if(s){n.gainNode.gain.setTargetAtTime(effGain(s),audioCtx.currentTime,.02);if(n.panNode)n.panNode.pan.setTargetAtTime(s.pan||0,audioCtx.currentTime,.02);}});
+  stemNodes.forEach(n=>{const s=stems.find(x=>x.id===n.id);if(s){
+    n.gainNode.gain.setTargetAtTime(effGain(s),audioCtx.currentTime,.02);
+    if(n.panNode)n.panNode.pan.setTargetAtTime(s.pan||0,audioCtx.currentTime,.02);
+  }});
 }
-function updatePlayBtn(){$("btn-play").textContent=isPlaying?"⏸":"▶"}
+function updatePlayBtn(){$("btn-play").innerHTML=isPlaying?"⏸":"▶"}
 
 // ── LED VU ────────────────────────────────────────────────────────────────────
 const LED_ROWS=10;
@@ -661,116 +772,221 @@ function updateVU(){
   stems.forEach(s=>{
     const lv=effMuted(s)?0:Math.min(100,s.vuLevel);
     const cfg=STEM_CFGS.find(c=>c.id===s.id);
-    const activeLeds=Math.round((lv/100)*LED_ROWS);
+    const active=Math.round((lv/100)*LED_ROWS);
     for(let ch=0;ch<2;ch++){
       for(let row=0;row<LED_ROWS;row++){
         const seg=$(`led-${s.id}-${ch}-${row}`);if(!seg)continue;
-        const lit=row<activeLeds;seg.style.opacity=lit?1:0.06;
+        const lit=row<active;seg.style.opacity=lit?1:0.06;
         if(lit){if(row>=LED_ROWS-2)seg.style.background=cfg.ledPeak;else if(row>=LED_ROWS-4)seg.style.background=cfg.ledMid;else seg.style.background=cfg.ledOn;}
       }
     }
-    const dbEl=$("db-led-"+s.id);
-    if(dbEl)dbEl.textContent=effMuted(s)?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
+    const db=$("db-"+s.id);
+    if(db)db.textContent=effMuted(s)?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
   });
   const activeStems=stems.filter(s=>s.buffer);
-  const visibleStems=activeStems.filter(s=>!effMuted(s));
-  const vuSrc=visibleStems.length?visibleStems:activeStems;
-  const masterLv=(masterMuted||!activeStems.length)?0:Math.min(100,vuSrc.reduce((a,s)=>a+s.vuLevel,0)/vuSrc.length);
-  const mActiveLeds=Math.round((masterLv/100)*LED_ROWS);
+  const vis=activeStems.filter(s=>!effMuted(s));
+  const src=vis.length?vis:activeStems;
+  const mLv=(masterMuted||!activeStems.length)?0:Math.min(100,src.reduce((a,s)=>a+s.vuLevel,0)/src.length);
+  const mActive=Math.round((mLv/100)*LED_ROWS);
   for(let ch=0;ch<2;ch++){
     for(let row=0;row<LED_ROWS;row++){
       const seg=$(`led-master-${ch}-${row}`);if(!seg)continue;
-      const lit=row<mActiveLeds;seg.style.opacity=lit?1:0.06;
+      const lit=row<mActive;seg.style.opacity=lit?1:0.06;
       if(lit)seg.style.background=row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#c8c8c8":"#e8e8e8";
     }
   }
 }
 
 function makeLedDisplay(id,cfg){
-  const color=cfg?cfg.color:"rgba(255,255,255,0.7)";
+  const color=cfg?cfg.color:"rgba(255,255,255,0.45)";
   const label=cfg?cfg.label:"MASTER";
-  const bgColor=cfg?cfg.color.replace('#',''):'ffffff';
-  const r=parseInt(bgColor.slice(0,2),16),g=parseInt(bgColor.slice(2,4),16),b=parseInt(bgColor.slice(4,6),16);
-  const displayBg=`rgba(${r},${g},${b},0.06)`;
-  const displayBorder=`rgba(${r},${g},${b},0.18)`;
-  let html=`<div class="ch-display" style="background:${displayBg};border:1px solid ${displayBorder}"><div class="led-meters">`;
+  const hex=cfg?cfg.color.replace('#',''):'ffffff';
+  const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
+  let html=`<div class="ch-display" id="disp-${id}" style="background:rgba(${r},${g},${b},0.04);border:1px solid rgba(${r},${g},${b},0.12)">
+    <div class="led-meters">`;
   for(let ch=0;ch<2;ch++){
     html+=`<div class="led-col">`;
     for(let row=LED_ROWS-1;row>=0;row--){
       const c=cfg?(row>=LED_ROWS-2?cfg.ledPeak:row>=LED_ROWS-4?cfg.ledMid:cfg.ledOn):(row>=LED_ROWS-2?"#ff4466":row>=LED_ROWS-4?"#c8c8c8":"#e8e8e8");
-      html+=`<div class="led-seg" id="led-${id}-${ch}-${row}" style="background:${c};opacity:0.06"></div>`;
+      html+=`<div class="led-seg" id="led-${id}-${ch}-${row}" style="background:${c};opacity:.06"></div>`;
     }
     html+=`</div>`;
   }
-  html+=`</div><div class="ch-label-led" style="color:${color}">${label}</div><div class="ch-db-led" id="db-led-${id}">0dB</div></div>`;
+  html+=`</div>
+    <div class="ch-label-led" id="lbl-${id}" style="color:${powered?color:"rgba(255,255,255,0.18)"}">${label}</div>
+    <div class="ch-db-led" id="db-${id}">0dB</div>
+  </div>`;
   return html;
 }
 
-// ── Build channels ────────────────────────────────────────────────────────────
+// ── buildChannels — crea il DOM dei canali (solo alla prima build e su reset/nuovo brano) ──
 function buildChannels(){
   const wrap=$("ch-wrap");wrap.innerHTML="";
-  stems.forEach((s,idx)=>{
+
+  stems.forEach(s=>{
     const cfg=STEM_CFGS.find(c=>c.id===s.id);if(!cfg)return;
-    const mu=effMuted(s),tT=(1-s.volume/150)*100;
+    const mu=effMuted(s);
+    // Colori dipendono da powered
+    const fillBg   = powered&&!mu ? cfg.color        : "rgba(255,255,255,0.05)";
+    const fillOp   = powered ? (mu?.18:.6)            : 1;
+    const thumbBg  = powered&&!mu ? `linear-gradient(180deg,${cfg.color}bb,${cfg.color}22)` : "linear-gradient(180deg,#1c2023,#14181a)";
+    const thumbBrd = powered&&!mu ? cfg.color         : "#242829";
+    const thumbShd = powered&&!mu ? `0 0 8px ${cfg.glow}` : "none";
+    const pctColor = powered&&!mu ? cfg.color         : "rgba(255,255,255,0.18)";
+    const dotBg    = powered      ? cfg.color         : "rgba(255,255,255,0.18)";
+    const tT=(1-s.volume/150)*100;
+
     const div=document.createElement("div");
     div.className="ch";div.id="ch-"+s.id;
-    div.style.animationDelay=(idx*60)+"ms";
-    if(s.buffer){div.style.borderColor=cfg.color+"22";div.style.boxShadow=`0 0 16px ${cfg.glow}`;}
+    if(powered&&s.buffer){div.style.borderColor=cfg.color+"1f";div.style.boxShadow=`0 0 18px ${cfg.glow}`;}
+
     div.innerHTML=`
       ${makeLedDisplay(s.id,cfg)}
       <div class="pan-wrap">
-        <div class="pan-knob-outer" id="pan-${s.id}" title="Pan">
+        <div class="pan-knob-outer" id="pan-${s.id}">
           <div class="pan-knob-track"></div>
-          <div class="pan-knob-dot" id="pan-dot-${s.id}" style="color:${cfg.color};transform:rotate(${(s.pan||0)*135}deg)"></div>
+          <div class="pan-knob-dot" id="pan-dot-${s.id}" style="background:${dotBg};transform:rotate(${(s.pan||0)*135}deg)"></div>
         </div>
-        <div class="pan-label" id="pan-lbl-${s.id}">${s.pan===0||!s.pan?"C":s.pan>0?"R"+(s.pan*100).toFixed(0):"L"+(-s.pan*100).toFixed(0)}</div>
+        <div class="pan-label" id="pan-lbl-${s.id}">${!s.pan?"C":s.pan>0?"R"+(s.pan*100).toFixed(0):"L"+(-s.pan*100).toFixed(0)}</div>
       </div>
       <div class="fader-track" id="ft-${s.id}">
-        <div class="fader-fill" id="ff-${s.id}" style="height:${(s.volume/150)*100}%;background:${mu?"rgba(255,255,255,0.05)":cfg.color};opacity:${mu?.18:.6}"></div>
+        <div class="fader-fill" id="ff-${s.id}" style="height:${(s.volume/150)*100}%;background:${fillBg};opacity:${fillOp}"></div>
         <div class="fader-unity" style="top:${(1-100/150)*100}%"></div>
-        <div class="fader-thumb" id="fth-${s.id}" style="top:calc(${tT}% - 10px);background:linear-gradient(180deg,${mu?"#1e2326":cfg.color+"aa"},${mu?"#161a1c":cfg.color+"22"});border-color:${mu?"#2a2e32":cfg.color};box-shadow:${mu?"none":"0 0 8px "+cfg.glow}"></div>
+        <div class="fader-thumb" id="fth-${s.id}" style="top:calc(${tT}% - 13px);background:${thumbBg};border-color:${thumbBrd};box-shadow:${thumbShd}"></div>
       </div>
-      <div class="ch-pct" id="pct-${s.id}" style="color:${mu?"var(--neutral-600)":cfg.color}">${Math.round(s.volume)}%</div>
+      <div class="ch-pct" id="pct-${s.id}" style="color:${pctColor}">${Math.round(s.volume)}%</div>
       <div class="sm-row">
-        <button class="btn-sm" id="solo-${s.id}" style="background:${s.solo?cfg.color:"var(--surface)"};color:${s.solo?"#000":"var(--neutral-500)"};border-color:${s.solo?cfg.color:"var(--border)"}">S</button>
-        <button class="btn-sm" id="mute-${s.id}" style="background:${s.muted?"#f97316":"var(--surface)"};color:${s.muted?"#fff":"var(--neutral-500)"};border-color:${s.muted?"#f97316":"var(--border)"}">M</button>
+        <button class="btn-sm" id="solo-${s.id}" style="${s.solo?`background:${cfg.color};color:#000;border-color:${cfg.color}`:""}">S</button>
+        <button class="btn-sm" id="mute-${s.id}" style="${s.muted?"background:#f97316;color:#fff;border-color:#f97316":""}">M</button>
       </div>
-      ${s.buffer?`<button class="btn-dl-stem" id="dl-${s.id}">⬇ ${cfg.label}</button>`:`<div style="font-size:7px;color:var(--neutral-600);text-align:center">n/a</div>`}
+      <button class="btn-dl-stem" id="dl-${s.id}">⬇ ${cfg.label}</button>
     `;
     wrap.appendChild(div);
     setupFader(s.id,cfg);
     setupPanKnob(s.id,cfg);
-    $("solo-"+s.id).onclick=()=>{s.solo=!s.solo;buildChannels();updateGains()};
-    $("mute-"+s.id).onclick=()=>{s.muted=!s.muted;buildChannels();updateGains()};
-    if(s.buffer)$("dl-"+s.id).onclick=()=>downloadStem(s.id,cfg.label);
+    // ← Mute/Solo: aggiorna SOLO gli stili, nessun rebuild del DOM
+    $("solo-"+s.id).onclick=()=>{s.solo=!s.solo;  refreshMuteSoloUI();updateGains()};
+    $("mute-"+s.id).onclick=()=>{s.muted=!s.muted; refreshMuteSoloUI();updateGains()};
+    $("dl-"+s.id).onclick=()=>{if(powered&&s.buffer)downloadStem(s.id,cfg.label)};
   });
 
   // Master
+  const mu=masterMuted,tT=(1-masterVol/150)*100;
   const mDiv=document.createElement("div");
   mDiv.className="ch-master";mDiv.id="ch-master";
-  mDiv.style.animationDelay="240ms";
-  mDiv.style.boxShadow="0 0 32px rgba(255,255,255,0.14), 0 0 8px rgba(255,255,255,0.08)";
-  mDiv.style.borderColor="rgba(255,255,255,0.22)";
-  const mu=masterMuted,tT=(1-masterVol/150)*100;
+  if(powered){mDiv.style.boxShadow="0 0 28px rgba(255,255,255,0.1),0 0 6px rgba(255,255,255,0.06)";mDiv.style.borderColor="rgba(255,255,255,0.2)";}
   mDiv.innerHTML=`
     ${makeLedDisplay("master",null)}
     <div class="fader-track" id="ft-master">
-      <div class="fader-fill" id="ff-master" style="height:${(masterVol/150)*100}%;background:${mu?"rgba(255,255,255,0.04)":"rgba(255,255,255,0.55)"};opacity:1"></div>
+      <div class="fader-fill" id="ff-master" style="height:${(masterVol/150)*100}%;background:${powered&&!mu?"rgba(255,255,255,0.45)":"rgba(255,255,255,0.05)"};opacity:1"></div>
       <div class="fader-unity" style="top:${(1-100/150)*100}%"></div>
-      <div class="fader-thumb" id="fth-master" style="top:calc(${tT}% - 10px);background:linear-gradient(180deg,${mu?"#1e2326":"rgba(255,255,255,0.7)"},${mu?"#161a1c":"rgba(255,255,255,0.2)"});border-color:${mu?"#2a2e32":"rgba(255,255,255,0.6)"};box-shadow:${mu?"none":"0 0 8px rgba(255,255,255,0.2)"}"></div>
+      <div class="fader-thumb" id="fth-master" style="top:calc(${tT}% - 13px);background:linear-gradient(180deg,${mu?"#1c2023":"rgba(255,255,255,0.6)"},${mu?"#14181a":"rgba(255,255,255,0.16)"});border-color:${mu?"#242829":"rgba(255,255,255,0.5)"};box-shadow:${powered&&!mu?"0 0 8px rgba(255,255,255,0.16)":"none"}"></div>
     </div>
-    <div class="ch-pct" id="pct-master" style="color:${mu?"var(--neutral-600)":"rgba(255,255,255,0.85)"}">${Math.round(masterVol)}%</div>
-    <button id="btn-mmut" style="width:54px;height:20px;border-radius:5px;border:1px solid ${mu?"#f97316":"var(--border)"};background:${mu?"rgba(249,115,22,0.18)":"var(--surface)"};color:${mu?"#f97316":"var(--neutral-500)"};cursor:pointer;font-size:8px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.05em;transition:all .2s">${mu?"MUTE":"MASTER"}</button>
-    <button class="btn-dl-stem" id="btn-dl-mix-ch" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6)">⬇ Mix</button>
+    <div class="ch-pct" id="pct-master" style="color:${powered?mu?"var(--neutral-600)":"rgba(255,255,255,0.75)":"rgba(255,255,255,0.18)"}">${Math.round(masterVol)}%</div>
+    <button id="btn-mmut" style="width:56px;height:22px;border-radius:5px;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s;border:1px solid ${mu?"#f97316":"var(--border)"};background:${mu?"rgba(249,115,22,0.18)":"var(--surface)"};color:${mu?"#f97316":"var(--neutral-500)"}">${mu?"MUTE":"MASTER"}</button>
+    <button class="btn-dl-stem" id="btn-dl-mix" style="border-color:${powered?"rgba(255,255,255,0.1)":"rgba(255,255,255,0.04)"};color:${powered?"rgba(255,255,255,0.45)":"rgba(255,255,255,0.14)"}">⬇ Mix</button>
   `;
   wrap.appendChild(mDiv);
   setupFader("master",null,true);
-  $("btn-mmut").onclick=()=>{masterMuted=!masterMuted;buildChannels();updateGains()};
-  $("btn-dl-mix-ch").onclick=()=>downloadMix();
+  $("btn-mmut").onclick=()=>{masterMuted=!masterMuted;refreshMuteSoloUI();updateGains()};
+  $("btn-dl-mix").onclick=()=>{if(powered)downloadMix()};
   $("solo-ban").style.display=hasSolo()?"flex":"none";
 }
 
-function setupPanKnob(id,cfg){
+// ── powerOnChannels — accende i canali senza rifare il DOM ───────────────────
+function powerOnChannels(){
+  stems.forEach(s=>{
+    const cfg=STEM_CFGS.find(c=>c.id===s.id);if(!cfg)return;
+    const mu=effMuted(s);
+    const ch=$("ch-"+s.id);
+    if(ch&&s.buffer){ch.style.borderColor=cfg.color+"1f";ch.style.boxShadow=`0 0 18px ${cfg.glow}`;}
+    const lbl=$("lbl-"+s.id);if(lbl)lbl.style.color=cfg.color;
+    const dot=$("pan-dot-"+s.id);if(dot)dot.style.background=cfg.color;
+    const ff=$("ff-"+s.id);if(ff){ff.style.background=mu?"rgba(255,255,255,0.05)":cfg.color;ff.style.opacity=mu?.18:.6;}
+    const fth=$("fth-"+s.id);
+    if(fth){fth.style.background=`linear-gradient(180deg,${mu?"#1c2023":cfg.color+"bb"},${mu?"#14181a":cfg.color+"22"})`;fth.style.borderColor=mu?"#242829":cfg.color;fth.style.boxShadow=mu?"none":`0 0 8px ${cfg.glow}`;}
+    const pct=$("pct-"+s.id);if(pct)pct.style.color=mu?"var(--neutral-600)":cfg.color;
+    const dl=$("dl-"+s.id);if(dl){dl.style.borderColor="rgba(255,255,255,0.09)";dl.style.color="var(--neutral-500)";}
+  });
+  // Master
+  const mEl=$("ch-master");
+  if(mEl){mEl.style.boxShadow="0 0 28px rgba(255,255,255,0.1),0 0 6px rgba(255,255,255,0.06)";mEl.style.borderColor="rgba(255,255,255,0.2)";}
+  const lbl=$("lbl-master");if(lbl)lbl.style.color="rgba(255,255,255,0.5)";
+  const ff=$("ff-master");if(ff)ff.style.background="rgba(255,255,255,0.45)";
+  const fth=$("fth-master");
+  if(fth){fth.style.background="linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.16))";fth.style.borderColor="rgba(255,255,255,0.5)";fth.style.boxShadow="0 0 8px rgba(255,255,255,0.16)";}
+  const pct=$("pct-master");if(pct)pct.style.color="rgba(255,255,255,0.75)";
+  const dl=$("btn-dl-mix");if(dl){dl.style.borderColor="rgba(255,255,255,0.1)";dl.style.color="rgba(255,255,255,0.45)";}
+}
+
+// ── refreshMuteSoloUI — aggiorna SOLO stili mute/solo, zero rebuild ──────────
+function refreshMuteSoloUI(){
+  if(!powered)return;
+  stems.forEach(s=>{
+    const cfg=STEM_CFGS.find(c=>c.id===s.id);if(!cfg)return;
+    const mu=effMuted(s);
+    const sb=$("solo-"+s.id),mb=$("mute-"+s.id);
+    if(sb){sb.style.background=s.solo?cfg.color:"";sb.style.color=s.solo?"#000":"";sb.style.borderColor=s.solo?cfg.color:"";}
+    if(mb){mb.style.background=s.muted?"#f97316":"";mb.style.color=s.muted?"#fff":"";mb.style.borderColor=s.muted?"#f97316":"";}
+    const ff=$("ff-"+s.id);if(ff){ff.style.background=mu?"rgba(255,255,255,0.05)":cfg.color;ff.style.opacity=mu?.18:.6;}
+    const fth=$("fth-"+s.id);
+    if(fth){fth.style.background=`linear-gradient(180deg,${mu?"#1c2023":cfg.color+"bb"},${mu?"#14181a":cfg.color+"22"})`;fth.style.borderColor=mu?"#242829":cfg.color;fth.style.boxShadow=mu?"none":`0 0 8px ${cfg.glow}`;}
+    const pct=$("pct-"+s.id);if(pct)pct.style.color=mu?"var(--neutral-600)":cfg.color;
+    const db=$("db-"+s.id);if(db)db.textContent=mu?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
+  });
+  // Master
+  const mu=masterMuted;
+  const ff=$("ff-master");if(ff)ff.style.background=mu?"rgba(255,255,255,0.04)":"rgba(255,255,255,0.45)";
+  const fth=$("fth-master");
+  if(fth){fth.style.background=`linear-gradient(180deg,${mu?"#1c2023":"rgba(255,255,255,0.6)"},${mu?"#14181a":"rgba(255,255,255,0.16)"})`;fth.style.borderColor=mu?"#242829":"rgba(255,255,255,0.5)";fth.style.boxShadow=mu?"none":"0 0 8px rgba(255,255,255,0.16)";}
+  const pct=$("pct-master");if(pct)pct.style.color=mu?"var(--neutral-600)":"rgba(255,255,255,0.75)";
+  const mmut=$("btn-mmut");
+  if(mmut){mmut.style.borderColor=mu?"#f97316":"var(--border)";mmut.style.background=mu?"rgba(249,115,22,0.18)":"var(--surface)";mmut.style.color=mu?"#f97316":"var(--neutral-500)";mmut.textContent=mu?"MUTE":"MASTER";}
+  $("solo-ban").style.display=hasSolo()?"flex":"none";
+}
+
+// ── Fader ─────────────────────────────────────────────────────────────────────
+function setupFader(id,cfg,isMaster=false){
+  const track=$("ft-"+id);if(!track)return;
+  const gv=y=>{const r=track.getBoundingClientRect();return Math.max(0,Math.min(150,Math.round((1-(y-r.top)/r.height)*150)))};
+  const apply=y=>{
+    const val=gv(y);
+    if(isMaster){masterVol=val;updateMasterFaderUI();}
+    else{const s=stems.find(x=>x.id===id);if(s){s.volume=val;updateFaderUI(id,cfg);}}
+    updateGains();
+  };
+  track.addEventListener("mousedown",e=>{
+    apply(e.clientY);
+    const mv=ev=>apply(ev.clientY),up=()=>{window.removeEventListener("mousemove",mv);window.removeEventListener("mouseup",up)};
+    window.addEventListener("mousemove",mv);window.addEventListener("mouseup",up);e.preventDefault();
+  });
+  track.addEventListener("touchstart",e=>{
+    apply(e.touches[0].clientY);
+    const mv=ev=>apply(ev.touches[0].clientY),end=()=>{window.removeEventListener("touchmove",mv);window.removeEventListener("touchend",end)};
+    window.addEventListener("touchmove",mv);window.addEventListener("touchend",end);e.preventDefault();
+  },{passive:false});
+}
+
+function updateFaderUI(id,cfg){
+  const s=stems.find(x=>x.id===id);if(!cfg)cfg=STEM_CFGS.find(c=>c.id===id);
+  const mu=effMuted(s),tT=(1-s.volume/150)*100;
+  const ff=$("ff-"+id),fth=$("fth-"+id),pct=$("pct-"+id),db=$("db-"+id);
+  if(ff){ff.style.height=`${(s.volume/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.05)":cfg.color;ff.style.opacity=mu?.18:.6;}
+  if(fth){fth.style.top=`calc(${tT}% - 13px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1c2023":cfg.color+"bb"},${mu?"#14181a":cfg.color+"22"})`;fth.style.borderColor=mu?"#242829":cfg.color;fth.style.boxShadow=mu?"none":`0 0 8px ${cfg.glow}`;}
+  if(pct){pct.textContent=Math.round(s.volume)+"%";pct.style.color=mu?"var(--neutral-600)":cfg.color;}
+  if(db)db.textContent=mu?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
+}
+
+function updateMasterFaderUI(){
+  const mu=masterMuted,tT=(1-masterVol/150)*100;
+  const ff=$("ff-master"),fth=$("fth-master"),pct=$("pct-master");
+  if(ff){ff.style.height=`${(masterVol/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.04)":"rgba(255,255,255,0.45)";}
+  if(fth){fth.style.top=`calc(${tT}% - 13px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1c2023":"rgba(255,255,255,0.6)"},${mu?"#14181a":"rgba(255,255,255,0.16)"})`;fth.style.borderColor=mu?"#242829":"rgba(255,255,255,0.5)";fth.style.boxShadow=mu?"none":"0 0 8px rgba(255,255,255,0.16)";}
+  if(pct){pct.textContent=Math.round(masterVol)+"%";pct.style.color=mu?"var(--neutral-600)":"rgba(255,255,255,0.75)";}
+}
+
+// ── Pan knob ──────────────────────────────────────────────────────────────────
+function setupPanKnob(id){
   const knob=$("pan-"+id);if(!knob)return;
   const s=stems.find(x=>x.id===id);
   let startY=0,startPan=0,dragging=false;
@@ -781,44 +997,13 @@ function setupPanKnob(id,cfg){
     if(lbl)lbl.textContent=Math.abs(s.pan)<0.02?"C":s.pan>0?"R"+(s.pan*100).toFixed(0):"L"+(-s.pan*100).toFixed(0);
     updateGains();
   };
-  knob.addEventListener("mousedown",e=>{dragging=true;startY=e.clientY;startPan=s.pan||0;e.preventDefault();});
-  window.addEventListener("mousemove",e=>{if(!dragging)return;update(startPan-(e.clientY-startY)/80);});
+  knob.addEventListener("mousedown",e=>{dragging=true;startY=e.clientY;startPan=s.pan||0;e.preventDefault()});
+  window.addEventListener("mousemove",e=>{if(!dragging)return;update(startPan-(e.clientY-startY)/80)});
   window.addEventListener("mouseup",()=>dragging=false);
-  knob.addEventListener("touchstart",e=>{dragging=true;startY=e.touches[0].clientY;startPan=s.pan||0;e.preventDefault();},{passive:false});
-  window.addEventListener("touchmove",e=>{if(!dragging)return;update(startPan-(e.touches[0].clientY-startY)/80);});
+  knob.addEventListener("touchstart",e=>{dragging=true;startY=e.touches[0].clientY;startPan=s.pan||0;e.preventDefault()},{passive:false});
+  window.addEventListener("touchmove",e=>{if(!dragging)return;update(startPan-(e.touches[0].clientY-startY)/80)});
   window.addEventListener("touchend",()=>dragging=false);
   knob.addEventListener("dblclick",()=>update(0));
-}
-
-function setupFader(id,cfg,isMaster=false){
-  const track=$("ft-"+id);if(!track)return;
-  const gv=y=>{const r=track.getBoundingClientRect();return Math.max(0,Math.min(150,Math.round((1-(y-r.top)/r.height)*150)))};
-  const apply=y=>{
-    const val=gv(y);
-    if(isMaster){masterVol=val;updateMasterFaderUI();}
-    else{const s=stems.find(x=>x.id===id);if(s){s.volume=val;updateFaderUI(id,cfg);}}
-    updateGains();
-  };
-  track.addEventListener("mousedown",e=>{apply(e.clientY);const mv=ev=>apply(ev.clientY),up=()=>{window.removeEventListener("mousemove",mv);window.removeEventListener("mouseup",up)};window.addEventListener("mousemove",mv);window.addEventListener("mouseup",up);e.preventDefault()});
-  track.addEventListener("touchstart",e=>{apply(e.touches[0].clientY);const mv=ev=>apply(ev.touches[0].clientY),end=()=>{window.removeEventListener("touchmove",mv);window.removeEventListener("touchend",end)};window.addEventListener("touchmove",mv);window.addEventListener("touchend",end);e.preventDefault()},{passive:false});
-}
-
-function updateFaderUI(id,cfg){
-  const s=stems.find(x=>x.id===id);if(!cfg)cfg=STEM_CFGS.find(c=>c.id===id);
-  const mu=effMuted(s),tT=(1-s.volume/150)*100;
-  const ff=$("ff-"+id),fth=$("fth-"+id),pct=$("pct-"+id),db=$("db-led-"+id);
-  if(ff){ff.style.height=`${(s.volume/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.05)":cfg.color;ff.style.opacity=mu?.18:.6;}
-  if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":cfg.color+"aa"},${mu?"#161a1c":cfg.color+"22"})`;fth.style.borderColor=mu?"#2a2e32":cfg.color;fth.style.boxShadow=mu?"none":`0 0 8px ${cfg.glow}`;}
-  if(pct){pct.textContent=Math.round(s.volume)+"%";pct.style.color=mu?"var(--neutral-600)":cfg.color;}
-  if(db)db.textContent=mu?"MUTE":(s.volume===0?"-∞":(20*Math.log10(s.volume/100)).toFixed(0))+"dB";
-}
-
-function updateMasterFaderUI(){
-  const mu=masterMuted,tT=(1-masterVol/150)*100;
-  const ff=$("ff-master"),fth=$("fth-master"),pct=$("pct-master");
-  if(ff){ff.style.height=`${(masterVol/150)*100}%`;ff.style.background=mu?"rgba(255,255,255,0.04)":"rgba(255,255,255,0.55)";ff.style.opacity=1;}
-  if(fth){fth.style.top=`calc(${tT}% - 10px)`;fth.style.background=`linear-gradient(180deg,${mu?"#1e2326":"rgba(255,255,255,0.7)"},${mu?"#161a1c":"rgba(255,255,255,0.2)"})`;fth.style.borderColor=mu?"#2a2e32":"rgba(255,255,255,0.6)";fth.style.boxShadow=mu?"none":"0 0 8px rgba(255,255,255,0.2)";}
-  if(pct){pct.textContent=Math.round(masterVol)+"%";pct.style.color=mu?"var(--neutral-600)":"rgba(255,255,255,0.85)";}
 }
 
 // ── Download ──────────────────────────────────────────────────────────────────
@@ -848,68 +1033,59 @@ async function exportAudio(buffer,filename){
   if(toast)toast.style.display="none";
 }
 
-async function downloadStem(id,label){
-  const s=stems.find(x=>x.id===id);if(!s?.buffer)return;
-  await exportAudio(s.buffer,`${trackName}_${label}.wav`);
-}
-
+async function downloadStem(id,label){const s=stems.find(x=>x.id===id);if(!s?.buffer)return;await exportAudio(s.buffer,`${trackName}_${label}.wav`);}
 async function downloadMix(){
-  const ctx=getCtx();
-  const active=stems.filter(s=>s.buffer);if(!active.length)return;
+  const ctx=getCtx(),active=stems.filter(s=>s.buffer);if(!active.length)return;
   const len=Math.max(...active.map(s=>s.buffer.length));
   const offCtx=new OfflineAudioContext(2,len,ctx.sampleRate);
-  const offMaster=offCtx.createGain();offMaster.connect(offCtx.destination);
-  active.forEach(s=>{
-    const src=offCtx.createBufferSource();src.buffer=s.buffer;
-    const gn=offCtx.createGain();gn.gain.value=effGain(s);
-    src.connect(gn);gn.connect(offMaster);src.start(0);
-  });
+  const offM=offCtx.createGain();offM.connect(offCtx.destination);
+  active.forEach(s=>{const src=offCtx.createBufferSource();src.buffer=s.buffer;const gn=offCtx.createGain();gn.gain.value=effGain(s);src.connect(gn);gn.connect(offM);src.start(0);});
   const rendered=await offCtx.startRendering();
   await exportAudio(rendered,`${trackName}_mix.wav`);
 }
-
 function bufferToWav(buffer){
   const nCh=buffer.numberOfChannels,sr=buffer.sampleRate,len=buffer.length;
   const out=new ArrayBuffer(44+len*nCh*2);const v=new DataView(out);
   const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
   w(0,"RIFF");v.setUint32(4,36+len*nCh*2,true);w(8,"WAVE");w(12,"fmt ");
   v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nCh,true);
-  v.setUint32(24,sr,true);v.setUint32(28,sr*nCh*2,true);
-  v.setUint16(32,nCh*2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,len*nCh*2,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*nCh*2,true);v.setUint16(32,nCh*2,true);v.setUint16(34,16,true);
+  w(36,"data");v.setUint32(40,len*nCh*2,true);
   let offset=44;
   for(let i=0;i<len;i++)for(let ch=0;ch<nCh;ch++){
-    const s=Math.max(-1,Math.min(1,buffer.getChannelData(ch)[i]));
-    v.setInt16(offset,s<0?s*0x8000:s*0x7FFF,true);offset+=2;
+    const s=Math.max(-1,Math.min(1,buffer.getChannelData(ch)[i]));v.setInt16(offset,s<0?s*0x8000:s*0x7FFF,true);offset+=2;
   }
   return out;
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
-$("btn-play").onclick=()=>{if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay()};
-$("btn-stop").onclick=()=>{pauseOff=0;curTime=0;stopAll();$("tnow").textContent="0:00";drawWave();updatePlayBtn()};
-$("btn-repeat").onclick=()=>{repeatOn=!repeatOn;$("btn-repeat").style.color=repeatOn?"#5dda9d":"";$("btn-repeat").style.borderColor=repeatOn?"rgba(93,218,157,0.4)":"";$("btn-repeat").style.background=repeatOn?"rgba(93,218,157,0.08)":"";};
-$("btn-reset").onclick=()=>{stems.forEach(s=>{s.volume=100;s.pan=0;s.muted=false;s.solo=false;});masterVol=100;masterMuted=false;buildChannels();updateGains()};
+$("btn-play").onclick=()=>{if(!powered)return;if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay()};
+$("btn-stop").onclick=()=>{if(!powered)return;pauseOff=0;curTime=0;stopAll();$("tnow").textContent="0:00";drawWave()};
+$("btn-repeat").onclick=()=>{
+  if(!powered)return;
+  repeatOn=!repeatOn;
+  $("btn-repeat").classList.toggle("repeat-on",repeatOn);
+};
+$("btn-reset").onclick=()=>{
+  if(!powered)return;
+  stems.forEach(s=>{s.volume=100;s.pan=0;s.muted=false;s.solo=false;});
+  masterVol=100;masterMuted=false;
+  buildChannels();powerOnChannels();updateGains();
+};
 $("btn-new").onclick=()=>{
-  stopAll();pauseOff=0;curTime=0;
+  stopAll();pauseOff=0;curTime=0;powered=false;
   stems.forEach(s=>{s.buffer=null;s.waveform=[];s.volume=100;s.pan=0;s.muted=false;s.solo=false;s.vuLevel=0});
   masterVol=100;masterMuted=false;totalDur=0;trackName="";
-  const chCard=$("ch-card");chCard.classList.remove("visible");
-  setTimeout(()=>{chCard.style.display="none";},400);
-  showPanel("panel-upload");
-  $("file-input").value="";
-  $("err-zone").style.display="none";
+  $("mixer-card").classList.remove("powered");
+  $("track-name").textContent="";$("tdur").textContent="";$("tnow").textContent="0:00";
+  buildChannels();drawWave();
+  setUploadState("idle");$("file-input").value="";
 };
-$("clear-solo").onclick=()=>{stems.forEach(s=>s.solo=false);buildChannels();updateGains()};
-$("btn-retry").onclick=()=>{$("err-zone").style.display="none";};
-$("col-btn").onclick=()=>{
-  transCollapsed=!transCollapsed;
-  $("mixer-body").classList.toggle("collapsed",transCollapsed);
-  $("col-btn").textContent=transCollapsed?"▼":"▲";
-};
+$("clear-solo").onclick=()=>{stems.forEach(s=>s.solo=false);refreshMuteSoloUI();updateGains()};
 
 document.addEventListener("keydown",e=>{
   if(e.code==="Space"&&!["INPUT","TEXTAREA"].includes(document.activeElement?.tagName||"")){
-    e.preventDefault();if(!totalDur)return;
+    e.preventDefault();if(!powered||!totalDur)return;
     if(isPlaying){pauseOff=audioCtx.currentTime-startAt;stopAll();}else startPlay();
   }
 });
@@ -917,23 +1093,23 @@ document.addEventListener("keydown",e=>{
 // ── Session ───────────────────────────────────────────────────────────────────
 function saveSession(){
   try{
-    const data={trackName,totalDur,stems:stems.map(s=>({id:s.id,volume:s.volume,pan:s.pan||0,muted:s.muted,solo:s.solo})),masterVol,masterMuted,
+    const data={trackName,totalDur,
+      stems:stems.map(s=>({id:s.id,volume:s.volume,pan:s.pan||0,muted:s.muted,solo:s.solo})),
+      masterVol,masterMuted,
       buffers:stems.filter(s=>s.buffer).map(s=>{
         const nCh=s.buffer.numberOfChannels,len=s.buffer.length,sr=s.buffer.sampleRate,chData=[];
         for(let c=0;c<nCh;c++)chData.push(Array.from(s.buffer.getChannelData(c)));
         return{id:s.id,sr,nCh,len,chData};
       })};
     sessionStorage.setItem("abcd_stem_session",JSON.stringify(data));
-  }catch(e){console.warn("saveSession failed",e);}
+  }catch(e){console.warn("saveSession",e);}
 }
-
 async function restoreSession(){
   try{
     const raw=sessionStorage.getItem("abcd_stem_session");if(!raw)return false;
     const data=JSON.parse(raw);if(!data.buffers?.length)return false;
     const ctx=getCtx();
-    trackName=data.trackName||"";totalDur=data.totalDur||0;
-    masterVol=data.masterVol??100;masterMuted=data.masterMuted||false;
+    trackName=data.trackName||"";totalDur=data.totalDur||0;masterVol=data.masterVol??100;masterMuted=data.masterMuted||false;
     data.stems?.forEach(saved=>{const s=stems.find(x=>x.id===saved.id);if(s){s.volume=saved.volume;s.pan=saved.pan||0;s.muted=saved.muted;s.solo=saved.solo;}});
     for(const b of data.buffers){
       const abuf=ctx.createBuffer(b.nCh,b.len,b.sr);
@@ -941,9 +1117,8 @@ async function restoreSession(){
       const s=stems.find(x=>x.id===b.id);if(s){s.buffer=abuf;s.waveform=makeWave(abuf);}
     }
     return true;
-  }catch(e){console.warn("restoreSession failed",e);return false;}
+  }catch(e){console.warn("restoreSession",e);return false;}
 }
-
 async function checkSession(){
   try{
     const raw=sessionStorage.getItem("abcd_stem_session");if(!raw)return;
@@ -959,18 +1134,16 @@ function updateScrollHint(){
   if(!outer||!wrap||!hint)return;
   hint.style.display=wrap.scrollWidth>outer.clientWidth+4?'block':'none';
 }
-const outer=document.querySelector('.ch-scroll-outer');
-if(outer)outer.addEventListener('scroll',()=>{const h=$("scroll-hint");if(h)h.style.display='none';},{once:true});
+document.querySelector('.ch-scroll-outer')?.addEventListener('scroll',()=>{$("scroll-hint").style.display='none'},{once:true});
 window.addEventListener('resize',updateScrollHint);
 
 // ── Email ─────────────────────────────────────────────────────────────────────
 (function(){const e=$("footer-email");if(e){const m="info"+"@"+"batterista"+".online";e.href="mailto:"+m;e.textContent=m;}})();
 
-// ── PWA Service Worker ────────────────────────────────────────────────────────
+// ── PWA ───────────────────────────────────────────────────────────────────────
 if('serviceWorker' in navigator){
-  const swCode=`self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>clients.claim());self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});`;
-  const swBlob=new Blob([swCode],{type:'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+  const c=`self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>clients.claim());self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([c],{type:'application/javascript'}))).catch(()=>{});
 }
 
 initUI();
