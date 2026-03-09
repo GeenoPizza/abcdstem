@@ -46,8 +46,8 @@ body{
 .logo h1 .ld{font-weight:700;color:#8ab7aa}
 .logo h1 .method{padding-left:8px;font-weight:300;color:#888}
 .logo h1 .stem{color:#8ab7aa;font-weight:600}
-.logo-sub{font-size:12px;color:var(--neutral-500);margin-top:5px}
-.header-right{font-size:12px}
+.logo-sub{font-size:14px;color:var(--neutral-400);margin-top:6px;font-weight:500}
+.header-right{font-size:14px}
 .header-right a{color:var(--neutral-500);text-decoration:none;transition:color .2s}
 .header-right a:hover{color:var(--accent)}
 
@@ -90,14 +90,14 @@ body{
 #state-idle input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .idle-icon{font-size:1.7rem;flex-shrink:0}
 .idle-text{flex:1;min-width:0}
-.idle-title{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:2px}
-.idle-sub{font-size:13px;color:var(--neutral-500)}
+.idle-title{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.idle-sub{font-size:14px;color:var(--neutral-400)}
 .idle-arrow{color:var(--neutral-600);font-size:1rem;flex-shrink:0}
 .idle-warn{
-  font-size:12px;color:#8a6820;
+  font-size:13px;color:#8a6820;
   background:rgba(241,181,79,0.05);
   border-top:1px solid rgba(241,181,79,0.1);
-  padding:8px 20px;line-height:1.6;
+  padding:9px 20px;line-height:1.6;
 }
 
 /* Processing */
@@ -106,8 +106,8 @@ body{
 .proc-row{display:flex;align-items:center;gap:14px}
 .spinner{width:28px;height:28px;border-radius:50%;border:2.5px solid rgba(93,218,157,0.12);border-top-color:var(--accent);animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.s-title{font-size:.95rem;font-weight:600;color:var(--text)}
-.s-sub{font-size:12px;color:var(--neutral-400);margin-top:3px}
+.s-title{font-size:1rem;font-weight:600;color:var(--text)}
+.s-sub{font-size:13px;color:var(--neutral-400);margin-top:3px}
 .prog-track{height:2px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden}
 .prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0%;transition:width .6s ease}
 .prog-fill.slide{width:25%;animation:slide 1.2s ease-in-out infinite}
@@ -329,8 +329,8 @@ body{
 
 /* ── Footer ── */
 footer{border-top:1px solid var(--border);padding-top:22px;text-align:center;margin-top:4px}
-footer p{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:var(--neutral-600);margin-bottom:5px}
-.flinks{display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;margin-bottom:4px}
+footer p{font-size:13px;text-transform:uppercase;letter-spacing:.2em;color:var(--neutral-500);margin-bottom:6px}
+.flinks{display:flex;align-items:center;justify-content:center;gap:14px;font-size:13px;margin-bottom:4px}
 .flinks a{color:var(--neutral-500);text-decoration:none;transition:color .2s}
 .flinks a:hover{color:var(--accent)}
 .ver{font-size:10px;color:#2a2a2a;margin-bottom:16px}
@@ -343,7 +343,7 @@ footer p{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:var(
   <div class="header">
     <div class="logo">
       <h1><span class="la">A</span><span class="lb">B</span><span class="lc">C</span><span class="ld">D</span><span class="method">method:<span class="stem">stem</span></span></h1>
-      <div class="logo-sub">AI Stem Separator · batterista.online</div>
+      <div class="logo-sub">Separatore stem AI · batterista.online</div>
     </div>
     <div class="header-right">
       <span style="color:var(--neutral-600)">Prodotto da</span> <a href="https://batterista.online" target="_blank">batterista.online</a>
@@ -368,12 +368,12 @@ footer p{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:var(
       <input type="file" id="file-input" accept=".mp3,.wav,.flac,.ogg,.m4a,audio/*"/>
       <div class="idle-icon">🎵</div>
       <div class="idle-text">
-        <div class="idle-title">Trascina il brano qui per separare gli stem</div>
+        <div class="idle-title">Trascina il brano qui per separarlo in tracce</div>
         <div class="idle-sub">Clicca per selezionare · MP3, WAV, FLAC, OGG, M4A</div>
       </div>
       <div class="idle-arrow">→</div>
     </div>
-    <div class="idle-warn">⏱ La separazione AI richiede <b style="color:#c9a03a">2–5 minuti</b>. Puoi lasciare la tab in background — riceverai una <b style="color:#c9a03a">notifica</b> quando è pronto.</div>
+    <div class="idle-warn">⏱ L'analisi del brano richiede <b style="color:#c9a03a">2–5 minuti</b>. Puoi lasciare la tab in background — riceverai una <b style="color:#c9a03a">notifica</b> quando le tracce sono pronte.</div>
 
     <div id="state-processing">
       <div class="proc-row">
@@ -386,10 +386,10 @@ footer p{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:var(
       </div>
       <div class="prog-track"><div class="prog-fill slide" id="prog"></div></div>
       <div class="steps">
-        <div class="pill" id="p-connect">🔌 Connessione</div>
-        <div class="pill" id="p-upload">📤 Upload</div>
-        <div class="pill" id="p-ai">⚙️ Separazione</div>
-        <div class="pill" id="p-dec">🔊 Decodifica</div>
+        <div class="pill" id="p-connect">🔗 Avvio</div>
+        <div class="pill" id="p-upload">📤 Invio brano</div>
+        <div class="pill" id="p-ai">🎵 Analisi</div>
+        <div class="pill" id="p-dec">✨ Preparazione</div>
       </div>
     </div>
 
@@ -493,8 +493,8 @@ function initUI(){
   if(!spaceId){
     $("state-idle").innerHTML=`
       <div style="padding:14px 0;width:100%">
-        <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px">⚙️ Configura Hugging Face Space</div>
-        <div style="font-size:13px;color:var(--neutral-400);margin-bottom:14px">Space ID (es. <code style="background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">tuonome/abcdstem</code>)</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px">⚙️ Configurazione servizio</div>
+        <div style="font-size:13px;color:var(--neutral-400);margin-bottom:14px">Inserisci l'indirizzo del server di analisi (es. <code style="background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">tuonome/abcdstem</code>)</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <input id="space-input" style="flex:1;min-width:200px;max-width:340px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:11px;padding:10px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none" placeholder="tuonome/abcdstem"/>
           <button id="btn-save-space" style="background:linear-gradient(135deg,#3e5c55,#2e4741);border:none;border-radius:11px;padding:10px 22px;color:#fff;font-weight:600;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">Salva →</button>
@@ -511,13 +511,13 @@ function initUI(){
   $("btn-resume-session").onclick=async()=>{
     $("session-banner").classList.remove("visible");
     setUploadState("processing");
-    setSt("Ripristino sessione…","Caricamento buffer audio",true);
+    setSt("Ripristino sessione…","Caricamento tracce audio",true);
     const ok=await restoreSession();
     if(ok) buildMixer({});
     else setUploadState("idle");
   };
   $("btn-discard-session").onclick=()=>{
-    sessionStorage.removeItem("abcd_stem_session");
+    clearSession();
     $("session-banner").classList.remove("visible");
   };
 
@@ -558,7 +558,7 @@ async function go(file){
   trackName=file.name.replace(/\.[^.]+$/,"");
   setUploadState("processing");
   $("s-file").textContent=file.name;
-  setSt("Connessione allo Space…",spaceId,true);
+  setSt("Avvio analisi…","",true);
   pill("p-connect","on");pill("p-upload","");pill("p-ai","");pill("p-dec","");
   await requestNotifPermission();
   try{
@@ -578,7 +578,7 @@ async function separateStems(file){
   const spaceUrl=`https://${spaceId.replace("/","-")}.hf.space`;
 
   pill("p-connect","done");pill("p-upload","on");
-  setSt("Upload del brano…","Invio a Hugging Face",true);
+  setSt("Invio brano al server…","Caricamento in corso",true);
 
   const formData=new FormData();formData.append("files",file);
   let uploadedPath;
@@ -586,13 +586,13 @@ async function separateStems(file){
     const r=await fetch(`${spaceUrl}/upload`,{method:"POST",body:formData});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const json=await r.json();uploadedPath=Array.isArray(json)?json[0]:json;
-  }catch(e){throw new Error(`Impossibile raggiungere lo Space.\n• Verifica che sia online: huggingface.co/spaces/${spaceId}\n• Se è in sleep clicca "Restart" su HF e riprova\n\nDettaglio: ${e.message}`);}
+  }catch(e){throw new Error(`Impossibile raggiungere il server di analisi.\n• Il servizio potrebbe essere temporaneamente in pausa — attendi 1 minuto e riprova\n• Verifica la tua connessione internet\n\nDettaglio tecnico: ${e.message}`);}
 
   pill("p-upload","done");pill("p-ai","on");
-  setSt("Separazione AI in corso…","Demucs sta analizzando il brano…",true);
+  setSt("Analisi del brano in corso…","Il server sta elaborando le tracce — ci vuole qualche minuto",true);
 
   const aiStart=Date.now();
-  const phases=["Analisi della forma d'onda…","Separazione drums…","Separazione bass…","Separazione vocals…","Separazione other…","Finalizzazione stems…","Ancora un momento…"];
+  const phases=["Analisi della struttura ritmica…","Isolamento della batteria…","Isolamento del basso…","Isolamento della voce…","Isolamento degli strumenti…","Rifinitura delle tracce…","Ancora un momento…"];
   let phaseIdx=0;
   const timerInterval=setInterval(()=>{
     const el=Math.floor((Date.now()-aiStart)/1000),m=Math.floor(el/60),s=el%60;
@@ -610,19 +610,22 @@ async function separateStems(file){
     clearInterval(timerInterval);
     if(!r.ok)throw new Error(`HTTP ${r.status} — ${await r.text().then(t=>t.slice(0,200))}`);
     predictData=await r.json();
-  }catch(e){clearInterval(timerInterval);throw new Error(`Errore separazione AI.\n\nDettaglio: ${e.message}`);}
+  }catch(e){clearInterval(timerInterval);throw new Error(`Errore durante l'analisi del brano.\n\nDettaglio tecnico: ${e.message}`);}
 
   pill("p-ai","done");pill("p-dec","on");
-  setSt("Decodifica audio…","Preparazione dei canali",false,82);
+  setSt("Preparazione delle tracce…","Ottimizzazione audio in corso",false,82);
 
   const outputs=predictData?.data;
-  if(!outputs?.length)throw new Error("Il modello non ha restituito audio. Riprova.");
+  if(!outputs?.length)throw new Error("Il server non ha restituito audio. Riprova con un file diverso.");
 
   const stemOrder=["drums","bass","vocals","other"];
   const bufMap={};
+  // Decodifica SEQUENZIALE — evita picchi di RAM che crashano il browser
   for(let i=0;i<outputs.length;i++){
     const out=outputs[i],stemId=stemOrder[i]||`stem_${i}`;
-    setSt(`Decodifica ${stemId}…`,"",false,82+i*4);
+    setSt(`Preparazione traccia ${i+1} di ${outputs.length}…`,"",false,82+i*4);
+    // Piccola pausa tra decodifiche per non bloccare il thread UI
+    if(i>0) await new Promise(r=>setTimeout(r,80));
     let url=null;
     if(typeof out==="string")url=out;
     else if(out?.url)url=out.url;
@@ -635,10 +638,11 @@ async function separateStems(file){
       }else if(url){const resp=await fetch(url);if(!resp.ok)throw new Error(`HTTP ${resp.status}`);ab=await resp.arrayBuffer();}
       else continue;
       bufMap[stemId]=await ctx.decodeAudioData(ab);
-    }catch(e){console.warn(`Stem ${stemId}:`,e)}
+      ab=null; // libera subito il buffer grezzo
+    }catch(e){console.warn(`Traccia ${stemId}:`,e)}
   }
-  if(!Object.keys(bufMap).length)throw new Error("Nessuno stem decodificato. Prova con un file WAV o un brano più corto.");
-  pill("p-dec","done");setSt("Separazione completata!","",false,100);
+  if(!Object.keys(bufMap).length)throw new Error("Nessuna traccia elaborata. Prova con un file WAV o un brano più corto.");
+  pill("p-dec","done");setSt("Tracce pronte!","",false,100);
   await new Promise(r=>setTimeout(r,400));
   return bufMap;
 }
@@ -1076,6 +1080,7 @@ $("btn-new").onclick=()=>{
   stopAll();pauseOff=0;curTime=0;powered=false;
   stems.forEach(s=>{s.buffer=null;s.waveform=[];s.volume=100;s.pan=0;s.muted=false;s.solo=false;s.vuLevel=0});
   masterVol=100;masterMuted=false;totalDur=0;trackName="";
+  clearSession();
   $("mixer-card").classList.remove("powered");
   $("track-name").textContent="";$("tdur").textContent="";$("tnow").textContent="0:00";
   buildChannels();drawWave();
@@ -1091,41 +1096,86 @@ document.addEventListener("keydown",e=>{
 });
 
 // ── Session ───────────────────────────────────────────────────────────────────
+// ── Session — salvataggio asincrono NON bloccante ─────────────────────────────
+// Usiamo un worker sintetico via setTimeout per non congelare il thread UI.
+// I Float32Array vengono salvati come ArrayBuffer (non JSON) tramite struttura clonabile.
 function saveSession(){
-  try{
-    const data={trackName,totalDur,
-      stems:stems.map(s=>({id:s.id,volume:s.volume,pan:s.pan||0,muted:s.muted,solo:s.solo})),
-      masterVol,masterMuted,
-      buffers:stems.filter(s=>s.buffer).map(s=>{
-        const nCh=s.buffer.numberOfChannels,len=s.buffer.length,sr=s.buffer.sampleRate,chData=[];
-        for(let c=0;c<nCh;c++)chData.push(Array.from(s.buffer.getChannelData(c)));
-        return{id:s.id,sr,nCh,len,chData};
-      })};
-    sessionStorage.setItem("abcd_stem_session",JSON.stringify(data));
-  }catch(e){console.warn("saveSession",e);}
+  // Ritarda il salvataggio: prima lascia che il browser renderizzi il mixer
+  setTimeout(async()=>{
+    try{
+      const meta={
+        trackName,totalDur,masterVol,masterMuted,
+        stems:stems.map(s=>({id:s.id,volume:s.volume,pan:s.pan||0,muted:s.muted,solo:s.solo}))
+      };
+      sessionStorage.setItem("abcd_stem_session_meta",JSON.stringify(meta));
+      // I buffer audio vengono salvati uno alla volta con pause tra uno e l'altro
+      // per non bloccare il thread
+      for(const s of stems){
+        if(!s.buffer)continue;
+        await new Promise(r=>setTimeout(r,50)); // respiro tra i buffer
+        try{
+          const nCh=s.buffer.numberOfChannels,len=s.buffer.length,sr=s.buffer.sampleRate;
+          // Usa Float32Array direttamente — molto più veloce di Array.from()
+          const chData=[];
+          for(let c=0;c<nCh;c++){
+            const f32=new Float32Array(len);
+            s.buffer.copyFromChannel(f32,c);
+            chData.push(f32);
+          }
+          // Serializza come array di base64 piccoli blocchi — meno RAM del JSON
+          const chB64=chData.map(f32=>{
+            const u8=new Uint8Array(f32.buffer);
+            let bin="";const chunk=8192;
+            for(let i=0;i<u8.length;i+=chunk){
+              bin+=String.fromCharCode(...u8.subarray(i,i+chunk));
+            }
+            return btoa(bin);
+          });
+          sessionStorage.setItem(`abcd_buf_${s.id}`,JSON.stringify({sr,nCh,len,chB64}));
+        }catch(e){console.warn(`saveSession buffer ${s.id}:`,e);}
+      }
+    }catch(e){console.warn("saveSession meta:",e);}
+  },200);
 }
 async function restoreSession(){
   try{
-    const raw=sessionStorage.getItem("abcd_stem_session");if(!raw)return false;
-    const data=JSON.parse(raw);if(!data.buffers?.length)return false;
+    const raw=sessionStorage.getItem("abcd_stem_session_meta");if(!raw)return false;
+    const meta=JSON.parse(raw);if(!meta.trackName)return false;
     const ctx=getCtx();
-    trackName=data.trackName||"";totalDur=data.totalDur||0;masterVol=data.masterVol??100;masterMuted=data.masterMuted||false;
-    data.stems?.forEach(saved=>{const s=stems.find(x=>x.id===saved.id);if(s){s.volume=saved.volume;s.pan=saved.pan||0;s.muted=saved.muted;s.solo=saved.solo;}});
-    for(const b of data.buffers){
-      const abuf=ctx.createBuffer(b.nCh,b.len,b.sr);
-      for(let c=0;c<b.nCh;c++)abuf.copyToChannel(new Float32Array(b.chData[c]),c);
-      const s=stems.find(x=>x.id===b.id);if(s){s.buffer=abuf;s.waveform=makeWave(abuf);}
+    trackName=meta.trackName||"";totalDur=meta.totalDur||0;masterVol=meta.masterVol??100;masterMuted=meta.masterMuted||false;
+    meta.stems?.forEach(saved=>{const s=stems.find(x=>x.id===saved.id);if(s){s.volume=saved.volume;s.pan=saved.pan||0;s.muted=saved.muted;s.solo=saved.solo;}});
+    let anyLoaded=false;
+    for(const s of stems){
+      const raw2=sessionStorage.getItem(`abcd_buf_${s.id}`);if(!raw2)continue;
+      await new Promise(r=>setTimeout(r,30)); // respiro tra i buffer
+      try{
+        const b=JSON.parse(raw2);
+        const abuf=ctx.createBuffer(b.nCh,b.len,b.sr);
+        for(let c=0;c<b.nCh;c++){
+          const binStr=atob(b.chB64[c]);
+          const u8=new Uint8Array(binStr.length);
+          for(let i=0;i<binStr.length;i++)u8[i]=binStr.charCodeAt(i);
+          abuf.copyToChannel(new Float32Array(u8.buffer),c);
+        }
+        s.buffer=abuf;s.waveform=makeWave(abuf);anyLoaded=true;
+      }catch(e){console.warn(`restoreSession buf ${s.id}:`,e);}
     }
-    return true;
-  }catch(e){console.warn("restoreSession",e);return false;}
+    return anyLoaded;
+  }catch(e){console.warn("restoreSession:",e);return false;}
 }
 async function checkSession(){
   try{
-    const raw=sessionStorage.getItem("abcd_stem_session");if(!raw)return;
+    const raw=sessionStorage.getItem("abcd_stem_session_meta");if(!raw)return;
     const data=JSON.parse(raw);if(!data.trackName)return;
     $("session-track-name").textContent=data.trackName;
     $("session-banner").classList.add("visible");
   }catch(_){}
+}
+function clearSession(){
+  sessionStorage.removeItem("abcd_stem_session_meta");
+  STEM_CFGS.forEach(c=>sessionStorage.removeItem(`abcd_buf_${c.id}`));
+  // compatibilità con vecchio formato
+  sessionStorage.removeItem("abcd_stem_session");
 }
 
 // ── Scroll hint ───────────────────────────────────────────────────────────────
