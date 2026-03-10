@@ -114,17 +114,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans','Helvetica Neu
 
 /* Channel card */
 #ch-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;overflow:visible}
-.ch-scroll-outer{overflow-x:auto;margin:-22px;padding:22px}
-.ch-scroll-outer::-webkit-scrollbar{height:2px}
-.ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
-.ch-scroll{display:flex;gap:12px;justify-content:center;flex-wrap:nowrap;padding-bottom:4px;align-items:flex-start}
+.ch-scroll-outer{overflow-x:auto;margin:-22px;padding:22px;-webkit-overflow-scrolling:touch}
+.ch-scroll-outer::-webkit-scrollbar{height:3px}
+.ch-scroll-outer::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}
+.ch-scroll{display:flex;gap:12px;justify-content:flex-start;flex-wrap:nowrap;padding-bottom:4px;align-items:flex-start;min-width:min-content}
+@media(min-width:700px){.ch-scroll{justify-content:center}}
 
 /* Band subgroup bracket + sub-channels */
 .subgroup-wrap{display:flex;gap:0;align-items:flex-start;position:relative}
 .subgroup-bracket{width:0;overflow:visible;position:relative}
 .subgroup-line{position:absolute;left:6px;top:20px;bottom:20px;width:2px;background:rgba(241,181,79,0.2);border-radius:2px;pointer-events:none;transition:opacity .4s}
-.sub-channels{display:flex;gap:12px;padding-left:14px;overflow:hidden;max-width:0;opacity:0;transition:max-width .4s ease,opacity .3s ease}
-.sub-channels.open{max-width:420px;opacity:1}
+.sub-channels{display:flex;gap:12px;padding-left:14px;width:0;overflow:hidden;opacity:0;transition:width .35s ease,opacity .3s ease,padding-left .35s ease}
+.sub-channels.open{width:auto;min-width:max-content;overflow:visible;opacity:1;padding-left:14px}
 
 /* Channel cards */
 .ch{flex-shrink:0;width:116px;min-width:116px;border-radius:16px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);padding:10px 7px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;transition:box-shadow .6s,border-color .6s}
@@ -338,13 +339,17 @@ const getStem=id=>stems.find(s=>s.id===id);
 const SUB_IDS=["bass","other","vocals"];
 const hasSolo=()=>stems.some(s=>s.solo);
 
-// effMuted: per i sub, considera anche se "band" è mutato
 function effMuted(s){
   if(s.muted)return true;
-  if(hasSolo()&&!s.solo)return true;
-  // se è un sub-stem, eredita il mute di band
+  // sub eredita mute di band
   if(SUB_IDS.includes(s.id)){const band=getStem("band");if(band&&band.muted)return true;}
-  return false;
+  if(!hasSolo())return false;
+  const band=getStem("band");
+  // band in solo → i suoi sub suonano tutti
+  if(SUB_IDS.includes(s.id)&&band?.solo)return false;
+  // sub in solo → band non viene mutata (host del solo)
+  if(s.id==="band"&&SUB_IDS.some(id=>getStem(id)?.solo))return false;
+  return !s.solo;
 }
 
 // effGain: gain = stem × (band se sub) × master
@@ -467,6 +472,7 @@ async function separateStems(file){
       }else if(url){const resp=await fetch(url);if(!resp.ok)throw new Error(`HTTP ${resp.status}`);ab=await resp.arrayBuffer();}
       else continue;
       bufMap[stemId]=await ctx.decodeAudioData(ab);ab=null;
+      await new Promise(r=>setTimeout(r,0)); // yield event loop
     }catch(e){console.warn(`Traccia ${stemId}:`,e)}
   }
 
@@ -510,19 +516,20 @@ function buildMixer(bufMap){
 
 // ── Waveform ──────────────────────────────────────────────────────────────────
 function makeWave(buf){
-  const N=1200,nCh=buf.numberOfChannels,len=buf.length,block=Math.floor(len/N);
-  const channels=[];for(let c=0;c<nCh;c++)channels.push(buf.getChannelData(c));
+  // N=600 campioni (abbastanza per visualizzazione), solo ch0 per velocità
+  const N=600,ch=buf.getChannelData(0),len=buf.length,block=Math.max(1,Math.floor(len/N));
   const wv=new Float32Array(N);
   for(let i=0;i<N;i++){
-    let sumSq=0,count=0;const start=i*block,end=Math.min(start+block,len);
-    for(let j=start;j<end;j++){let mix=0;for(let c=0;c<nCh;c++)mix+=channels[c][j];mix/=nCh;sumSq+=mix*mix;count++;}
-    wv[i]=count>0?Math.sqrt(sumSq/count):0;
+    let sumSq=0;const start=i*block,end=Math.min(start+block,len);
+    for(let j=start;j<end;j++)sumSq+=ch[j]*ch[j];
+    wv[i]=Math.sqrt(sumSq/(end-start));
   }
+  // smoothing leggero
   const smooth=new Float32Array(N);smooth[0]=wv[0];smooth[N-1]=wv[N-1];
   for(let i=1;i<N-1;i++)smooth[i]=(wv[i-1]+wv[i]*2+wv[i+1])/4;
   const sorted=Float32Array.from(smooth).sort();
-  const p99=sorted[Math.floor(N*0.99)]||0.001;
-  return Array.from(smooth).map(v=>Math.min(1,v/p99));
+  const p95=sorted[Math.floor(N*0.95)]||0.001;
+  return Array.from(smooth).map(v=>Math.min(1,v/p95));
 }
 
 function drawSingleWave(canvasId,waveform,colorActive,colorInactive,progress){
