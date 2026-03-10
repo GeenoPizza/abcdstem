@@ -730,7 +730,6 @@ function buildChannels(){
       </button>
       <button class="btn-dl-stem" onclick="downloadStem('band','Band')" title="Scarica Band">⬇ Band</button>`;
     sgWrap.appendChild(div);
-    setupFader("band",cfg);setupPanKnob("band");
 
     // Subgroup bracket line
     const bracket=document.createElement("div");bracket.className="subgroup-bracket";
@@ -759,10 +758,12 @@ function buildChannels(){
           <button class="btn-sm" id="s-${scfg.id}" onclick="toggleSolo('${scfg.id}')" style="${ss.solo?'background:rgba(251,191,36,0.15);border-color:rgba(251,191,36,0.35);color:#fbbf24':''}" title="Solo">S</button>
         </div>`;
       subWrap.appendChild(sdiv);
-      setupFader(scfg.id,scfg);setupPanKnob(scfg.id);
     });
     sgWrap.appendChild(subWrap);
     wrap.appendChild(sgWrap);
+    // Setup DOPO che tutti gli elementi sono nel DOM
+    setupFader("band",cfg);setupPanKnob("band");
+    SUB_CFGS.forEach(scfg=>{setupFader(scfg.id,scfg);setupPanKnob(scfg.id);});
   }
 
   // ── MASTER channel ──
