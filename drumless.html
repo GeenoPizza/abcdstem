@@ -448,20 +448,16 @@ async function separateStems(file){
   const outputs=predictData?.data;
   if(!outputs?.length)throw new Error("Il server non ha restituito audio. Riprova con un file diverso.");
 
-  // Server restituisce: outputs[0]=drums, outputs[1]=no_drums(mix bass+other+vocals)
-  // Ma noi abbiamo bisogno di 4 stem separati per il subgruppo.
-  // Con htdemucs il server restituisce 2 file: usiamo drums + no_drums
-  // Il no_drums va nel canale "band" come buffer; bass/other/vocals non hanno buffer separati.
-  // (Per avere i 4 sub separati servirebbe un server 4-stem — per ora band è il mix unico)
-  const serverMap=["drums","band"];
+  // Server htdemucs restituisce 4 stem: drums, bass, other, vocals
+  const serverMap=["drums","bass","other","vocals"];
   const bufMap={};
-  for(let i=0;i<Math.min(outputs.length,2);i++){
+  for(let i=0;i<Math.min(outputs.length,4);i++){
     const out=outputs[i],stemId=serverMap[i];
-    setSt(`Preparazione traccia ${i+1} di 2…`,"",false,84+i*7);
+    setSt(`Preparazione traccia ${i+1} di 4…`,"",false,82+i*4);
     if(i>0)await new Promise(r=>setTimeout(r,80));
     let url=null;
     if(typeof out==="string")url=out;
-    else if(out?.url)url=`${spaceUrl}${out.url}`;
+    else if(out?.url)url=out.url.startsWith("http")?out.url:`${spaceUrl}${out.url}`;
     else if(out?.name)url=`${spaceUrl}/file/${out.name}`;
     try{
       let ab;
@@ -475,7 +471,7 @@ async function separateStems(file){
   }
 
   if(!bufMap.drums)throw new Error("Traccia batteria non trovata. Riprova con un file diverso.");
-  if(!bufMap.band) throw new Error("Traccia band non trovata. Riprova con un file diverso.");
+  if(!bufMap.bass&&!bufMap.other&&!bufMap.vocals)throw new Error("Tracce band non trovate. Riprova con un file diverso.");
 
   pill("p-dec","done");setSt("Tracce pronte!","",false,100);
   await new Promise(r=>setTimeout(r,400));
@@ -485,13 +481,23 @@ async function separateStems(file){
 // ── Build mixer ───────────────────────────────────────────────────────────────
 function buildMixer(bufMap){
   if(Object.keys(bufMap).length>0){
-    // drums e band hanno buffer diretti
-    ["drums","band"].forEach(id=>{
+    // Assegna buffer ai 4 stem reali
+    ["drums","bass","other","vocals"].forEach(id=>{
       const s=getStem(id),buf=bufMap[id]||null;
       if(s){s.buffer=buf;s.waveform=buf?makeWave(buf):[];s.volume=100;s.pan=0;s.muted=false;s.solo=false;s.vuLevel=0;}
     });
-    // i sub (bass,other,vocals) non hanno buffer separati con il server 2-stem
-    SUB_IDS.forEach(id=>{const s=getStem(id);if(s){s.buffer=null;s.waveform=[];s.volume=100;s.pan=0;s.muted=false;s.solo=false;s.vuLevel=0;}});
+    // Band: nessun buffer proprio — waveform calcolata come mix dei sub
+    const band=getStem("band");
+    if(band){
+      band.buffer=null;
+      // Waveform band = media delle waveform dei sub
+      const subWaves=SUB_IDS.map(id=>getStem(id)?.waveform).filter(w=>w&&w.length);
+      if(subWaves.length){
+        const N=subWaves[0].length;
+        band.waveform=Array.from({length:N},(_,i)=>subWaves.reduce((a,w)=>a+w[i],0)/subWaves.length);
+      }else band.waveform=[];
+      band.volume=100;band.pan=0;band.muted=false;band.solo=false;band.vuLevel=0;
+    }
   }
   totalDur=Math.max(...stems.filter(s=>s.buffer).map(s=>s.buffer.duration),0);
   powered=true;
@@ -570,8 +576,10 @@ function startPlay(){
   if(!powered)return;
   const ctx=getCtx();if(ctx.state==="suspended")ctx.resume();
   const off=pauseOff;startAt=ctx.currentTime-off;
-  // Solo stems con buffer reale (drums + band)
-  stemNodes=stems.filter(s=>s.buffer).map(s=>{
+
+  // Band ha solo fader virtuale — i nodi audio sono bass+other+vocals
+  // Drums e sub stems (bass,other,vocals) hanno buffer reali
+  stemNodes=stems.filter(s=>s.buffer&&s.id!=="band").map(s=>{
     const src=ctx.createBufferSource();src.buffer=s.buffer;
     const gn=ctx.createGain(),an=ctx.createAnalyser();an.fftSize=256;
     const pn=ctx.createStereoPanner();pn.pan.value=s.pan||0;
@@ -596,6 +604,9 @@ function startPlay(){
       const amp=Math.min(1,pk*1.6),logVal=amp>0?Math.log10(1+amp*9)*100:0;
       const s=getStem(n.id);if(s)s.vuLevel=logVal;
     });
+    // VU band = media dei sub
+    const band=getStem("band");
+    if(band){const subLevels=SUB_IDS.map(id=>getStem(id)?.vuLevel||0);band.vuLevel=subLevels.reduce((a,v)=>a+v,0)/subLevels.length;}
     updateVU();
   },55);
   updatePlayBtn();
@@ -880,11 +891,20 @@ async function exportAudio(buffer,filename){
 }
 async function downloadStem(id,label){const s=getStem(id);if(!s?.buffer)return;await exportAudio(s.buffer,`${trackName}_${label}.wav`);}
 async function downloadMix(){
-  const ctx=getCtx(),active=stems.filter(s=>s.buffer);if(!active.length)return;
+  const ctx=getCtx();
+  // Stems audio reali: drums + bass + other + vocals (band è virtuale)
+  const active=stems.filter(s=>s.buffer&&s.id!=="band");
+  if(!active.length)return;
   const len=Math.max(...active.map(s=>s.buffer.length));
-  const offCtx=new OfflineAudioContext(2,len,ctx.sampleRate);const offM=offCtx.createGain();offM.connect(offCtx.destination);
-  active.forEach(s=>{const src=offCtx.createBufferSource();src.buffer=s.buffer;const gn=offCtx.createGain();gn.gain.value=effGain(s);src.connect(gn);gn.connect(offM);src.start(0);});
-  const rendered=await offCtx.startRendering();await exportAudio(rendered,`${trackName}_mix.wav`);
+  const offCtx=new OfflineAudioContext(2,len,ctx.sampleRate);
+  const offM=offCtx.createGain();offM.connect(offCtx.destination);
+  active.forEach(s=>{
+    const src=offCtx.createBufferSource();src.buffer=s.buffer;
+    const gn=offCtx.createGain();gn.gain.value=effGain(s);
+    src.connect(gn);gn.connect(offM);src.start(0);
+  });
+  const rendered=await offCtx.startRendering();
+  await exportAudio(rendered,`${trackName}_mix.wav`);
 }
 function bufferToWav(buffer){
   const nCh=buffer.numberOfChannels,sr=buffer.sampleRate,len=buffer.length;
